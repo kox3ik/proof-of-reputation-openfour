@@ -1,6 +1,6 @@
 # Numbers on the page and where they come from
 
-Base dir: `<workspace>/`.
+Base dir: our private working directory, not part of this repo.
 PITCH = `deck/mentor-pitch-20261127.md`, DECK = `deck/presentation-v2.html`,
 RUNLOG = `deck/video/por-simulation-testnet-20261126T191952Z-runlog.json`.
 
@@ -20,5 +20,5 @@ RUNLOG = `deck/video/por-simulation-testnet-20261126T191952Z-runlog.json`.
 | Wallet addresses in cards and quick buttons | RUNLOG `preload.samples` (real), `wallets` (sim honestA, bundle1) |
 | Transaction hashes in Receipts | RUNLOG `keyTxs` |
 | 1:56 demo length | `deck/video/por-simulation-testnet-cut.webm` (duration) |
-| 235 contract tests, 51 publisher tests | Measured 27.11.2026 ~03:15 BKK on commit c69b4bd+: `forge test` → 235 passed, 0 failed (13 suites); `cd service/publisher/tests && python3 -m unittest discover -p "test_*.py"` → Ran 51 tests, OK. (The mentor pitch still says 227 — older count.) |
+| 235 contract tests, 51 publisher tests | Measured 27.11.2026 ~03:00 BKK on commit c69b4bd+: `forge test` → 235 passed, 0 failed (13 suites); `cd service/publisher/tests && python3 -m unittest discover -p "test_*.py"` → Ran 51 tests, OK. (The mentor pitch still says 227 — older count.) |
 | "Trusted wallets pay below 50 bps" | no number from files: qualitative, consistent with the live registry reading |

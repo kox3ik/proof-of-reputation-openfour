@@ -6,13 +6,15 @@ A wallet's on-chain track record sets its trading terms on every launch:
 trusted traders pay less, fresh one-time wallets pay a surcharge plus a configurable, refundable deposit (on buys only), and wallets with a rug history pay a penalty in their own rate. Nobody is blocked: flagged wallets can buy and sell, sells are never blocked, and the sell-fee cap does not apply to flagged wallets.
 OpenFour's protocol fee is untouched by construction.
 
-Status: work in progress.
+**Site:** https://kox3ik.github.io/proof-of-reputation-openfour/ · **Demo video:** `site/media/demo.webm` (1:56) · **OpenFour submission:** [`docs/OPENFOUR_SUBMISSION.md`](docs/OPENFOUR_SUBMISSION.md) · **AI audit:** [`docs/AI-AUDIT.md`](docs/AI-AUDIT.md)
+
+Status: hackathon submission, BSC testnet only (not audited by humans).
 
 ## Contracts
 
 | Contract | Role |
 | --- | --- |
-| `ReputationRegistry` | Per-wallet score from 5 components (shown as 0..1; on chain the integers 0..1000) (volume, activity, holding, identity, penalty). Protocol-only weights and a smooth fee curve; config changes go through a delay. |
+| `ReputationRegistry` | Per-wallet score from 5 components (shown as 0-1; on chain the integers 0..1000) (volume, activity, holding, identity, penalty). Protocol-only weights and a smooth fee curve; config changes go through a delay. |
 | `ReputationTradeModule` | OpenFour `TradeModule` (`evaluate(TradeContext)`): fee by score for every wallet (no buy ban; the flag penalty is part of the wallet's own rate; the sell cap does not apply to flagged wallets; sells are never blocked). Uses `tx.origin` when the trader is a contract. |
 | `ReputationLockedToken` | OpenFour token implementation with a pre-migration transfer fee: wallet-to-wallet moves cost the sender's sell rate (to the treasury); trade flows are free, and so are router hand-offs of tokens bought in the same tx (see `docs/transfers.md`). |
 
@@ -47,35 +49,49 @@ expressed on OZ v5 `_update`; the interface/storage surface matches `OpenFourTok
 ### Cashback
 
 The on-chain path: OpenFour's post-trade hook calls `ReputationLedger`, which tracks positions and funds `CashbackPool`;
-the deposit and cashback unlock on a curve sale or at migration (`docs/cashback.md`). The Merkle distributor is kept in the
+the deposit (charged on buys only) and cashback unlock on a curve sale or at migration (`docs/cashback.md`). Cashback is bucketed per (asset, token, wallet). The Merkle distributor is kept in the
 repo but is not deployed.
 
-**Scam fund.** A flagged wallet pays its usual fee plus a penalty, and its whole share of the pool goes into a separate fund, as do the deposit and cashback right confiscated from a rug sale. Honest wallets get their deposit back, their own cashback, and a bonus (the rest of the module fee they paid) from that fund; if the fund is short, bonuses are shared pro rata, and only what exceeds all bonus rights can be swept to the treasury. Details: `docs/cashback.md`.
+**Scam fund.** A flagged wallet pays its usual fee plus a penalty, and its whole share of the pool goes into a separate fund, as do the deposit and cashback right confiscated from a rug sale. Honest wallets get their deposit back, their own cashback, and a bonus (the rest of the module fee they paid) from that fund; a plain claim pays the bonus only when the fund covers all bonus rights; otherwise the wallet itself can call `claimBonusPartial` to take a pro-rata share. Only what exceeds all bonus rights can be swept to the treasury. The flag penalty is live: a flagged wallet pays 640 bps on top of its regular rate on buys and sells. Details: `docs/cashback.md`.
 
 ### Tests and demo
 
-`forge test` (solc 0.8.24, via-IR). Local end-to-end demo on a local fork of BSC testnet: `scripts/demo-local.sh`
-(logs are written to `demo-out/`: `demo-run-local.json` for the trades, `demo-migrate-local.json` for the full create, buy, sell, migrate, settle, claim path, and `demo-out/submit-pack/` with OpenFour's `tokens.json`, registration and submit pack, built by `scripts/demo/make_submit_pack.js`). Real testnet: `scripts/demo-testnet.md`.
+`forge test` (solc 0.8.24, via-IR): **235 passed**. Publisher: `cd service/publisher/tests && python3 -m unittest discover -p "test_*.py"`: **51 OK** (both measured 27 Nov 2026). Local end-to-end demo on a local fork of BSC testnet: `scripts/demo-local.sh`
+(logs are written to `demo-out/`, including the full create, buy, sell, migrate, settle, claim path and the OpenFour submit pack built by `scripts/demo/make_submit_pack.js`). Real testnet: `scripts/demo-testnet.md`.
 
 ## Live on BSC Testnet (chain 97)
 
-Own OpenFour fork + our contracts, full demo run on chain. All addresses and tx hashes: `deployments/testnet.json`,
-the trade log is produced by `scripts/demo-testnet.md` into `demo-out/`. Explorer: https://testnet.bscscan.com.
+The final run (27 Nov 2026, ~02:19-02:32 BKK) is the deployment that counts: our own OpenFour fork plus our contracts, one simulation on a public chain. Addresses: `app/config.json`, `submission/reputation-bonding-registration.json`. Explorer: https://testnet.bscscan.com.
 
 | Item | Address |
 | --- | --- |
-| ReputationRegistry | [`0x496a355E7B84C967Db4bcBBd5F67B2Bf81dd8046`](https://testnet.bscscan.com/address/0x496a355E7B84C967Db4bcBBd5F67B2Bf81dd8046) |
-| ReputationTradeModule | [`0xA7c0285f8b8e679f9ffd475ba722EAd5CF1bF5CA`](https://testnet.bscscan.com/address/0xA7c0285f8b8e679f9ffd475ba722EAd5CF1bF5CA) |
-| ReputationLockedToken (impl) | [`0x030A3a49b01cB9Fb0EB53368439d5109eE5b03A9`](https://testnet.bscscan.com/address/0x030A3a49b01cB9Fb0EB53368439d5109eE5b03A9) |
-| Mock BABT / Mock Agent ID (testnet stand-ins) | [`0x7cF564B1B92668c732b844A9c15070FcFa8b2502`](https://testnet.bscscan.com/address/0x7cF564B1B92668c732b844A9c15070FcFa8b2502) / [`0x6981243bb9F32B2857c973811b352cA885e16512`](https://testnet.bscscan.com/address/0x6981243bb9F32B2857c973811b352cA885e16512) |
-| OpenFour fork Registry / Core | [`0xD3FD416B937f252d8C9fdDAdba9BafCF407F1214`](https://testnet.bscscan.com/address/0xD3FD416B937f252d8C9fdDAdba9BafCF407F1214) / [`0xf7aeCDf4411baA046Cdf978da94ddc8BAf890f98`](https://testnet.bscscan.com/address/0xf7aeCDf4411baA046Cdf978da94ddc8BAf890f98) |
-| Demo token | [`0x5cA9072d99dE8e92dFe28816D2142764b33Cb4A0`](https://testnet.bscscan.com/address/0x5cA9072d99dE8e92dFe28816D2142764b33Cb4A0) |
+| ReputationRegistry | [`0x7231682cdfed6d9d401efb8a2002b026bcbbc105`](https://testnet.bscscan.com/address/0x7231682cdfed6d9d401efb8a2002b026bcbbc105) |
+| ReputationTradeModule | [`0xd67a6d6F12d79495f2f0D8EDd1AD67cf9B73AcF4`](https://testnet.bscscan.com/address/0xd67a6d6F12d79495f2f0D8EDd1AD67cf9B73AcF4) |
+| ReputationLedger | [`0x15B9f0b6Fd56c3622ae7E65C5d28D04efe888a54`](https://testnet.bscscan.com/address/0x15B9f0b6Fd56c3622ae7E65C5d28D04efe888a54) |
+| CashbackPool | [`0x26c3fF93169be2049aaD92F732F013d015E70e75`](https://testnet.bscscan.com/address/0x26c3fF93169be2049aaD92F732F013d015E70e75) |
+| ReputationLockedToken (impl) | [`0xbd5C281512b21927BbCAEcBfA34f63A8Ce4AB03D`](https://testnet.bscscan.com/address/0xbd5C281512b21927BbCAEcBfA34f63A8Ce4AB03D) |
+| OpenFour fork Registry | [`0x74463FA010193012601912d961a445899164BeeF`](https://testnet.bscscan.com/address/0x74463FA010193012601912d961a445899164BeeF) |
+| OpenFour fork Core | [`0x210edA86A5343b37a06573b6a4C9d49D0F86B2b3`](https://testnet.bscscan.com/address/0x210edA86A5343b37a06573b6a4C9d49D0F86B2b3) |
+| Preset | `Reputation Bonding V1`, id `1795717041641` (tx [preset](https://testnet.bscscan.com/tx/0x0c4941f8e8720c11297cd22f0237295184271df0a6dd918291c7d71df1342a64)) |
 
-Measured extra fee (on top of OpenFour's 50 bps): trusted buy 9 bps ([0xa9c3fa5c...](https://testnet.bscscan.com/tx/0xa9c3fa5c9c55997346329552f6d5c8e0aa40ab8d1afb93e7b337f0004db0cd6f)), regular 50,
-fresh 300 ([0x4442a346...](https://testnet.bscscan.com/tx/0x4442a34693f6d347f9b684217e4e630fcde0752d7b2ba37283c67a2e9e48dd4a)), flagged wallet (penalised, score 0.100) 190 and it can buy
-([0xa1a5cc63...](https://testnet.bscscan.com/tx/0xa1a5cc635a5db39eb2d37d28d2c35ce37ba6ec4656f2dbd5a97a6f85478d9952)), flagged sell 100 (old deployment; flagged sells are now uncapped), BABT holder 300 -> 155, Agent ID holder 190.
-Wallet-to-wallet transfer before migration pays the sender's sell rate in tokens to the treasury (see `docs/transfers.md`;
-the live-testnet run above predates this and still shows the old transfer lock, the local demo log `demo-out/demo-run-local.json` shows the fee).
+The simulation: scores of 8,000 real mainnet wallets were loaded (800 with a rug history), 11 bot wallets traded three tokens, and the bundle that dumped was flagged 10 blocks (~4 s) after the dump.
+
+Key transactions:
+
+| Step | Tx |
+| --- | --- |
+| Honest first buy (fresh wallet, deposit charged) | [0x09d30f42...](https://testnet.bscscan.com/tx/0x09d30f4214a7eab1439c514c3492efac5baa5297a75f0b5f4c8106e545807833) |
+| Bundle dump (bundle1; four wallets sold in block 145035168) | [0x5f2b384c...](https://testnet.bscscan.com/tx/0x5f2b384c74e585cd99165e57ec7b8c3fff3cdefe5b5b38b63b3ba50560ef42bb) |
+| Flag publication by the publisher | [0x2e3d4e83...](https://testnet.bscscan.com/tx/0x2e3d4e83cc96d08290cf2a3c06560d5585ac46274d0f1597ffc2c588c8e3cd7d) |
+| Bundle wallet buys BEFORE the flag: 50 bps | [0xfe2e3329...](https://testnet.bscscan.com/tx/0xfe2e332947180251e7ac34313ed44d0b4ae139ee1fd3b8631e185c060c91ddfd) |
+| Same wallet buys AFTER the flag: 690 bps (50 + 640 penalty) | [0x5491c574...](https://testnet.bscscan.com/tx/0x5491c5747bc44b13d746992db7d81e4b0bb749f5a28d9c056489366cde637839) |
+| Same wallet sells AFTER the flag: 690 bps, no sell cap | [0x96f17b72...](https://testnet.bscscan.com/tx/0x96f17b72315a8074bff1dc048c8f8e497e6b1180002a398f351fb642cad4258f) |
+| Deposit and cashback forfeited (bundle1 / bundle2 / bundle3 / bundle4) | [1](https://testnet.bscscan.com/tx/0xe57bc3b5397390b8fe10bd0a8ca87b09f49bb471e4bfa2098dd9247a9978d771) / [2](https://testnet.bscscan.com/tx/0xaba3fd8c3932c8cd42467e9d54d4008dbbdeece52c3a44a3266ab7f1eb54e996) / [3](https://testnet.bscscan.com/tx/0xd7a7e35dafbee75add8017d7acf0e4c947b00db9a216a4a69f507c6964b05daa) / [4](https://testnet.bscscan.com/tx/0xaa2c1ce3e2cb401924788ae436e2b1812d383bcb61b3fd3277dc6f97bd9e45df) |
+| Honest claim (deposit refund + cashback + bonus) | [honestA](https://testnet.bscscan.com/tx/0x9d8ab38f1d8461e432a8ebc6d09a2537354f304c6b7607ee9adbfb8f0034814c) |
+
+Fees measured on chain (on top of OpenFour's 50 bps protocol fee, which is untouched): a wallet with a record pays 50 bps; a fresh wallet pays 690 bps on its first buy (50 regular + 640 refundable deposit); a flagged wallet pays 690 bps on buys and sells (50 + 640 penalty); the same bundle wallet went 50 -> 690 bps on buy and on sell once flagged. The complete log, with every hash: the run log referenced in `site/SOURCES.md` (`keyTxs`).
+
+Not part of this final run: a migrate step (none was recorded). The migrate path was shown earlier on a local fork (`scripts/demo-local.sh`, `scripts/demo/migrate_flow.js`).
 
 ## Risks and limitations
 
