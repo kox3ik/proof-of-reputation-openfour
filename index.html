@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proof of Reputation: your reputation, your price</title>
+<meta name="description" content="An OpenFour trade module. Every wallet gets a score from 0 to 1 from its on-chain history, and the fee of each trade follows the score. Rug wallets pay, honest wallets get paid back.">
+<meta name="theme-color" content="#1c1c1b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="#top"><span data-pxwallet="#d7f25c" style="display:inline-block;width:22px;height:20px"></span>Proof of Reputation</a>
+  <ul>
+    <li><a href="#thesis">Thesis</a></li><li><a href="#how">How it works</a></li><li><a href="#demo">Demo</a></li>
+    <li><a href="#live">Live testnet</a></li><li><a href="#limits">Limits</a></li>
+  </ul>
+</div></header>
+
+<main id="main">
+<!-- 1 HERO -->
+<section class="hero" id="top"><div class="wrap">
+  <div class="label"><span><i></i>Reputation / Pricing</span><span>01 / Value of trust</span></div>
+  <div class="hero-grid">
+    <div>
+      <p><span class="tag">BNB Bangkok 2026</span><span class="tag">Four.meme / OpenFour</span></p>
+      <h1>Your reputation — <em>your price.</em></h1>
+      <p class="lead"><b>Proof of Reputation</b> is an OpenFour trade module. Every wallet gets a score from 0 to 1 from its on-chain history. The fee of each trade follows the score. Rug wallets pay. Honest wallets get paid back.</p>
+      <div class="cta"><a class="btn fill" href="#live">Check a wallet</a><a class="btn" href="#demo">Watch the demo</a></div>
+    </div>
+    <div class="pxbox" aria-hidden="true"><span data-pxwallet="#141414"></span></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>75.5 %</b><span>of Four.meme rug turnover came from wallets that had already joined earlier rugs</span></div>
+    <div class="stat"><b>35.0 %</b><span>of curve volume is rug participants, who are 6.5 % of wallets</span></div>
+    <div class="stat"><b>50 → 690</b><span>bps: one flagged wallet, same trade, before and after the flag (testnet)</span></div>
+    <div class="stat"><b>8,000</b><span>wallets scored on BSC testnet, 800 of them flagged for rug history</span></div>
+  </div>
+</div></section>
+
+<!-- 2 THESIS -->
+<section class="thesis" id="thesis"><div class="wrap">
+  <div class="label"><span><i></i>Our thesis</span><span>02</span></div>
+  <h2>The market doesn’t need <em>another launchpad.</em></h2>
+  <div class="twocol">
+    <div>
+      <p class="lead">Not a new launch mechanic, not another split of fees, tokens or dividends.</p>
+      <p class="lead">First, clean the market of rugs and scams. Then new mechanics can work.</p>
+    </div>
+    <div class="hist" id="hist" role="img" aria-label="Decorative pixel histogram"></div>
+  </div>
+  <div class="problem">
+    <div><b>75.5 %</b><span>of rug turnover on Four.meme came from wallets with earlier rug history. The launchpad charges them the same fee as honest traders.</span></div>
+    <div><b>35.0 %</b><span>of Four.meme curve volume came from rug participants, who are only 6.5 % of wallets. 5,358 wallets, 919 coordinated rug events, 844 tokens.</span></div>
+    <div><b>35.6M</b><span>Four.meme trades on 1.47M tokens analysed this year, plus 820k OpenFour trades since launch. The same people, every time.</span></div>
+  </div>
+</div></section>
+
+<!-- 3 CARDS -->
+<section id="wallets"><div class="wrap">
+  <div class="label"><span><i></i>Unknown wallets</span><span>03 / Until now</span></div>
+  <h2>Unknown wallets, <em>until now.</em></h2>
+  <p class="lead">Today every wallet looks the same to a launchpad. With the module each one carries a score and a fee. Real wallets below, scores read from our testnet registry.</p>
+  <div class="stage">
+    <div class="cardrow" aria-label="Wallets without reputation">
+      <div class="wcard unk"><div class="ic"><span data-pxwallet></span></div><div class="nm">Unknown</div><div class="sc">?</div><div class="ad">0x896d…6c</div><span class="pill">same fee for all</span></div>
+      <div class="wcard unk"><div class="ic"><span data-pxwallet></span></div><div class="nm">Unknown</div><div class="sc">?</div><div class="ad">0xc366…7a</div><span class="pill">same fee for all</span></div>
+      <div class="wcard unk"><div class="ic"><span data-pxwallet></span></div><div class="nm">Unknown</div><div class="sc">?</div><div class="ad">0x6b04…b3</div><span class="pill">same fee for all</span></div>
+    </div>
+    <div class="arrow">score + fee<svg width="64" height="16" viewBox="0 0 16 4" shape-rendering="crispEdges" fill="#d7f25c" aria-hidden="true"><rect x="0" y="1" width="13" height="2"/><rect x="12" y="0" width="1" height="4"/><rect x="13" y="1" width="2" height="2"/></svg></div>
+    <div class="cardrow" aria-label="The same wallets with scores">
+      <div class="wcard" data-live="0x896d37ee4a1022d722304d2fd2f9594b26d16c8c"><div class="ic"><span data-pxwallet></span></div><div class="nm">Top trader</div><div class="sc">0.799 <small>/ 1</small></div><div class="ad">0x896d…6c</div><span class="pill">score from run log</span></div>
+      <div class="wcard" data-live="0xc366f55d3ea6e6da886343b374582a35801dcb7a"><div class="ic"><span data-pxwallet></span></div><div class="nm">Median trader</div><div class="sc">0.570 <small>/ 1</small></div><div class="ad">0xc366…7a</div><span class="pill">score from run log</span></div>
+      <div class="wcard bad" data-live="0x6b042bc47cb517315480e1d85834185d802224b3"><div class="ic"><span data-pxwallet></span></div><div class="nm">Rug history</div><div class="sc">0.000 <small>/ 1</small></div><div class="ad">0x6b04…b3</div><span class="pill">flagged</span></div>
+    </div>
+  </div>
+  <p class="small muted" style="margin-top:22px">Real BSC mainnet wallets, their scores loaded into the testnet registry. Cards update to live registry values when the testnet RPC answers.</p>
+</div></section>
+
+<!-- 4 HOW -->
+<section id="how"><div class="wrap">
+  <div class="label"><span><i></i>How it works</span><span>04</span></div>
+  <h2>One score, one fee curve, <em>every launch.</em></h2>
+  <div class="steps">
+    <div><span class="n">01 / SCORE</span><h3>History becomes a score</h3><p>Volume, activity, holding time, verified identity and past rug participation make a score from 0 to 1. The weights are set by the protocol.</p></div>
+    <div><span class="n">02 / FEE</span><h3>The score sets the fee</h3><p>OpenFour reads the wallet that signs the trade and prices it. Trusted wallets pay less. Fresh and flagged wallets pay more. No call before sending, no change in terminals.</p></div>
+    <div><span class="n">03 / DEPOSIT</span><h3>New wallets post a deposit</h3><p>A new wallet leaves a refundable deposit on its first buys. It comes back after honest trading. If the wallet joins a rug, the deposit burns into the scam fund.</p></div>
+    <div><span class="n">04 / PENALTY</span><h3>Rug wallets pay on every trade</h3><p>A flagged wallet pays a penalty in its own rate. It can still buy and sell. Selling is never blocked, only priced.</p></div>
+    <div><span class="n">05 / CASHBACK</span><h3>Scammers pay honest wallets</h3><p>Penalties and forfeited deposits fill the scam fund. Honest wallets get a cashback and a bonus from it, never more than they paid in fees.</p></div>
+    <div><span class="n">06 / PROTOCOL</span><h3>The protocol fee is untouched</h3><p>OpenFour’s own fee stays exactly as it is. The module adds a second, reputation-based layer on top of it.</p></div>
+  </div>
+  <div class="fees">
+    <div><span class="k">Regular wallet</span><b>50 bps</b><span class="small muted">module fee</span></div>
+    <div><span class="k">Trusted wallet</span><b>below 50</b><span class="small muted">the curve falls with the score</span></div>
+    <div><span class="k">New wallet, buy</span><b>690 bps</b><span class="small muted">50 + 640 refundable deposit</span></div>
+    <div><span class="k">Flagged wallet</span><b>690 bps</b><span class="small muted">50 + 640 penalty, buys and sells</span></div>
+  </div>
+</div></section>
+
+<!-- 5 VIDEO -->
+<section id="demo"><div class="wrap">
+  <div class="label"><span><i></i>Demo</span><span>05 / 1:56</span></div>
+  <h2>The whole cycle, <em>on testnet.</em></h2>
+  <p class="lead">Honest wallets, a bundle dump, the flag, the penalty, forfeited deposits and the honest claim. Real transactions, recorded from our run.</p>
+  <video class="video" controls preload="metadata" poster="assets/poster.png"><source src="media/demo.webm" type="video/webm">Your browser cannot play WebM video. Open <a href="media/demo.webm">the file</a> directly.</video>
+</div></section>
+
+<!-- 6 LIVE -->
+<section id="live"><div class="wrap">
+  <div class="label"><span><i></i>Live on BSC testnet</span><span>06</span></div>
+  <h2>Check any wallet, <em>live.</em></h2>
+  <p class="lead">Paste an address. The page calls our deployed registry on BSC testnet directly from your browser. No wallet needed, no server of ours in between.</p>
+  <div class="panel">
+    <form id="lkform" class="lk"><label for="addr" class="small muted" style="width:100%">Wallet address</label>
+      <input id="addr" autocomplete="off" spellcheck="false" placeholder="0x…" inputmode="text"><button class="btn fill" type="submit">Look up</button></form>
+    <div class="chips" aria-label="Quick picks">
+      <button class="chip" data-a="0x896d37ee4a1022d722304d2fd2f9594b26d16c8c">real: top trader</button>
+      <button class="chip" data-a="0x73f3a84a8b33a3d1ead7eab7e73684ad93492eed">real: high</button>
+      <button class="chip" data-a="0xc366f55d3ea6e6da886343b374582a35801dcb7a">real: median</button>
+      <button class="chip" data-a="0x1a6024151faf44ba7a51caa8792f97ac43e32b8b">real: low</button>
+      <button class="chip" data-a="0x6b042bc47cb517315480e1d85834185d802224b3">real: rug history</button>
+      <button class="chip" data-a="0xb016De44fcB18d88Fd9638dbFE3e1358b12CfCc7">sim: honest wallet</button>
+      <button class="chip" data-a="0x628303D7831E3f37bC8D166EFF5c950A6dD37C9B">sim: bundle wallet</button>
+    </div>
+    <div class="out" id="walletOut" aria-live="polite"><p class="muted">Pick a wallet or paste an address.</p></div>
+    <p class="net">Chain 97 · registry <code>0x7231682cdfed6d9d401efb8a2002b026bcbbc105</code> · RPC bsc-testnet-rpc.publicnode.com</p>
+  </div>
+
+  <h3 style="margin-top:64px;font:400 32px var(--serif)">Receipts</h3>
+  <p class="muted">The key transactions of the simulation. Every link opens testnet.bscscan.com.</p>
+  <div class="panel" style="padding:8px 18px 14px">
+    <table class="rc"><thead><tr><th>#</th><th>Step</th><th>Transaction</th></tr></thead><tbody><tr><td>01</td><td><b>Honest first buy</b><br><span class="muted small">A fresh wallet buys for the first time and posts the refundable deposit.</span></td><td><a href="https://testnet.bscscan.com/tx/0x09d30f4214a7eab1439c514c3492efac5baa5297a75f0b5f4c8106e545807833" rel="noopener"><code>0x09d30f42…807833</code></a></td></tr><tr><td>02</td><td><b>Bundle dump</b><br><span class="muted small">Four linked wallets buy one token together, then sell it in the same block.</span></td><td>1&nbsp;<a href="https://testnet.bscscan.com/tx/0x5f2b384c74e585cd99165e57ec7b8c3fff3cdefe5b5b38b63b3ba50560ef42bb" rel="noopener"><code>0x5f2b384c…ef42bb</code></a> · 2&nbsp;<a href="https://testnet.bscscan.com/tx/0x43f5991da7b2052697af0b7f0e0425e30cb02e0688b5a235e13b108c7014a6e0" rel="noopener"><code>0x43f5991d…14a6e0</code></a> · 3&nbsp;<a href="https://testnet.bscscan.com/tx/0xa83d610dfcfd3f8481fd29b220ed0b765bea92b06ae306b57a5ee3fabcee2891" rel="noopener"><code>0xa83d610d…ee2891</code></a> · 4&nbsp;<a href="https://testnet.bscscan.com/tx/0xe2cf9600626172fb8641a9af4ddf1c7e1998d4d2f9f1567541d40ef8e60e592c" rel="noopener"><code>0xe2cf9600…0e592c</code></a></td></tr><tr><td>03</td><td><b>Flag publication</b><br><span class="muted small">Our publisher flags the bundle on chain right after the dump.</span></td><td><a href="https://testnet.bscscan.com/tx/0x2e3d4e83cc96d08290cf2a3c06560d5585ac46274d0f1597ffc2c588c8e3cd7d" rel="noopener"><code>0x2e3d4e83…e3cd7d</code></a></td></tr><tr><td>04</td><td><b>Same wallet, before and after</b><br><span class="muted small">The same bundle wallet: 50 bps before the flag, 690 bps after. Its sell is allowed, not blocked.</span></td><td>buy before <a href="https://testnet.bscscan.com/tx/0xfe2e332947180251e7ac34313ed44d0b4ae139ee1fd3b8631e185c060c91ddfd" rel="noopener"><code>0xfe2e3329…91ddfd</code></a><br>buy after <a href="https://testnet.bscscan.com/tx/0x5491c5747bc44b13d746992db7d81e4b0bb749f5a28d9c056489366cde637839" rel="noopener"><code>0x5491c574…637839</code></a><br>sell after <a href="https://testnet.bscscan.com/tx/0x96f17b72315a8074bff1dc048c8f8e497e6b1180002a398f351fb642cad4258f" rel="noopener"><code>0x96f17b72…d4258f</code></a></td></tr><tr><td>05</td><td><b>Deposits forfeited</b><br><span class="muted small">Flagged wallets lose their deposit and cashback right into the scam fund.</span></td><td>1&nbsp;<a href="https://testnet.bscscan.com/tx/0xe57bc3b5397390b8fe10bd0a8ca87b09f49bb471e4bfa2098dd9247a9978d771" rel="noopener"><code>0xe57bc3b5…78d771</code></a> · 2&nbsp;<a href="https://testnet.bscscan.com/tx/0xaba3fd8c3932c8cd42467e9d54d4008dbbdeece52c3a44a3266ab7f1eb54e996" rel="noopener"><code>0xaba3fd8c…54e996</code></a> · 3&nbsp;<a href="https://testnet.bscscan.com/tx/0xd7a7e35dafbee75add8017d7acf0e4c947b00db9a216a4a69f507c6964b05daa" rel="noopener"><code>0xd7a7e35d…b05daa</code></a> · 4&nbsp;<a href="https://testnet.bscscan.com/tx/0xaa2c1ce3e2cb401924788ae436e2b1812d383bcb61b3fd3277dc6f97bd9e45df" rel="noopener"><code>0xaa2c1ce3…9e45df</code></a></td></tr><tr><td>06</td><td><b>Honest claim</b><br><span class="muted small">Honest wallets take their deposit back, plus cashback and a bonus from the fund.</span></td><td>A&nbsp;<a href="https://testnet.bscscan.com/tx/0x9d8ab38f1d8461e432a8ebc6d09a2537354f304c6b7607ee9adbfb8f0034814c" rel="noopener"><code>0x9d8ab38f…34814c</code></a> · B&nbsp;<a href="https://testnet.bscscan.com/tx/0xa2d4bd080d82adf0e0bb9f09f2d04651b8aeb873c34f9a78520280f787a08d3e" rel="noopener"><code>0xa2d4bd08…a08d3e</code></a> · newbie&nbsp;<a href="https://testnet.bscscan.com/tx/0x18612b8749ab5c36883497f3888fcc7d059aaf7afbcffedb60488f643922bcec" rel="noopener"><code>0x18612b87…22bcec</code></a></td></tr></tbody></table>
+  </div>
+  <div class="checks">
+    <div><b>235</b><span>contract tests</span></div>
+    <div><b>51</b><span>publisher tests</span></div>
+    <div><b>AI</b><span>audit report, several AI reviewers: <a href="#" data-todo="repo link">docs/AI-AUDIT.md</a>. Not a human audit.</span></div>
+  </div>
+</div></section>
+
+<!-- 7 PRICE NOT PERMISSION -->
+<section id="price"><div class="wrap">
+  <div class="label"><span><i></i>Price, not permission</span><span>07</span></div>
+  <h2>We don’t close the door. <em>We price it.</em></h2>
+  <div class="cmp">
+    <div><span class="tag">Permissioned launches</span>
+      <h3>Papers, freezes, caps</h3>
+      <ul><li>KYC documents before you can trade</li><li>Caps and freezes decided by an operator</li><li>An operator who can freeze your funds</li><li>Honest traders leave, volume drops</li></ul></div>
+    <div><span class="tag">Proof of Reputation</span>
+      <h3>Every trader stays</h3>
+      <ul><li>No documents, only on-chain history</li><li>Nothing is blocked, selling is never blocked</li><li>No freeze: a flag changes the price</li><li>Scammers pay, honest wallets get paid back</li></ul></div>
+  </div>
+</div></section>
+
+<!-- 8 LIMITS -->
+<section id="limits"><div class="wrap">
+  <div class="label"><span><i></i>Limits, honestly</span><span>08</span></div>
+  <h2>What this is not, <em>yet.</em></h2>
+  <div class="lim">
+    <div><h3>Scores come from our service</h3><p>Scores are published by our service, signed, with an open rule. Anyone can recompute them from public data. They are not computed on chain, and ZK proofs are on the roadmap.</p></div>
+    <div><h3>Testnet only</h3><p>Everything here runs on BSC testnet. Identity tokens are stand-ins there. Nothing was run on an official, audited OpenFour registry.</p></div>
+    <div><h3>AI-reviewed, not audited</h3><p>The code was reviewed by several AI models and fixed after each round. That is not a human audit.</p></div>
+    <div><h3>Transfer-collection rugs</h3><p>Rugs that collect tokens by plain transfers into one wallet are not detected yet. A pre-migration transfer fee prices them, but the detector does not flag them.</p></div>
+  </div>
+  <p class="lead" style="margin-top:34px"><span class="mono small muted">NEXT</span> &nbsp;Zero-knowledge proofs of every score. The same rule after migration in a PancakeSwap Infinity hook. A default trade rule for all OpenFour launches. Risk-data partners for identity and rug flags.</p>
+</div></section>
+</main>
+
+<footer><div class="wrap foot">
+  <div><div class="brand"><span data-pxwallet="#d7f25c" style="display:inline-block;width:22px;height:20px"></span>Proof of Reputation</div>
+    <p class="small muted">BNB Bangkok 2026 · Four.meme / OpenFour track · BSC testnet only</p></div>
+  <ul>
+    <!-- TODO: GitHub repository link: publication not decided yet -->
+    <li><a href="#" data-todo="github">GitHub repository</a></li>
+    <!-- TODO: OpenFour submission link: publication not decided yet -->
+    <li><a href="#" data-todo="openfour">OpenFour submission</a></li>
+  </ul>
+</div></footer>
+
+<script src="vendor/ethers.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
