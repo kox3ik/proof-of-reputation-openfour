@@ -1,0 +1,37 @@
+{
+  "default": "testnet",
+  "networks": {
+    "testnet": {
+      "key": "testnet",
+      "label": "BSC testnet (97)",
+      "chainId": 97,
+      "rpc": "https://data-seed-prebsc-2-s1.bnbchain.org:8545",
+      "explorer": "https://testnet.bscscan.com",
+      "registry": "0x7231682cdfed6d9d401efb8a2002b026bcbbc105",
+      "tradeModule": "0xd67a6d6F12d79495f2f0D8EDd1AD67cf9B73AcF4",
+      "pool": "0x26c3fF93169be2049aaD92F732F013d015E70e75",
+      "ledger": "0x15B9f0b6Fd56c3622ae7E65C5d28D04efe888a54",
+      "lockedToken": "0xbd5C281512b21927BbCAEcBfA34f63A8Ce4AB03D",
+      "mockBabt": null,
+      "mockAgentId": null,
+      "quoteAsset": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+      "token": null,
+      "tokens": [],
+      "router": null,
+      "presetId": "1795717041641",
+      "wallets": {
+        "real: top": "0x896d37ee4a1022d722304d2fd2f9594b26d16c8c",
+        "real: high": "0x73f3a84a8b33a3d1ead7eab7e73684ad93492eed",
+        "real: median": "0xc366f55d3ea6e6da886343b374582a35801dcb7a",
+        "real: low": "0x1a6024151faf44ba7a51caa8792f97ac43e32b8b",
+        "real: flagged (rug history)": "0x6b042bc47cb517315480e1d85834185d802224b3"
+      },
+      "treasury": null,
+      "fromBlock": null,
+      "pollMs": 3000,
+      "logsRpc": "https://bsc-testnet-rpc.publicnode.com"
+    }
+  },
+  "runSource": "simulation",
+  "runOnTestnet": true
+}

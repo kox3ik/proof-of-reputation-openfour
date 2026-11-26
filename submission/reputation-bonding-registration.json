@@ -1,0 +1,48 @@
+{
+  "slug": "reputation-bonding",
+  "presetPath": "presets/reputation-bonding.json",
+  "network": "bsctestnet",
+  "chainId": 97,
+  "registeredAt": "2026-11-26T19:20:35.251Z",
+  "registry": "0x74463FA010193012601912d961a445899164BeeF",
+  "core": "0x210edA86A5343b37a06573b6a4C9d49D0F86B2b3",
+  "presetId": "1795717041641",
+  "tokenImplId": "0x4aada5111d85c6dd091b1689d17a92c929d991d7b88c0bdc202fcd0c2cb3b78d",
+  "tokenImpl": "0xbd5C281512b21927BbCAEcBfA34f63A8Ce4AB03D",
+  "implementations": {
+    "ReputationTradeModule": "0xd67a6d6F12d79495f2f0D8EDd1AD67cf9B73AcF4",
+    "ReputationLedger": "0x15B9f0b6Fd56c3622ae7E65C5d28D04efe888a54",
+    "ReputationLockedToken": "0xbd5C281512b21927BbCAEcBfA34f63A8Ce4AB03D",
+    "CashbackPool": "0x26c3fF93169be2049aaD92F732F013d015E70e75",
+    "ReputationRegistry": "0x7231682cdfed6d9d401efb8a2002b026bcbbc105"
+  },
+  "moduleKeys": {
+    "ReputationTradeModule": {
+      "keySource": "module.trade.reputation",
+      "moduleKey": "0xafaec57895b1a9196fa49cb83c71650fa18041b07c2f25ff62b97399516b04a8"
+    },
+    "ReputationLedger": {
+      "keySource": "module.data.reputation_ledger",
+      "moduleKey": "0x5382845c70c77c6d29086020e4844324ac8a39be01597d2ef567f9e6f5b5ae83"
+    }
+  },
+  "developerModules": [
+    {
+      "keySource": "module.trade.reputation",
+      "moduleKey": "0xafaec57895b1a9196fa49cb83c71650fa18041b07c2f25ff62b97399516b04a8",
+      "implementation": "0xd67a6d6F12d79495f2f0D8EDd1AD67cf9B73AcF4",
+      "kind": 3,
+      "name": "ReputationTradeModule",
+      "txHash": "0xb93c6a048a72c3fa71a582783b65486868b2c2f8e67f6f4677d65035b0ca071f"
+    },
+    {
+      "keySource": "module.data.reputation_ledger",
+      "moduleKey": "0x5382845c70c77c6d29086020e4844324ac8a39be01597d2ef567f9e6f5b5ae83",
+      "implementation": "0x15B9f0b6Fd56c3622ae7E65C5d28D04efe888a54",
+      "kind": 5,
+      "name": "ReputationLedger",
+      "txHash": "0xb3ffef00b6558d22a55325fe2cdece4207573ab309348c9faf8eb57f8a79f219"
+    }
+  ],
+  "presetTx": "0x0c4941f8e8720c11297cd22f0237295184271df0a6dd918291c7d71df1342a64"
+}

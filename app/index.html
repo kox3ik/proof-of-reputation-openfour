@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proof of Reputation - judge demo</title>
+<link rel="stylesheet" href="vendor/openfour-style/tokens.css">
+<link rel="stylesheet" href="vendor/openfour-style/base.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="of-page">
+<header class="of-main hdr">
+  <div>
+    <h1 class="of-title">Proof of Reputation</h1>
+    <p class="of-lede sub">Reputation-priced trading for OpenFour launches. Every number below is read from the contracts, or from the logged demo run.</p>
+  </div>
+  <div class="netbox">
+    <label class="of-label" for="net">Network</label>
+    <select id="net" class="of-select"></select>
+    <span id="netstat" class="pill">...</span>
+  </div>
+</header>
+
+<main class="of-main">
+<section id="live" class="of-panel of-panel-brand" hidden>
+  <h2>Live rating simulation</h2>
+  <p class="muted small" id="liveNote">...</p>
+  <div class="grid" id="liveStats"></div>
+  <div id="liveFba"></div>
+  <div class="scroll"><table id="liveTable"></table></div>
+  <h3>What just happened on chain</h3>
+  <ul id="liveFeed"></ul>
+  <div class="scroll"><table id="liveTrades"></table></div>
+</section>
+<section id="lookup" class="of-panel of-panel-brand">
+  <h2>1. Wallet lookup</h2>
+  <div class="row">
+    <input id="addr" class="of-input" placeholder="0x... wallet address" spellcheck="false">
+    <button id="go" class="of-btn of-btn-primary">Look up</button>
+  </div>
+  <div class="row chips" id="chips"></div>
+  <div id="walletOut" class="muted">Pick a demo wallet or paste an address.</div>
+</section>
+
+<section id="table" class="of-panel of-panel-brand" hidden>
+  <h2>2. Same token, same budget</h2>
+  <p class="muted" id="runNote"></p>
+  <div class="scroll"><table id="runTable"></table></div>
+</section>
+
+<section id="cashback" class="of-panel of-panel-brand">
+  <h2>3. Cashback</h2>
+  <div id="cbOut" class="muted">...</div>
+  <div class="row">
+    <button id="connect" class="of-btn">Connect wallet</button>
+    <button id="claim" class="of-btn of-btn-primary" disabled>Claim cashback</button>
+    <button id="mint" class="of-btn" disabled>Get test BABT</button>
+    <span id="walletMsg" class="muted"></span>
+  </div>
+  <p class="muted small">Buttons only prepare a transaction for your wallet (MetaMask). This page holds no keys.</p>
+</section>
+
+<section id="terminals" class="of-panel of-panel-brand">
+  <h2>4. For terminals</h2>
+  <p class="muted">A terminal needs two view calls on the registry: the score and the full price of the next trade.</p>
+  <pre id="snippet"></pre>
+</section>
+</main>
+<footer class="of-main muted small">BNB Bangkok 2026, OpenFour track. Prototype on OpenFour hooks; cashback depends on the pool budget and on the published flags.</footer>
+
+<script src="vendor/ethers.umd.min.js"></script>
+<script src="app.js"></script>
+<script src="live.js"></script>
+</body>
+</html>

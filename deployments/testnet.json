@@ -1,0 +1,248 @@
+{
+  "chainId": 97,
+  "network": "BSC Testnet",
+  "explorer": "https://testnet.bscscan.com",
+  "deployer": "0xf2121A546e3f8b43E5Eb88c0eF8E79B29b3C2B78",
+  "openfour": {
+    "registry": "0xD3FD416B937f252d8C9fdDAdba9BafCF407F1214",
+    "core": "0xf7aeCDf4411baA046Cdf978da94ddc8BAf890f98",
+    "feeRouter": "0x855283a28753AE2cBd317d45C1aeF8E4217859B5",
+    "tools": "0x33d33a3f71013e65D23a1c56c615b6170F07FA8b",
+    "wbnb": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"
+  },
+  "proofOfReputation": {
+    "registry": "0x496a355E7B84C967Db4bcBBd5F67B2Bf81dd8046",
+    "tradeModule": "0xA7c0285f8b8e679f9ffd475ba722EAd5CF1bF5CA",
+    "lockedTokenImpl": "0x030A3a49b01cB9Fb0EB53368439d5109eE5b03A9",
+    "mockBABT": "0x7cF564B1B92668c732b844A9c15070FcFa8b2502",
+    "mockAgentId": "0x6981243bb9F32B2857c973811b352cA885e16512"
+  },
+  "preset": {
+    "id": "1795685685090",
+    "moduleKey": "0xafaec57895b1a9196fa49cb83c71650fa18041b07c2f25ff62b97399516b04a8",
+    "tokenImplId": "0x4aada5111d85c6dd091b1689d17a92c929d991d7b88c0bdc202fcd0c2cb3b78d",
+    "upsertModuleTx": "0x4b6086a068ba681635044102ea07f5d161a9edc7497729517fdbff7f13097101",
+    "upsertTokenImplTx": "0x6cd4b9d3ac2ceff23cde84f03b4127682b94884988fb744480c1b29f85794403",
+    "upsertPresetTx": "0x5ebd714c3fd6b3bb5f50def64a2058122a11a19a4c73dd0a7ac4992375667fea",
+    "feeOverride": {
+      "worked": true,
+      "tx": "0x4b7c7ea305c3ceab72f9e58bccb03e4b1753c63fdad1f6cd2910f94a32a104ea",
+      "protocolFeeBps": 50,
+      "developerFeePoolBps": 0
+    }
+  },
+  "demoToken": "0x5cA9072d99dE8e92dFe28816D2142764b33Cb4A0",
+  "createTx": "0xbdb933af731df68e717023045840bb3d7032d408899e9af75d91dd249eb33f6b",
+  "demoRouter": "0xc48FB056b0A32be992c2e8bbBF82B9cAb1039228",
+  "demoWallets": {
+    "trusted": "0xE03FC02578cCf6F15312bd27b6DA47e86247893d",
+    "regular": "0x706A065c2851699Ef569Fc5236A63FD8d089B177",
+    "fresh": "0xfe2eEc27C74D097aFCE5Dc739a4561d5d962908a",
+    "flagged": "0x9035beC64c100041d643790eBc240e485e166893",
+    "babholder": "0x7bdDbd4aC55Ff8ba4266ac28592942cb7233eBA3",
+    "agentholder": "0x13d2Ca66f3924641d3f2a7556d95badFf4dd8647",
+    "treasury": "0x3E910a9BA1247D1350bd76e9776EBD5dE1CCDBFE",
+    "rewards": "0x61317424A11a29Afc83C26e764A39d22A7e109cc"
+  },
+  "fundTxs": {
+    "trusted": "0xb5b8999a50239ef65eab125fdb235eee63429eae78661101ea2643b9c47b8501",
+    "regular": "0x0a81ffc8fd146f44709d1f92b62cffb7093c8041caf0cb0fe515619cac20f8ba",
+    "fresh": "0x1e970498ccb68560a9a24db91c263d51b8cfc4d02330086e38d9a1515de78cb0",
+    "flagged": "0xe8594656c93da055e826276974757b5863ea7dfec42da6fabaace190bdbfe91e",
+    "babholder": "0xb33f0c59220dc6df80a4c20557cfd8561b60c22170752d45ad8385b457d81e34",
+    "agentholder": "0xfcde1d42b355978a5a6f0c45f42ff949ab3984080c63c20a721b6f29787352c2"
+  },
+  "publishTxs": {
+    "epoch1": "0xd43bea80cd85d690012644b7c56570894e5d0d78dabc50ce1cc83306dd5cfcd9",
+    "epoch2": "0xfa87d9399fc81ef2f268027165e3985914bd94daf15ee671414ec448c8e9dbc8"
+  },
+  "identityTxs": {
+    "babMint": "0xc158784f8a83b8db9a824790a982dcf2bdbde677315e6daa20e2eee277b491d1",
+    "agentMint": "0x844953a346c3924da1d61a0216183f75b78a3667d190acfa5ed61bd4719369d5"
+  },
+  "trades": [
+    {
+      "label": "setup buy of future flagged wallet (good record, no penalty yet)",
+      "role": "flagged",
+      "side": "buy",
+      "score": 500,
+      "identity": 500,
+      "expectedExtraBps": 42,
+      "chargedExtraBps": 41.9999,
+      "tx": "0xf11f1a19bc8c398de52e467d2552c6777f98720ac1faa0a15be5d1c043ff5d4e",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "same buy: trusted",
+      "role": "trusted",
+      "side": "buy",
+      "score": 900,
+      "identity": 900,
+      "expectedExtraBps": 9,
+      "chargedExtraBps": 8.9999,
+      "tx": "0x203f6c87baaaa029aa593092f2eaf55c33798a80eb7b5c28f5045d08ae4e864f",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "same buy: regular",
+      "role": "regular",
+      "side": "buy",
+      "score": 400,
+      "identity": 400,
+      "expectedExtraBps": 50,
+      "chargedExtraBps": 49.9999,
+      "tx": "0x833f72337c6ceaa9b62cbce14d6bc77986ea661543b2fab4b862da7f5d33371b",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "same buy: fresh",
+      "role": "fresh",
+      "side": "buy",
+      "score": 0,
+      "identity": 0,
+      "expectedExtraBps": 300,
+      "chargedExtraBps": 299.9999,
+      "tx": "0x4442a34693f6d347f9b684217e4e630fcde0752d7b2ba37283c67a2e9e48dd4a",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "same buy: flagged (rug penalty, flagged: buys are NOT blocked)",
+      "role": "flagged",
+      "side": "buy",
+      "score": 100,
+      "identity": 900,
+      "expectedExtraBps": 190,
+      "chargedExtraBps": 189.9999,
+      "tx": "0xa1a5cc635a5db39eb2d37d28d2c35ce37ba6ec4656f2dbd5a97a6f85478d9952",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "babholder, no BABT yet (unknown record, identity 0)",
+      "role": "babholder",
+      "side": "buy",
+      "score": 0,
+      "identity": 0,
+      "expectedExtraBps": 300,
+      "chargedExtraBps": 299.9999,
+      "tx": "0xafba2ed3d8e6cb36c859c1604477f1f0a40ae4f809e6d085d91acb1ecf9078cb",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "same babholder after receiving a BABT (identity -> babIdentity)",
+      "role": "babholder",
+      "side": "buy",
+      "score": 140,
+      "identity": 700,
+      "expectedExtraBps": 155,
+      "chargedExtraBps": 154.9999,
+      "tx": "0x95e0d2d10e6c3fcafabb7574ef22db7ac2f965fba792f62f7329aa1e2da02155",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "agentholder holding an Agent ID (identity -> agentIdentity)",
+      "role": "agentholder",
+      "side": "buy",
+      "score": 100,
+      "identity": 500,
+      "expectedExtraBps": 190,
+      "chargedExtraBps": 189.9999,
+      "tx": "0xc7d5d7402bbe99e963064c67820f3e1aedf5f5b350525132555cb23d41920bdd",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "buy through DemoRouter contract by trusted wallet (tx.origin resolution; router cannot forward tokens while locked)",
+      "role": "trusted",
+      "side": "buy",
+      "score": 900,
+      "identity": 900,
+      "expectedExtraBps": 9,
+      "chargedExtraBps": 8.9999,
+      "tx": "0xa9c3fa5c9c55997346329552f6d5c8e0aa40ab8d1afb93e7b337f0004db0cd6f",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "sell by flagged wallet (sell fee capped)",
+      "role": "flagged",
+      "side": "sell",
+      "score": 100,
+      "identity": null,
+      "expectedExtraBps": 100,
+      "chargedExtraBps": 99.9999,
+      "tx": "0x51d15c8980b6317f521c5d0f15f3b51ddcd71a91b80b38f17bafa5d6fe89b667",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "sell by trusted wallet",
+      "role": "trusted",
+      "side": "sell",
+      "score": 900,
+      "identity": null,
+      "expectedExtraBps": 9,
+      "chargedExtraBps": 8.9999,
+      "tx": "0xcd0ee3336a34204afde7924fef5faa78cfc0a7b91a1ed70d83b9814a59fefc45",
+      "failedTx": null,
+      "reverted": null,
+      "revertError": null
+    },
+    {
+      "label": "trusted -> regular plain transfer before migration (collect-by-transfer pattern)",
+      "role": "trusted",
+      "side": "transfer",
+      "score": 900,
+      "identity": null,
+      "expectedExtraBps": 0,
+      "chargedExtraBps": null,
+      "tx": null,
+      "failedTx": "0x5931d4f3e84aef9be11861354cea18de23e14815f3959bffcd5ca7690820c1d1",
+      "reverted": true,
+      "revertError": "TransferLocked()"
+    },
+    {
+      "label": "babholder -> agentholder plain transfer before migration",
+      "role": "babholder",
+      "side": "transfer",
+      "score": 140,
+      "identity": null,
+      "expectedExtraBps": 0,
+      "chargedExtraBps": null,
+      "tx": null,
+      "failedTx": "0x602812b8518d3d61a18ec83acce5c878244d6989753b5f69264362cb0fa06bda",
+      "reverted": true,
+      "revertError": "TransferLocked()"
+    }
+  ],
+  "gas": {
+    "deployerLeftTBNB": 0.24636114375,
+    "deployerStartTBNB": 0.2999975,
+    "fundedToDemoWallets": 0.051000000000000004,
+    "spentOnChainDeploymentsAndGas": 0.002636,
+    "demoWalletBalancesWei": {
+      "trusted": 5955638685321847,
+      "regular": 1882705163715147,
+      "fresh": 1882472113093307,
+      "flagged": 18986388176775302,
+      "babholder": 2763877914073220,
+      "agentholder": 1882472991841405
+    }
+  }
+}

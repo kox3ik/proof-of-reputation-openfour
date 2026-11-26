@@ -1,0 +1,118 @@
+{
+  "kind": "openfour-submit-pack",
+  "version": "1",
+  "createdAt": "2026-11-26T19:32:38.726Z",
+  "gitRev": "8a0d2390558f72c0c997c7103f3beccc951060af",
+  "preset": {
+    "id": "reputation-bonding",
+    "name": "Reputation Bonding V1",
+    "description": "Bonding V1 with reputation-priced Trade module and pre-migration transfer fee",
+    "path": "presets/reputation-bonding.json",
+    "modules": {
+      "token": {
+        "keySource": "module.token.standard",
+        "reuse": true
+      },
+      "vault": {
+        "keySource": "module.vault.standard",
+        "reuse": true
+      },
+      "curve": {
+        "keySource": "module.curve.bonding",
+        "reuse": true
+      },
+      "trade": {
+        "contract": "ReputationTradeModule",
+        "keySource": "module.trade.reputation"
+      },
+      "migrate": {
+        "keySource": "module.migrate.bonding",
+        "reuse": true
+      },
+      "customData": {
+        "contract": "ReputationLedger",
+        "keySource": "module.data.reputation_ledger"
+      }
+    },
+    "validator": {
+      "reuse": "fork",
+      "note": "the validator of the fork's Bonding V1 preset (the Preset copies it unchanged)"
+    },
+    "tokenImpl": {
+      "contract": "ReputationLockedToken",
+      "keySource": "TOKEN_IMPL_REPUTATION_LOCKED"
+    }
+  },
+  "sources": [
+    "src/ReputationTradeModule.sol",
+    "src/ReputationLedger.sol",
+    "src/ReputationLockedToken.sol",
+    "src/ReputationRegistry.sol",
+    "src/CashbackPool.sol",
+    "src/ReputationMath.sol",
+    "src/ReputationTypes.sol"
+  ],
+  "registration": {
+    "path": "submission/reputation-bonding-registration.json",
+    "registry": "0x74463FA010193012601912d961a445899164BeeF",
+    "core": "0x210edA86A5343b37a06573b6a4C9d49D0F86B2b3",
+    "presetId": "1795717041641",
+    "tokenImplId": "0x4aada5111d85c6dd091b1689d17a92c929d991d7b88c0bdc202fcd0c2cb3b78d",
+    "moduleKeys": {
+      "ReputationTradeModule": {
+        "keySource": "module.trade.reputation",
+        "moduleKey": "0xafaec57895b1a9196fa49cb83c71650fa18041b07c2f25ff62b97399516b04a8"
+      },
+      "ReputationLedger": {
+        "keySource": "module.data.reputation_ledger",
+        "moduleKey": "0x5382845c70c77c6d29086020e4844324ac8a39be01597d2ef567f9e6f5b5ae83"
+      }
+    }
+  },
+  "forkRegistry": "0x74463FA010193012601912d961a445899164BeeF",
+  "tokens": [
+    {
+      "tokenAddress": "0xbda42CeC66986F8FD47Fa2f28a9f23e6CDc79518",
+      "name": "ALPHA5252",
+      "symbol": "ALPHA5252",
+      "presetId": "1795717041641",
+      "presetName": "Reputation Bonding V1",
+      "creator": "0xf2121A546e3f8b43E5Eb88c0eF8E79B29b3C2B78",
+      "txHash": "0xd0d5bfbbe17e9d205f7970b3ffd668b088842145b768210ba7317eb64e0d31df",
+      "chainId": 97,
+      "quoteAsset": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+      "createdAt": "2026-11-26T19:20:36Z"
+    },
+    {
+      "tokenAddress": "0xBb9076Dc35AA9B34474cdA341c3eeB84a9179957",
+      "name": "BETA7893",
+      "symbol": "BETA7893",
+      "presetId": "1795717041641",
+      "presetName": "Reputation Bonding V1",
+      "creator": "0xf2121A546e3f8b43E5Eb88c0eF8E79B29b3C2B78",
+      "txHash": "0x43236b4ae5fcf5e2d17315e9180c19a55ac948742185ec1877720b7545da47c1",
+      "chainId": 97,
+      "quoteAsset": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+      "createdAt": "2026-11-26T19:20:39Z"
+    },
+    {
+      "tokenAddress": "0xB9F2fF25C51f2f88789ACD78C08AEc3ca8E4C1d6",
+      "name": "GAMMA0100",
+      "symbol": "GAMMA0100",
+      "presetId": "1795717041641",
+      "presetName": "Reputation Bonding V1",
+      "creator": "0xf2121A546e3f8b43E5Eb88c0eF8E79B29b3C2B78",
+      "txHash": "0xfc829d1027d3b190f8664bd0dc28e93a276d978873bd39c50b38e73ca615a5e0",
+      "chainId": 97,
+      "quoteAsset": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+      "createdAt": "2026-11-26T19:20:41Z"
+    }
+  ],
+  "notes": [
+    "Do not upsert production Registries yourself.",
+    "Include this file, module source, tests, and the fork Registry address on four.meme.",
+    "Sources are paths relative to the Proof of Reputation repository root (Foundry project), not to developer/startup.",
+    "Registry and Core addresses are those of our own OpenFour fork deployed on the real BSC Testnet (chain id 97); tx hashes are in the simulation run log."
+  ],
+  "frontendStyle": "developer/frontend-style/"
+}

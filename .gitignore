@@ -1,0 +1,37 @@
+# dependencies and build output
+node_modules/
+artifacts/
+cache/
+typechain-types/
+coverage/
+out/
+dist/
+
+# secrets: never commit keys or environment files
+.env
+.env.*
+*.key
+keys/
+
+# local data
+data/raw/
+.DS_Store
+
+# foundry deps (scripts/install-deps.sh)
+lib/
+
+# deployments and broadcast artifacts (local/testnet runs)
+broadcast/
+deployments/*
+!deployments/testnet.json
+demo-out/
+
+# python bytecode
+__pycache__/
+*.pyc
+
+# real-time publisher: built snapshot (large) and runtime logs
+service/publisher/data/*.npz
+service/publisher/data/*.jsonl
+service/publisher/rehearse/out/
+app/sim-live.json
