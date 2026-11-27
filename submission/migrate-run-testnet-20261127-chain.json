@@ -1,0 +1,187 @@
+{
+ "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69",
+ "chainId": 97,
+ "registry": "0x98bbf48635f680bdbecda0343896d8a7a2ca703e",
+ "scores": {
+  "fresh.flag": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "fresh.score": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "regular.flag": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "regular.score": "0x0000000000000000000000000000000000000000000000000000000000000190",
+  "trusted.flag": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "trusted.score": "0x0000000000000000000000000000000000000000000000000000000000000384"
+ },
+ "blockTimes": {
+  "145084306": 1795743293,
+  "145084403": 1795743337
+ },
+ "trades": [
+  {
+   "tx": "0xaa79ae9dad23e2a6b2376afd99905fedd7710d32dfd8c59c4ebd8986711bfba0",
+   "block": 145084316,
+   "side": "buy",
+   "role": "fresh",
+   "wallet": "0xcf75edac67eafee9f334bdcfa70a1f6fdf11ab33",
+   "valueWei": "4000000000000000",
+   "core": {
+    "isBuy": "1",
+    "tokens": "3782870309667277497900495942",
+    "quote": "3724393844783354",
+    "protocolFee": "18621969223916",
+    "moduleFee": "256983175290051"
+   },
+   "inflow": {
+    "budget": "9310984611959",
+    "deposit": "238361206066134",
+    "fund": "0",
+    "bonus": "9310984611958"
+   }
+  },
+  {
+   "tx": "0xff12e1b2e31025d482f2fec9f8e617b10295a23989fcf2a8d4ed518ac8d71682",
+   "block": 145084326,
+   "side": "buy",
+   "role": "regular",
+   "wallet": "0x09cdf0a7c8d9d545dcf1a28d3f756079ae1a96e0",
+   "valueWei": "4000000000000000",
+   "core": {
+    "isBuy": "1",
+    "tokens": "1895672416848072938201055619",
+    "quote": "3960395650397837",
+    "protocolFee": "19801978251989",
+    "moduleFee": "19801978251988"
+   },
+   "inflow": {
+    "budget": "9900989125994",
+    "deposit": "0",
+    "fund": "0",
+    "bonus": "9900989125994"
+   }
+  },
+  {
+   "tx": "0xf6b87b85393316972bf7b3219b5f048337fdfa265011de266b563bd42382d40b",
+   "block": 145084335,
+   "side": "buy",
+   "role": "trusted",
+   "wallet": "0x4da2504e450adb1ee5674155793a35cccb2d7ce5",
+   "valueWei": "4000000000000000",
+   "core": {
+    "isBuy": "1",
+    "tokens": "1087265775552266977723205655",
+    "quote": "3976538106202968",
+    "protocolFee": "19882690531014",
+    "moduleFee": "3578884295582"
+   },
+   "inflow": {
+    "budget": "1988269053101",
+    "deposit": "0",
+    "fund": "0",
+    "bonus": "1590615242481"
+   }
+  },
+  {
+   "tx": "0x154cf179cc51adebf2ddbbb3b4213dd2ebb5f3344407999471bddeadfde3e945",
+   "block": 145084355,
+   "side": "sell",
+   "role": "fresh",
+   "wallet": "0xcf75edac67eafee9f334bdcfa70a1f6fdf11ab33",
+   "valueWei": "0",
+   "core": {
+    "isBuy": "0",
+    "tokens": "1891435154833638748950247971",
+    "quote": "5969237008164850",
+    "protocolFee": "29846185040824",
+    "moduleFee": "29846185040824"
+   },
+   "inflow": {
+    "budget": "14923092520412",
+    "deposit": "0",
+    "fund": "0",
+    "bonus": "14923092520412"
+   }
+  },
+  {
+   "tx": "0xd9bf8385bb19bf639da1d0d66816db15a3c4bc3f541c21d72e37948282f46220",
+   "block": 145084374,
+   "side": "sell",
+   "role": "regular",
+   "wallet": "0x09cdf0a7c8d9d545dcf1a28d3f756079ae1a96e0",
+   "valueWei": "0",
+   "core": {
+    "isBuy": "0",
+    "tokens": "1895672416848072938201055619",
+    "quote": "3063306262283019",
+    "protocolFee": "15316531311415",
+    "moduleFee": "15316531311414"
+   },
+   "inflow": {
+    "budget": "7658265655707",
+    "deposit": "0",
+    "fund": "0",
+    "bonus": "7658265655707"
+   }
+  },
+  {
+   "tx": "0x884433a25d69883aa1ecd14fe7482b2618e71097dfaf79466b85b47f3e7f635f",
+   "block": 145084383,
+   "side": "buy",
+   "role": "trusted",
+   "wallet": "0x4da2504e450adb1ee5674155793a35cccb2d7ce5",
+   "valueWei": "8000000000000000",
+   "core": {
+    "isBuy": "1",
+    "tokens": "3541013344864009403268714032",
+    "quote": "7953076538293809",
+    "protocolFee": "39765382691469",
+    "moduleFee": "7157768884463"
+   },
+   "inflow": {
+    "budget": "3976538269146",
+    "deposit": "0",
+    "fund": "0",
+    "bonus": "3181230615317"
+   }
+  },
+  {
+   "tx": "0x65c36d027a180cd108493e1429cee989d50bf0d91ecd839f58aa6e4f0ccaacd9",
+   "block": 145084393,
+   "side": "buy",
+   "role": "trusted",
+   "wallet": "0x4da2504e450adb1ee5674155793a35cccb2d7ce5",
+   "valueWei": "8000000000000000",
+   "core": {
+    "isBuy": "1",
+    "tokens": "1322161334617604141840256719",
+    "quote": "7953076771098695",
+    "protocolFee": "39765383855493",
+    "moduleFee": "7157769093988"
+   },
+   "inflow": {
+    "budget": "3976538385549",
+    "deposit": "0",
+    "fund": "0",
+    "bonus": "3181230708439"
+   }
+  },
+  {
+   "tx": "0xa7810639fd495261c403a5ed24495e644dd0dfc76ac61bce3b4a0169c04bd08b",
+   "block": 145084403,
+   "side": "buy",
+   "role": "trusted",
+   "wallet": "0x4da2504e450adb1ee5674155793a35cccb2d7ce5",
+   "valueWei": "8000000000000000",
+   "core": {
+    "isBuy": "1",
+    "tokens": "158124390132480728217575623",
+    "quote": "1465062359671204",
+    "protocolFee": "7325311798356",
+    "moduleFee": "1318556123703"
+   },
+   "inflow": {
+    "budget": "732531179835",
+    "deposit": "0",
+    "fund": "0",
+    "bonus": "586024943868"
+   }
+  }
+ ]
+}

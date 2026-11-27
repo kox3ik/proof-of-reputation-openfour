@@ -12,17 +12,19 @@
 <link rel="stylesheet" href="terminal.css">
 </head>
 <body class="term">
-<header class="tbar">
-  <a class="brand" href="index.html"><span class="pxl" data-pxwallet="#141414"></span><span>Proof of Reputation</span></a>
+<header class="snav"><div class="snav-in">
+  <a class="brand" href="index.html" aria-label="Proof of Reputation"><svg viewBox="0 0 16 14" width="24" height="21" shape-rendering="crispEdges" fill="#d7f25c" aria-hidden="true"><path d="M4 0h8v1h-8zM2 1h2v1h-2zM12 1h2v1h-2zM1 2h1v1h-1zM4 2h3v1h-3zM8 2h4v1h-4zM14 2h1v1h-1zM1 3h1v1h-1zM3 3h1v1h-1zM7 3h1v1h-1zM12 3h1v1h-1zM14 3h1v1h-1zM0 4h16v1h-16zM0 5h1v1h-1zM15 5h1v1h-1zM0 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM11 7h3v1h-3zM15 7h1v1h-1zM0 8h1v1h-1zM10 8h1v1h-1zM14 8h1v1h-1zM0 9h1v1h-1zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM0 10h1v1h-1zM11 10h2v1h-2zM14 10h1v1h-1zM0 11h1v1h-1zM15 11h1v1h-1zM0 12h1v1h-1zM15 12h1v1h-1zM0 13h16v1h-16z"/></svg><span>Proof of Reputation</span></a>
+  <nav class="snav-links" aria-label="Pages"><a href="index.html">Overview</a><a href="leaderboard.html">Leaderboard</a><a href="profile.html">Profile</a><a href="claim.html">Cashback</a></nav>
+  <div class="snav-r"><a class="snav-term" href="terminal.html" aria-current="page">Terminal</a><a class="snav-lang" href="zh/index.html" hreflang="zh-CN" lang="zh-CN">中文</a></div>
+</div></header>
+<div class="tbar">
   <nav class="sets" id="sets" aria-label="Data sets"></nav>
   <form class="yfee" id="yform" autocomplete="off">
     <label for="yaddr" class="lbl">Your fee</label>
     <input id="yaddr" placeholder="paste 0x wallet" spellcheck="false" aria-label="Wallet address">
     <button class="btn fill" type="submit">Check</button>
   </form>
-  <a class="back" href="leaderboard.html">Leaderboard</a> <a class="back" href="profile.html">Profile</a> <a class="back" href="claim.html">Claim cashback</a>
-  <a class="back" href="index.html">&larr; Back to overview</a>
-</header>
+</div>
 <div class="yout" id="yout" hidden></div>
 <div class="note" id="setnote"></div>
 <main class="grid" id="main">
@@ -35,6 +37,7 @@
     <div class="cstats" id="cstats"></div>
     <div class="cwrap" id="cwrap"><div id="lw" role="img" aria-label="Candlestick chart with trades"></div><div class="tip" id="tip" hidden></div></div>
     <div class="ctoken mono" id="ctoken"></div>
+    <div class="cevents mono" id="cevents" hidden></div>
   </section>
   <aside class="pane traders" aria-label="Traders rating and fees">
     <div class="ph"><span>Traders on this token &mdash; rating &amp; fees</span><span id="livestate" class="livestate"></span></div>

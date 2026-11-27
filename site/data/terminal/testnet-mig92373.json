@@ -1,0 +1,229 @@
+{
+ "id": "testnet-migrated-mig92373",
+ "name": "MIG92373",
+ "symbol": "MIG92373",
+ "network": "bsc-testnet",
+ "address": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69",
+ "note": "Full path on BSC testnet: 8 trades on the curve, none after the migration (finalizeEpoch and the claims follow). Time per trade is derived from its block.",
+ "registry": "0x98bbf48635f680bdbecda0343896d8a7a2ca703e",
+ "migrated": {
+  "block": 145084403,
+  "tx": "0xa7810639fd495261c403a5ed24495e644dd0dfc76ac61bce3b4a0169c04bd08b"
+ },
+ "trades": [
+  {
+   "t": 1795743298,
+   "block": 145084316,
+   "side": "buy",
+   "wallet": "0xcf75edac67eafee9f334bdcfa70a1f6fdf11ab33",
+   "bnb": 0.003724393844783354,
+   "tokens": 3782870309.6672773,
+   "price": 9.845417738127357e-13,
+   "tx": "0xaa79ae9dad23e2a6b2376afd99905fedd7710d32dfd8c59c4ebd8986711bfba0",
+   "phase": "curve",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 640,
+    "penalty": 0,
+    "total": 690
+   },
+   "role": "new",
+   "label": "fresh buy"
+  },
+  {
+   "t": 1795743302,
+   "block": 145084326,
+   "side": "buy",
+   "wallet": "0x09cdf0a7c8d9d545dcf1a28d3f756079ae1a96e0",
+   "bnb": 0.003960395650397837,
+   "tokens": 1895672416.848073,
+   "price": 2.0891772308333587e-12,
+   "tx": "0xff12e1b2e31025d482f2fec9f8e617b10295a23989fcf2a8d4ed518ac8d71682",
+   "phase": "curve",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "honest",
+   "label": "regular buy"
+  },
+  {
+   "t": 1795743306,
+   "block": 145084335,
+   "side": "buy",
+   "wallet": "0x4da2504e450adb1ee5674155793a35cccb2d7ce5",
+   "bnb": 0.003976538106202968,
+   "tokens": 1087265775.552267,
+   "price": 3.657374485261546e-12,
+   "tx": "0xf6b87b85393316972bf7b3219b5f048337fdfa265011de266b563bd42382d40b",
+   "phase": "curve",
+   "feeBps": {
+    "regular": 9,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 9
+   },
+   "role": "honest",
+   "label": "trusted buy"
+  },
+  {
+   "t": 1795743315,
+   "block": 145084355,
+   "side": "sell",
+   "wallet": "0xcf75edac67eafee9f334bdcfa70a1f6fdf11ab33",
+   "bnb": 0.00596923700816485,
+   "tokens": 1891435154.8336387,
+   "price": 3.1559300317064665e-12,
+   "tx": "0x154cf179cc51adebf2ddbbb3b4213dd2ebb5f3344407999471bddeadfde3e945",
+   "phase": "curve",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "new",
+   "label": "fresh sell"
+  },
+  {
+   "t": 1795743324,
+   "block": 145084374,
+   "side": "sell",
+   "wallet": "0x09cdf0a7c8d9d545dcf1a28d3f756079ae1a96e0",
+   "bnb": 0.003063306262283019,
+   "tokens": 1895672416.848073,
+   "price": 1.6159470565997717e-12,
+   "tx": "0xd9bf8385bb19bf639da1d0d66816db15a3c4bc3f541c21d72e37948282f46220",
+   "phase": "curve",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "honest",
+   "label": "regular sell"
+  },
+  {
+   "t": 1795743328,
+   "block": 145084383,
+   "side": "buy",
+   "wallet": "0x4da2504e450adb1ee5674155793a35cccb2d7ce5",
+   "bnb": 0.007953076538293809,
+   "tokens": 3541013344.8640094,
+   "price": 2.24598886356336e-12,
+   "tx": "0x884433a25d69883aa1ecd14fe7482b2618e71097dfaf79466b85b47f3e7f635f",
+   "phase": "curve",
+   "feeBps": {
+    "regular": 9,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 9
+   },
+   "role": "honest",
+   "label": "trusted buy"
+  },
+  {
+   "t": 1795743332,
+   "block": 145084393,
+   "side": "buy",
+   "wallet": "0x4da2504e450adb1ee5674155793a35cccb2d7ce5",
+   "bnb": 0.007953076771098695,
+   "tokens": 1322161334.6176043,
+   "price": 6.015209008815014e-12,
+   "tx": "0x65c36d027a180cd108493e1429cee989d50bf0d91ecd839f58aa6e4f0ccaacd9",
+   "phase": "curve",
+   "feeBps": {
+    "regular": 9,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 9
+   },
+   "role": "honest",
+   "label": "trusted buy"
+  },
+  {
+   "t": 1795743337,
+   "block": 145084403,
+   "side": "buy",
+   "wallet": "0x4da2504e450adb1ee5674155793a35cccb2d7ce5",
+   "bnb": 0.001465062359671204,
+   "tokens": 158124390.13248074,
+   "price": 9.265252238720013e-12,
+   "tx": "0xa7810639fd495261c403a5ed24495e644dd0dfc76ac61bce3b4a0169c04bd08b",
+   "phase": "curve",
+   "feeBps": {
+    "regular": 9,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 9
+   },
+   "role": "honest",
+   "label": "trusted buy"
+  }
+ ],
+ "wallets": {
+  "0xcf75edac67eafee9f334bdcfa70a1f6fdf11ab33": {
+   "score": 0.0,
+   "flagged": false,
+   "fresh": true,
+   "buyBps": 690,
+   "sellBps": 50,
+   "depositBps": 640,
+   "label": "fresh",
+   "live": false
+  },
+  "0x09cdf0a7c8d9d545dcf1a28d3f756079ae1a96e0": {
+   "score": 0.4,
+   "flagged": false,
+   "fresh": false,
+   "buyBps": 50,
+   "sellBps": 50,
+   "depositBps": 0,
+   "label": "regular",
+   "live": false
+  },
+  "0x4da2504e450adb1ee5674155793a35cccb2d7ce5": {
+   "score": 0.9,
+   "flagged": false,
+   "fresh": false,
+   "buyBps": 9,
+   "sellBps": 9,
+   "depositBps": 0,
+   "label": "trusted",
+   "live": false
+  }
+ },
+ "events": [
+  {
+   "t": 1795743337,
+   "kind": "migrate",
+   "block": 145084403,
+   "tx": "0xa7810639fd495261c403a5ed24495e644dd0dfc76ac61bce3b4a0169c04bd08b",
+   "text": "Migrated to PancakeSwap (block 145084403): the raise target was reached, 0.0200 BNB raised"
+  },
+  {
+   "t": 1795743350,
+   "kind": "finalize",
+   "block": 145084431,
+   "tx": "0x05e9bccd81ecf79b6e64b4bdc8253a68ad48a9043b9da98eb371dbc4b29c7652",
+   "text": "Epoch finalized after the migration (block 145084431): unlocks cashback and deposits"
+  },
+  {
+   "t": 1795743354,
+   "kind": "claim",
+   "block": 145084441,
+   "tx": "0x50706e5471cebbbcaec7ceb15c5e960d60890dd1250753f379ee40e5c0d4970a",
+   "text": "Cashback and deposit claimed (fresh): 0.000131 BNB"
+  },
+  {
+   "t": 1795743359,
+   "kind": "claim",
+   "block": 145084451,
+   "tx": "0xdb96f0de4e05f95021d9f08384891e02e704bb313263c3513e6d5d3408ab4c0c",
+   "text": "Cashback and deposit claimed (regular): 0.000018 BNB"
+  }
+ ]
+}

@@ -51,7 +51,7 @@
       $("tcount").textContent = S.tokens.length;
       renderTokens();
       selectToken(S.tokens[0] || null);
-      if (isT) liveRefresh();
+      if (isT && !set.static) liveRefresh();
     });
   }
   function boot() {
@@ -83,7 +83,16 @@
     $("cstats").innerHTML = [["Last", fp(last)], ["High", fp(hi)], ["Low", fp(lo === Infinity ? 0 : lo)], ["Volume", fb(vol) + " BNB"], ["Trades", tr.length]].map(function (x) { return "<div>" + x[0] + "<b>" + x[1] + "</b></div>"; }).join("");
     $("ctoken").innerHTML = (t.network === "bsc-testnet" ? "BSC testnet" : "Mainnet replay") + " &middot; token " + (t.address ? '<a href="' + base(t) + '/token/' + esc(t.address) + '" target="_blank" rel="noopener">' + esc(t.address) + "</a>" : "") + (t.note ? " &middot; " + esc(t.note) : "") + ' &middot; <a href="https://www.tradingview.com/" target="_blank" rel="noopener">Charts by TradingView Lightweight Charts</a>';
     $("legend").innerHTML = Object.keys(COL).filter(function (k) { return k !== "other" || tr.some(function (x) { return cls(x.role) === "other"; }); }).map(function (k) { return '<span><i style="background:' + COL[k] + '"></i>' + NAME[k] + "</span>"; }).join("") + '<span class="vleg">volume: <i style="background:' + VC.bad + '"></i>bundle <i style="background:' + VC["new"] + '"></i>new <i style="background:' + VC.ok + '"></i>honest</span><button type="button" class="more" id="tgl">' + (S.showTrades ? "Hide trades" : "Show trades") + "</button>";
-    drawChart(); renderTraders(); renderTape();
+    drawChart(); renderTraders(); renderTape(); renderEvents();
+  }
+  // events after the migration (finalizeEpoch, claims) and the migration itself, for data sets that carry them
+  function renderEvents() {
+    var t = S.tok, el = $("cevents"), ev = (t.events || []).filter(function (e) { return e.kind === "migrate" || e.kind === "finalize" || (e.kind === "claim" && t.migrated); });
+    if (!t.migrated || !ev.length) { el.hidden = true; el.innerHTML = ""; return; }
+    el.hidden = false;
+    el.innerHTML = '<b>Migration and after</b>' + ev.map(function (e) {
+      return '<a class="ev ' + esc(e.kind) + '" href="' + esc(txUrl(t, e)) + '" target="_blank" rel="noopener">' + ft(e.t) + " &middot; " + esc(e.text) + " &middot; " + esc(e.tx.slice(0, 10)) + "\u2026</a>";
+    }).join("") + '<span class="muted">No trades after the migration in this run: the pool pricing is covered by the contract tests.</span>';
   }
 
   // ---- chart: TradingView Lightweight Charts (candles from trades + volume + trade markers) ----
@@ -126,7 +135,7 @@
     var cs = LW.addCandlestickSeries({ upColor: "#7fe07f", downColor: "#ff7a5c", borderUpColor: "#7fe07f", borderDownColor: "#ff7a5c", wickUpColor: "#7fe07f", wickDownColor: "#ff7a5c", priceFormat: { type: "custom", formatter: fmt, minMove: 1e-9 },
       autoscaleInfoProvider: function () { // fixed range: never below 0, leaves the bottom fifth to the volume bars
         var lo = Math.min.apply(null, B.map(function (b) { return b.low; })), hi = Math.max.apply(null, B.map(function (b) { return b.high; })), r = (hi - lo) || hi * 0.2 || 1;
-        return { priceRange: { minValue: Math.max(0, lo - r * 0.38), maxValue: hi + r * 0.2 } };
+        return { priceRange: { minValue: Math.max(0, lo - r * 0.38), maxValue: hi + r * ((t.migrated) ? 0.45 : 0.2) } };
       } });
     cs.setData(B.map(function (b) { return { time: b.time, open: b.open, high: b.high, low: b.low, close: b.close }; }));
     var vs = LW.addHistogramSeries({ priceScaleId: "vol", priceFormat: { type: "custom", formatter: function (v) { return fb(v) + " BNB"; }, minMove: 1e-9 }, lastValueVisible: false, priceLineVisible: false });
@@ -136,7 +145,7 @@
     if (S.showTrades) tr.forEach(function (x, i) {
       var w = x.wallet.toLowerCase(), r = cls(x.role), show = r === "bundle" || r === "flagged" || (r === "new" && x.side === "buy" && !firstBuy[w]);
       if (x.side === "buy") firstBuy[w] = 1;
-      mk.push({ time: B[idxBucket[i]].time, position: x.side === "buy" ? "belowBar" : "aboveBar", shape: x.side === "buy" ? "arrowUp" : "arrowDown", color: COL[r], size: 1 });
+      mk.push({ time: B[idxBucket[i]].time, position: x.side === "buy" ? "belowBar" : "aboveBar", shape: x.phase === "pool" ? "square" : x.side === "buy" ? "arrowUp" : "arrowDown", color: x.phase === "pool" ? "#5cb8ff" : COL[r], size: 1 });
     });
     var firstDump = -1; tr.forEach(function (x, i) { if (firstDump < 0 && x.side === "sell" && (x.role === "bundle" || x.role === "flagged")) firstDump = i; });
     var late = function (tm) { return (tm - T0) / STEP > B.length * 0.9; };
@@ -145,6 +154,8 @@
       var tm = B[idxBucket[eventIndex(t, e)]].time;
       if (e.kind === "dump" && !seen.dump) { seen.dump = 1; mk.push({ time: tm, position: late(tm) ? "belowBar" : "aboveBar", shape: "square", color: "#ff9f5c", text: "DUMP", size: 1 }); }
       else if (e.kind === "flag" && !seen.flag) { seen.flag = 1; mk.push({ time: tm, position: late(tm) ? "belowBar" : "aboveBar", shape: "circle", color: "#ff5d5d", text: "FLAGGED", size: 1 }); }
+      else if (e.kind === "migrate") mk.push({ time: tm, position: "aboveBar", shape: "square", color: "#5cb8ff", text: "Migrated to PancakeSwap \u00b7 block " + e.block, size: 1 });
+      else if (e.kind === "finalize") mk.push({ time: tm, position: "belowBar", shape: "circle", color: "#5cb8ff", size: 1 });
       else if (e.kind === "claim") mk.push({ time: tm, position: "belowBar", shape: "circle", color: "#4cc9b0", size: 1 });
     });
     if (!seen.dump) { // no dump event in the data: take the candle with the largest bundle sell volume
@@ -203,7 +214,8 @@
     }).join("") || '<tr><td colspan="6" class="muted">no traders</td></tr>';
     if (rows.length < total) document.querySelector("#ttab tbody").insertAdjacentHTML("beforeend", '<tr><td colspan="6"><button type="button" class="more" id="showall">Show all ' + total + ' traders (showing flagged + top by score)</button></td></tr>');
     var ls = $("livestate");
-    if (/testnet/.test(S.set.id)) { ls.className = "livestate " + (S.liveOk ? "on" : "off"); ls.textContent = S.liveOk === null ? "reading registry…" : S.liveOk ? "● live from registry" : "stored values (RPC unavailable)"; }
+    if (S.set.static) { ls.className = "livestate"; ls.textContent = "values at the time of the run"; }
+    else if (/testnet/.test(S.set.id)) { ls.className = "livestate " + (S.liveOk ? "on" : "off"); ls.textContent = S.liveOk === null ? "reading registry…" : S.liveOk ? "● live from registry" : "stored values (RPC unavailable)"; }
     else { ls.className = "livestate"; ls.textContent = "replay values"; }
   }
 
@@ -212,7 +224,7 @@
     var t = S.tok, tx = t.network === "bsc-testnet" ? CFG.explorer : "https://bscscan.com";
     document.querySelector("#tape tbody").innerHTML = t.trades.slice().reverse().map(function (x) {
       var f = x.feeBps || {}, c = cls(x.role);
-      return '<tr class="rowlink" data-href="' + esc(txUrl(t, x)) + '"><td>' + ft(x.t) + '</td><td class="' + (x.side === "buy" ? "up" : "dn") + '">' + x.side.toUpperCase() + "</td><td>" + short(x.wallet) + "</td><td class=\"r\">" + fb(x.bnb) + '</td><td class="r"><b>' + f.total + '</b></td><td class="split">' + f.regular + " + " + f.deposit + " + " + f.penalty + '</td><td><span class="dot" style="background:' + COL[c] + '"></span>' + NAME[c] + '</td><td><a href="' + esc(txUrl(t, x)) + '" target="_blank" rel="noopener">' + (x.tx ? esc(x.tx.slice(0, 10)) + "\u2026" : "transfers") + "</a></td></tr>";
+      return '<tr class="rowlink" data-href="' + esc(txUrl(t, x)) + '"><td>' + ft(x.t) + '</td><td class="' + (x.side === "buy" ? "up" : "dn") + '">' + x.side.toUpperCase() + "</td><td>" + short(x.wallet) + "</td><td class=\"r\">" + fb(x.bnb) + '</td><td class="r"><b>' + f.total + '</b></td><td class="split">' + f.regular + " + " + f.deposit + " + " + f.penalty + '</td><td><span class="dot" style="background:' + COL[c] + '"></span>' + NAME[c] + (x.phase === "pool" ? ' &middot; pool' : "") + '</td><td><a href="' + esc(txUrl(t, x)) + '" target="_blank" rel="noopener">' + (x.tx ? esc(x.tx.slice(0, 10)) + "\u2026" : "transfers") + "</a></td></tr>";
     }).join("");
   }
 
