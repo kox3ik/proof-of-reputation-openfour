@@ -77,3 +77,17 @@ false positives 2 (9 and 22; row 9 additionally hardened).
 AI reviewers read code and ran tests on snapshots; none ran against the real OpenFour Core or a production
 FeeRouter. Real-Core gas, relayer behaviour and migration with leftover tokens are unverified. A human audit is
 recommended before any mainnet deployment.
+
+## Second review, 27 Nov 2026 (two independent AI reviewers, post-migration path and smooth pricing)
+
+Fixed (commit `1d426d9`, 286/286 forge tests): a pool sale was counted against both the pool and the curve position (now allocated once,
+pool position first); a buy through a router was charged again on the router-to-user hop (the router now gets a transient credit);
+a listed router's `owed` was not spent on the pair leg; a duplicated `_market` call in `_update`. Texts that no longer matched the code
+(cut order at the 950 bps cap, deploy defaults, transfer fee after migration, test count) were corrected in `79b25c6`.
+
+Open, documented in README "Risks and limitations": the post-migration path lives in the token's transfer hook and cannot tell a swap
+from a plain transfer to the pair (`skim`) or from liquidity moves, so a deposit can unlock without a swap; only the registered pair is
+priced; a sale through a non-allowlisted contract pays the sell rate on both hops; the publisher does not read DEX swaps yet; changing
+`rewardsPool` leaves open deposits in the old pool; the reference rug rule publishes a binary rug component (0 or 1000), so the sell fee
+still steps at the flag although the contracts price the component continuously; dust-size trades can round a penalty share into
+cashback. Production path: a PancakeSwap Infinity hook.

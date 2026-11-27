@@ -5,9 +5,9 @@
 
 ## Flow
 1. The trade module returns two tiers: treasury and the pool. The pool tier is `CashbackPool`, the registry's
-   `rewardsPool`. It carries the pool part of the regular fee, the **fresh deposit** (`freshDepositBps`, default 150, scaled by the score: `freshDepositBps * (N - s) / N` for score `s` below the knee `N` = `neutralScore`, zero at or above it; buys only:
+   `rewardsPool`. It carries the pool part of the regular fee, the **fresh deposit** (`freshDepositBps`, deploy default 640, scaled by the score: `freshDepositBps * (N - s) / N` for score `s` below the knee `N` = `neutralScore`, zero at or above it; buys only:
    wallets with no history and no BAB pay it on top of the regular rate, on **buys only** (a sell, and a transfer priced as a sell, pays the regular fee without a deposit); the soulbound Agent ID is minted for ~gas with a
-   SPACE ID server signature, so it does not end newness) and the **flag penalty** (`penaltyBps`, default 500, scaled by the
+   SPACE ID server signature, so it does not end newness) and the **flag penalty** (`penaltyBps`, deploy default 640, scaled by the
    publisher's penalty component: `penaltyBps * component / 1000`, no cliff at `flagThreshold`; flagged wallets also lose the 1 % sell cap, sells are priced, never blocked). The penalty is split
    like any other fee (treasury / pool by `treasuryShareBps`); only the deposit is 100 % pool.
 2. After every successful buy or sell OpenFour Core calls `afterHook` on the token's `ReputationLedger` (an OpenFour
@@ -64,7 +64,7 @@ preset is rejected.
 
 ## For judges
 Prototype on OpenFour's official hooks. Cashback depends on the budget and on flags by a trusted publisher. The deposit
-unlocks on a real sale (curve or DEX pair). 150 / 500 bps are deployment defaults (950 bps is the module cap). The official
+unlocks on a real sale (curve or DEX pair). 640 / 640 bps are the deploy defaults (950 bps is the module cap). The official
 preset needs OpenFour approval.
 
 ## Known limitations

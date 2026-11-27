@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proof of Reputation · Profile</title>
+<meta name="description" content="Wallet profile: your reputation score, the five components and how far you are from the newcomer threshold.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="terminal.css">
+<style>
+.pg{max-width:1280px;margin:0 auto;padding:18px 16px 40px}
+.pg h1{font:400 34px var(--serif);margin:6px 0 4px}
+.pg p.lead{color:var(--muted);margin:0 0 14px;max-width:80ch}
+.tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.tools input{background:#161615;border:1px solid var(--line2);color:var(--text);padding:8px 10px;font:400 12px var(--mono);border-radius:0;width:420px;max-width:90vw}
+.card{background:var(--bg);border:1px solid var(--line2);padding:16px;margin:12px 0}
+.bar{position:relative;height:22px;background:#161615;border:1px solid var(--line2);margin:10px 0 4px}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--grad)}
+.bar u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--lime);text-decoration:none}
+.axis{display:flex;justify-content:space-between;font:400 11px var(--mono);color:var(--muted)}
+.big{font:400 20px var(--serif)}
+.cmp{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.cmp div{border:1px solid var(--line);padding:8px;font:400 11px var(--mono);color:var(--muted)}
+.cmp b{display:block;color:var(--text);font:500 14px var(--mono)}
+.ex button{margin-right:8px}
+</style>
+</head>
+<body class="term">
+<header class="tbar">
+  <a class="brand" href="index.html"><span class="pxl" data-pxwallet="#141414"></span><span>Proof of Reputation</span></a>
+  <nav class="sets" aria-label="Pages"><a class="btn" href="terminal.html">Terminal</a> <a class="btn" href="leaderboard.html">Leaderboard</a> <a class="btn" href="profile.html">Profile</a></nav>
+  <a class="back" style="margin-left:auto" href="index.html">&larr; Back to overview</a>
+</header>
+<main class="pg">
+  <h1>Wallet profile</h1>
+  <p class="lead">New to the market? Paste a wallet to see its reputation score, its five components, and how many points separate it from the newcomer threshold (400 points = score 0.4), where the refundable buy deposit reaches zero.</p>
+  <form class="tools" id="f" autocomplete="off"><input id="w" placeholder="paste 0x wallet" spellcheck="false" aria-label="Wallet address"><button class="btn fill" type="submit">Check</button></form>
+  <div class="tools ex" id="ex"><span class="lbl">Examples</span></div>
+  <div id="out" hidden>
+    <div class="card"><div class="big" id="head"></div><div class="mono" id="addr" style="color:var(--muted);margin-top:4px"></div>
+      <div class="bar" id="bar"><i></i><u></u></div>
+      <div class="axis"><span>0</span><span>400 &mdash; newcomer threshold (deposit 0)</span><span>1000</span></div>
+      <p id="msg" style="margin:14px 0 0;font-size:15px"></p></div>
+    <div class="card"><div class="ph" style="padding:0 0 10px;border:0"><span>Your five components (0&ndash;1000)</span><span id="src"></span></div><div id="comps"></div></div>
+    <div class="card"><div class="ph" style="padding:0 0 10px;border:0"><span>Fees &mdash; current contracts</span></div><div class="cmp" id="fees"></div><p class="foot" id="livefees" style="padding:10px 0 0"></p></div>
+  </div>
+  <div class="card"><div class="ph" style="padding:0 0 10px;border:0"><span>What raises your score</span></div>
+    <table><thead><tr><th>Component</th><th class="r">Weight</th><th>How to raise it</th></tr></thead><tbody>
+    <tr><td>Volume</td><td class="r">30</td><td>Trade more BNB volume on Four.meme / OpenFour curves (percentile rank among all wallets).</td></tr>
+    <tr><td>Activity</td><td class="r">25</td><td>Trade on many different days and across many tokens.</td></tr>
+    <tr><td>Holding</td><td class="r">25</td><td>Hold positions instead of dumping right after buying.</td></tr>
+    <tr><td>Identity</td><td class="r">20</td><td>Hold a BAB token or an Agent ID; the registry raises identity from on-chain checks.</td></tr>
+    <tr><td>Penalty</td><td class="r">&minus;</td><td>Subtracts from the score: joining rugs or coordinated dumps. Keep it at 0.</td></tr></tbody></table>
+    <p class="foot" style="padding:10px 0 0">Score = (30&middot;volume + 25&middot;activity + 25&middot;holding + 20&middot;identity) / 100 &minus; penalty. Buy deposit = 640&middot;(400 &minus; score)/400 bps below 400 points, refundable; 0 from 400.</p></div>
+</main>
+<script src="vendor/ethers.umd.min.js"></script>
+
+<script>(function(){var MAP=["....########....","..##........##..",".#..###.####..#.",".#.#...#....#.#.","################","#..............#","#..............#","#..........###.#","#.........#...#.","#.........#.#.#.","#..........##.#.","#..............#","#..............#","################"];document.querySelectorAll("[data-pxwallet]").forEach(function(el){var r="";MAP.forEach(function(row,y){for(var x=0;x<row.length;x++)if(row[x]==="#")r+="<rect x=\""+x+"\" y=\""+y+"\" width=\"1\" height=\"1\"/>"});el.innerHTML="<svg viewBox=\"0 0 16 14\" shape-rendering=\"crispEdges\" fill=\"#141414\" aria-hidden=\"true\">"+r+"</svg>"})})();</script>
+<script src="por-common.js"></script><script src="profile.js"></script></body></html>

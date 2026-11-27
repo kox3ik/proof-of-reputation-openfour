@@ -7,7 +7,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_mainnet_replay import fee_curve, quote_score  # noqa: E402
+from build_mainnet_replay import quote_score  # noqa: E402
 
 
 def reprice(d: dict) -> dict:
@@ -16,13 +16,15 @@ def reprice(d: dict) -> dict:
         s, pen = round(w["score"] * 1000), (1000 if w["flagged"] else 0)
         qb, qs = quote_score(s, pen, True), quote_score(s, pen, False)
         wallets[a] = {**w, "buyBps": qb["total"], "sellBps": qs["total"], "depositBps": qb["deposit"]}
+    # the rug rule flags the bundle at the token's "flag" event: from then on its trades carry penalty component 1000
+    # (score 0); before it, every wallet trades at its snapshot from before the token's first trade
+    flag_t = min((e["t"] for e in d.get("events", []) if e.get("kind") == "flag"), default=None)
     trades = []
     for t in d["trades"]:
         w = d["wallets"][t["wallet"]]
         s, pen = round(w["score"] * 1000), (1000 if w["flagged"] else 0)
-        old = t["feeBps"]
-        if old["regular"] != min(fee_curve(s), 100 if (t["side"] == "sell" and pen == 0) else 10**9):
-            raise SystemExit(f"regular mismatch {t['wallet']} {old} s={s}")
+        if flag_t is not None and t["role"] == "bundle" and t["t"] >= flag_t:
+            s, pen = 0, 1000
         trades.append({**t, "feeBps": quote_score(s, pen, t["side"] == "buy")})
     return {**d, "wallets": wallets, "trades": trades}
 

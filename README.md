@@ -1,4 +1,8 @@
+[中文说明](README.zh-CN.md)
+
 # Proof of Reputation
+
+For AI agents: [llms.txt](llms.txt) · [llms-full.txt](llms-full.txt)
 
 Reputation-priced trading for OpenFour launches (Four.meme), built for **BNB Bangkok 2026 — Four.meme / OpenFour track**.
 
@@ -6,9 +10,45 @@ A wallet's on-chain track record sets its trading terms on every launch:
 trusted traders pay less, low-score wallets pay a refundable deposit on buys that shrinks smoothly to zero at the neutral score, and wallets with a rug history pay a penalty proportional to their penalty component (no all-or-nothing cliff). Nobody is blocked: flagged wallets can buy and sell, sells are never blocked, and the sell-fee cap does not apply to flagged wallets.
 OpenFour's protocol fee is untouched by construction.
 
+![Score vs fee](docs/img/score-vs-fee.png)
+
+*Fee by wallet score: buy = fee + refundable deposit, sell = fee; lines are for wallets without rug history. A flagged wallet pays up to 6.9 % on sells and is capped at 9.5 % on buys.*
+
+### How the money flows
+
+```mermaid
+flowchart LR
+  T[Trade] --> R[Regular fee]
+  T --> D[Deposit on buys]
+  T --> P[Penalty if flagged]
+  R --> TR[Treasury]
+  R --> B[Cashback budget]
+  P --> TR
+  P --> B
+  D --> H[Deposits held]
+  B -->|flagged wallet share| S[Scam fund]
+  H -->|honest sale| W[Honest wallet claim]
+  B -->|honest sale| W
+  S -->|bonus, capped by fees paid| W
+  H -->|rug sale| S
+```
+
+### Token lifecycle
+
+```mermaid
+flowchart LR
+  A[Create on curve] --> B[Trades priced by score]
+  B --> C[Rug rule flags a bundle]
+  C --> D[Migration, nothing released]
+  D --> E[Trades vs pair priced the same]
+  E --> F[Sale unlocks deposit]
+```
+
 **Site:** https://kox3ik.github.io/proof-of-reputation-openfour/ · **Demo video:** `site/media/demo.webm` (1:56) · **OpenFour submission:** [`docs/OPENFOUR_SUBMISSION.md`](docs/OPENFOUR_SUBMISSION.md) · **AI audit:** [`docs/AI-AUDIT.md`](docs/AI-AUDIT.md)
 
 Status: hackathon submission, BSC testnet only (not audited by humans).
+
+**Explainer video (1:38):** https://kox3ik.github.io/proof-of-reputation-openfour/media/explainer.webm
 
 ## Contracts
 
@@ -52,11 +92,11 @@ The on-chain path: OpenFour's post-trade hook calls `ReputationLedger`, which tr
 the deposit (charged on buys only) and cashback unlock only on a real sale, on the curve or into the migrated DEX pair (`docs/cashback.md`); migration itself releases nothing, and after migration the same pricing applies against the pair, fee in tokens (`docs/transfers.md`). Cashback is bucketed per (asset, token, wallet). The Merkle distributor is kept in the
 repo but is not deployed.
 
-**Scam fund.** A flagged wallet pays its usual fee plus a penalty, and its whole share of the pool goes into a separate fund, as do the deposit and cashback right confiscated from a rug sale. Honest wallets get their deposit back, their own cashback, and a bonus (the rest of the module fee they paid) from that fund; a plain claim pays the bonus only when the fund covers all bonus rights; otherwise the wallet itself can call `claimBonusPartial` to take a pro-rata share. Only what exceeds all bonus rights can be swept to the treasury. The flag penalty is live: a flagged wallet pays 640 bps on top of its regular rate on buys and sells. Details: `docs/cashback.md`.
+**Scam fund.** A flagged wallet pays its usual fee plus a penalty, and its whole share of the pool goes into a separate fund, as do the deposit and cashback right confiscated from a rug sale. Honest wallets get their deposit back, their own cashback, and a bonus (the rest of the module fee they paid) from that fund; a plain claim pays the bonus only when the fund covers all bonus rights; otherwise the wallet itself can call `claimBonusPartial` to take a pro-rata share. Only what exceeds all bonus rights can be swept to the treasury. The penalty is live and proportional to the rug component: up to 640 bps on top of the regular rate, on buys and sells. Details: `docs/cashback.md`.
 
 ### Tests and demo
 
-`forge test` (solc 0.8.24, via-IR): **235 passed**. Publisher: `cd service/publisher/tests && python3 -m unittest discover -p "test_*.py"`: **51 OK** (both measured 27 Nov 2026). Local end-to-end demo on a local fork of BSC testnet: `scripts/demo-local.sh`
+`forge test` (solc 0.8.24, via-IR): **283 passed**. Publisher: `cd service/publisher/tests && python3 -m unittest discover -p "test_*.py"`: **51 OK** (both measured 27 Nov 2026). Local end-to-end demo on a local fork of BSC testnet: `scripts/demo-local.sh`
 (logs are written to `demo-out/`, including the full create, buy, sell, migrate, settle, claim path and the OpenFour submit pack built by `scripts/demo/make_submit_pack.js`). Real testnet: `scripts/demo-testnet.md`.
 
 ## Live on BSC Testnet (chain 97)
@@ -98,8 +138,10 @@ Not part of this final run: a migrate step (none was recorded). The migrate path
 - **Trusted keys.** One publisher key writes scores, flags and `coveredUntil`; the registry owner changes config (behind a timelock) and corrects flags. A wrong or malicious publication can unfairly flag a wallet or delay claims. Plan: multisig for the owner and the publisher, later a ZK proof of the publication.
 - **Payer is `tx.origin`.** For a contract trader the module and ledger charge `tx.origin`. A relayer or ERC-4337 bundler is then the payer, not the user: positions mix and payouts go to the relayer.
 - **Detector evasion.** The rug detector looks at wallets selling inside a 3-block window. Dumping through a collector contract, or stretching a dump over more than the window, is not detected. Sells in the first 60 s of a token are ignored.
-- **Smooth pricing (current contracts).** Deposit on a buy = `freshDepositBps * (N - s) / N` (score `s`, knee `N` = `neutralScore`, 0 from the knee up); penalty = `penaltyBps * penaltyComponent / 1000`; regular + penalty + deposit is capped at 950 bps (penalty cut first, then deposit). With the deploy defaults (regular 50 flat below the knee, deposit 640, penalty 640) the buy fee at score 0 / 100 / 200 / 300 / 400 / 700 is 690 / 530 / 370 / 210 / 50 / 25 bps without a penalty, and 950 / 950 / 950 / 850 / 690 / 665 bps with penalty component 1000. The per-wallet testnet measurements below predate this and show the old cliff.
-- **Newness (old rule, informational only).** A wallet stops being fresh (stops paying the deposit) after its first published trade. A stricter threshold rule exists in the publisher (`service/publisher/newness.py`) but is off; its values are to be chosen by measurement. The Agent ID does not end newness; the BAB does.
+- **Smooth pricing (current contracts).** Deposit on a buy = `freshDepositBps * (N - s) / N` (score `s`, knee `N` = `neutralScore`, 0 from the knee up); penalty = `penaltyBps * penaltyComponent / 1000`; regular + penalty + deposit is capped at 950 bps (the deposit is cut first; the penalty only if it alone exceeds the room). With the deploy defaults (regular 50 flat below the knee, deposit 640, penalty 640) the buy fee at score 0 / 100 / 200 / 300 / 400 / 700 is 690 / 530 / 370 / 210 / 50 / 25 bps without a penalty, and 950 / 950 / 950 / 850 / 690 / 665 bps with penalty component 1000. The per-wallet testnet measurements below predate this and show the old cliff.
+- **Newness (informational only).** `isFresh` (no published trade yet) is shown in the UI but no longer prices anything: the deposit depends on the score only. A stricter threshold rule exists in the publisher (`service/publisher/newness.py`) but is off; its values are to be chosen by measurement. The Agent ID does not end newness; the BAB does.
+- **Post-migration pricing is a prototype (in code and unit tests, not deployed).** It lives in the token's transfer hook, which cannot tell a swap from other moves of a V2 pair. Known gaps, found by our AI reviewers on 27 Nov: a plain transfer to the pair (then `skim`) or adding liquidity is treated as a sale and can unlock a deposit without a swap; removing liquidity is priced as a buy; only the registered migrated pair is priced (a second pool is not); a sale routed through a non-allowlisted contract (`user -> contract -> pair`) pays the sell rate on both hops; the publisher does not read DEX swaps yet. The production path is a PancakeSwap Infinity hook that sees the swap itself.
+- **The rug component is binary today.** The contracts price the penalty continuously, but the reference rug rule in the publisher publishes 0 or 1000, so a wallet's sell fee still steps from 50 to 690 bps at the flag; a graded rug component is the next step.
 - **Positions that never close.** Deposits and cashback unlock only on a real sale. A token that never migrates (for example one that ends in the Terminal phase) leaves open positions locked; the transfer fee still applies in that phase (`docs/transfers.md`). We have not tested Terminal behaviour against a real Core.
 - **Token implementation.** `ReputationLockedToken` is built on OpenZeppelin v5; OpenFour's own `OpenFourToken` uses v4. It needs OpenFour's review before it can replace the official implementation.
 - **Mock Core in unit tests.** The unit tests use a stand-in for OpenFour Core that pays the fee tiers before calling the ledger hook. The pool checks its balance on every report, so a different order would revert the trade instead of corrupting accounts. The demos and the publisher rehearsal run the same flow through OpenFour's Core deployed on a local fork of BSC testnet, which passes that check; nothing was run on an official, audited Registry.

@@ -193,7 +193,6 @@ contract ReputationLockedToken is Initializable, ERC20, IOpenFourToken {
     function _update(address from, address to, uint256 amount) internal override {
         uint256 fee;
         FeeQuote memory q;
-        if (from != address(0) && to != address(0) && transfersUnlocked() && _market(from, to, amount)) return;
         bool post = transfersUnlocked();
         if (from != address(0) && to != address(0) && post && _market(from, to, amount)) return;
         // After migration a plain wallet-to-wallet transfer costs the sender's sell rate exactly as before (so a flagged
@@ -240,6 +239,10 @@ contract ReputationLockedToken is Initializable, ERC20, IOpenFourToken {
         uint256 toPool = collapsed ? amount * (q.treasuryBps + q.poolBps) / 10_000 : amount * q.poolBps / 10_000;
         uint256 fee = toTreasury + toPool;
         address payer = isBuy ? to : from; // who gives up the fee tokens
+        // A router receiving a buy hands it on in the same tx: that hop is covered by the buy fee just paid. A listed
+        // router that pulled tokens for this sale has spent its `owed` here, so it cannot leak into later transfers.
+        if (isBuy && to.code.length > 0) _addCredit(to, amount - fee);
+        if (!isBuy) _spendOwed(from, _tget(_owedKey(from)), amount);
         if (isBuy) super._update(from, to, amount);
         if (toTreasury != 0) super._update(payer, q.treasury, toTreasury);
         if (toPool != 0) super._update(payer, q.pool, toPool);
@@ -256,6 +259,7 @@ contract ReputationLockedToken is Initializable, ERC20, IOpenFourToken {
         uint256 ud;
         uint256 uf;
         uint256 ub;
+        uint256 closed; // part of the sale already allocated to the pool (market) position
         Open storage o = marketPositions[wallet];
         o.depositOpen += deposit;
         o.feeOpen += fee;
@@ -272,6 +276,7 @@ contract ReputationLockedToken is Initializable, ERC20, IOpenFourToken {
                 uf = Math.mulDiv(o.feeOpen, sold, p);
                 ub = Math.mulDiv(o.bonusOpen, sold, p);
                 o.pos = p - sold;
+                closed = sold;
             }
             o.depositOpen -= ud;
             o.feeOpen -= uf;
@@ -282,7 +287,8 @@ contract ReputationLockedToken is Initializable, ERC20, IOpenFourToken {
                 address(this), wallet, poolAmt - deposit - fundIn, deposit, fundIn, bonus, ud, uf, ub, uint64(block.timestamp)
             );
         }
-        if (!isBuy && customData.code.length != 0) ILedgerPoolSale(customData).onPoolSale(wallet, gross);
+        // The sold amount is allocated once: the pool position first, only the remainder spills to the curve position.
+        if (!isBuy && gross > closed && customData.code.length != 0) ILedgerPoolSale(customData).onPoolSale(wallet, gross - closed);
     }
 
     /// @dev After migration: moves touching a migrated pair (priced in `_market` or exempt protocol liquidity) and moves

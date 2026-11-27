@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proof of Reputation · Claim your cashback</title>
+<meta name="description" content="Rug wallets pay into the scam fund; honest wallets claim a cashback and bonus from it. Read-only view of the BSC testnet CashbackPool.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.cl{max-width:1040px;margin:0 auto;padding:28px 24px 60px}
+.cl h1{font-size:44px;line-height:1.1;margin:10px 0 14px}
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+.flow div{border:1px solid var(--line2);padding:14px 16px;font-size:15px;color:#d9d9d3}
+.flow b{display:block;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.cl form{display:flex;gap:8px;margin:18px 0 8px;flex-wrap:wrap}
+.cl input{flex:1;min-width:320px;background:#0d0d0d;border:1px solid var(--line2);color:#eee;font:400 14px var(--mono);padding:11px 12px}
+.ex{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
+.ex button,.cl .btn{cursor:pointer;background:transparent;color:#ddd;border:1px solid var(--line2);font:400 12px var(--mono);padding:8px 12px}
+.cl .btn.fill{background:#e9e9e2;color:#111;font-weight:500}
+.cl .btn:disabled{opacity:.4;cursor:not-allowed}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.card{border:1px solid var(--line2);padding:14px}
+.card .v{font:500 22px var(--mono);margin-top:6px}
+.card .l{font:400 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+table.t{width:100%;border-collapse:collapse;margin:10px 0 20px;font-size:14px}
+table.t th,table.t td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2)}
+table.t th{font:400 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+table.t .r{text-align:right;font-family:var(--mono)}
+.cl h2{font-size:22px;margin:26px 0 4px}
+.cl a{color:#9fd3ff}
+#status{font:400 13px var(--mono);color:var(--muted);min-height:20px}
+#status.err{color:#ff7b7b}#status.ok{color:#7fe07f}
+.mono{font-family:var(--mono)}
+@media(max-width:800px){.flow,.cards{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main class="cl">
+  <a href="index.html" class="muted small">&larr; Back to overview</a> &nbsp; <a href="terminal.html" class="muted small">Terminal</a>
+  <h1>Claim your <em>cashback</em></h1>
+  <p class="lead">Rug wallets pay: their flag penalties and forfeited deposits fill the <b>scam fund</b>. Honest wallets claim from it: their fees back as cashback, plus a bonus, never more than they paid in fees. The deposit taken from fresh wallets is refundable after honest trading.</p>
+  <div class="flow">
+    <div><b>1 &middot; Rug wallets pay</b>Flag penalty and forfeited deposit go to the scam fund.</div>
+    <div><b>2 &middot; Scam fund</b>Held by the CashbackPool contract. No owner withdrawal.</div>
+    <div><b>3 &middot; Honest wallets claim</b>Deposit back + cashback + bonus, paid to the wallet.</div>
+  </div>
+  <form id="f" autocomplete="off">
+    <input id="addr" placeholder="paste 0x wallet address" spellcheck="false" aria-label="Wallet address">
+    <button class="btn fill" type="submit">Look up</button>
+  </form>
+  <div class="ex" id="ex"><span class="muted small">Examples from our testnet simulation:</span></div>
+  <div id="status"></div>
+  <div class="cards" id="fund"></div>
+  <div id="wallet" hidden>
+    <h2>Position per token</h2>
+    <p class="muted small">Amounts in tBNB read live from <span class="mono">CashbackPool.unlocked(asset, token, wallet)</span>. Zero means nothing waiting: already claimed, or not yet sold.</p>
+    <table class="t" id="tt"><thead><tr><th>Token</th><th class="r">Open deposit</th><th class="r">Cashback (fee right)</th><th class="r">Bonus</th><th class="r">Claimable now</th></tr></thead><tbody></tbody></table>
+    <div class="cards" id="tot"></div>
+    <p><button class="btn fill" id="claimBtn" type="button" disabled>Connect wallet &amp; claim</button> <span class="muted small" id="wnote"></span></p>
+    <h2>Past claims</h2>
+    <table class="t" id="ct"><thead><tr><th>Block</th><th class="r">Deposit</th><th class="r">Cashback</th><th class="r">Bonus</th><th>Transaction</th></tr></thead><tbody></tbody></table>
+  </div>
+  <p class="muted small">Network: BSC testnet (chainId 97). Pool <a id="poolLink" target="_blank" rel="noopener"></a>. Read-only without a wallet; claiming is a real testnet transaction.</p>
+</main>
+<script src="vendor/ethers.umd.min.js"></script>
+<script src="claim.js"></script>
+</body>
+</html>

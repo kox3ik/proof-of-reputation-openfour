@@ -164,4 +164,85 @@ contract MarketPricingTest is CashbackPoolTest {
         assertEq(mt.balanceOf(carol), X - expected);
         assertGe(mt.balanceOf(treasury) + mt.balanceOf(address(pool)) - tBefore, expected - 1);
     }
+
+    function _listRouterAddr(address r) internal {
+        vm.prank(registry.owner());
+        registry.proposeRouter(r);
+        vm.warp(block.timestamp + 30 days);
+        registry.activateRouter(r);
+    }
+
+    /// @dev A sale is allocated once: the pool position closes first, the curve position only gets the remainder.
+    function test_saleIsNotCountedAgainstBothPositions() public {
+        core.trade(address(mt), alice, true, CQ, AMT);
+        mvault.pay(alice, AMT);
+        _migrate();
+        _pairBuy(alice, AMT);
+        (uint256 mpos,,,) = mt.marketPositions(alice);
+        assertGt(mpos, 50e18);
+        (uint256 cpos, uint256 cdep,,) = mledger.positions(alice);
+        assertEq(cpos, AMT);
+        _pairSell(alice, 50e18);
+        (uint256 mpos2,,,) = mt.marketPositions(alice);
+        assertEq(mpos2, mpos - 50e18);
+        (uint256 cpos2, uint256 cdep2,,) = mledger.positions(alice);
+        assertEq(cpos2, cpos); // curve position untouched by a sale the pool position covers
+        assertEq(cdep2, cdep);
+        // a sale above the remaining pool position spills only the rest to the curve position
+        _pairSell(alice, mpos2 + 30e18);
+        (uint256 mpos3,,,) = mt.marketPositions(alice);
+        assertEq(mpos3, 0);
+        (uint256 cpos3,,,) = mledger.positions(alice);
+        assertEq(cpos3, cpos - 30e18);
+    }
+
+    /// @dev Buy `pair -> router -> user` is charged once (on the pair leg); the hand-over is covered by credit.
+    function test_routerBuyHopIsNotChargedTwice() public {
+        HopRouter r = new HopRouter(mt);
+        _listRouterAddr(address(r));
+        _migrate();
+        (uint256 tr, uint256 po) = _fee(carol, true, X);
+        vm.prank(pair);
+        mt.transfer(address(r), X);
+        uint256 net = X - tr - po;
+        assertEq(mt.balanceOf(address(r)), net);
+        vm.prank(address(r), carol);
+        r.forward(carol, net);
+        assertEq(mt.balanceOf(carol), net);
+        assertEq(mt.balanceOf(treasury), tr);
+    }
+
+    /// @dev Sale `user -> listed router -> pair`: the owed amount is spent on the pair leg and cannot leak further.
+    function test_routerSellSpendsOwed() public {
+        HopRouter r = new HopRouter(mt);
+        _listRouterAddr(address(r));
+        _migrate();
+        _pairBuy(carol, X);
+        uint256 held = mt.balanceOf(carol);
+        vm.prank(carol, carol);
+        mt.approve(address(r), held);
+        (uint256 tr, uint256 po) = _fee(carol, false, held);
+        uint256 pairBefore = mt.balanceOf(pair);
+        vm.prank(carol, carol);
+        r.pullAndForward(carol, pair, held);
+        assertEq(mt.balanceOf(pair) - pairBefore, held - tr - po);
+        assertEq(mt.balanceOf(carol), 0);
+    }
+}
+
+contract HopRouter {
+    ReputationLockedToken public token;
+
+    constructor(ReputationLockedToken t) {
+        token = t;
+    }
+
+    function forward(address to, uint256 amt) external {
+        token.transfer(to, amt);
+    }
+
+    function pullAndForward(address from, address to, uint256 amt) external {
+        token.transferFrom(from, address(this), amt);
+        token.transfer(to, amt);
+    }
 }

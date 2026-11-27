@@ -8,7 +8,7 @@
   registry, flag penalty included; no fresh deposit: that is charged on curve buys only). The receiver gets the rest; the fee goes to
   the registry's treasury. Nothing is burned.
 - Phases: the fee applies in Created, Trading, SoldOut and Terminal (no DEX pool is tradeable there; SoldOut and
-  Terminal are not DEX states per the OpenFour integration guide). From MigratePending on: no fee.
+  Terminal are not DEX states per the OpenFour integration guide), and from MigratePending on as well (wallet-to-wallet only; moves touching the migrated pair are priced as trades, protocol moves are free).
 - Free: mint / burn; anything involving the vault or Core (buys, sells); a contract handing the signer tokens it received
   from the vault or Core earlier in the same transaction (transient credit, capped at the amount received: a purchase
   through any router); a router on the registry allowlist (`isRouter`) pulling tokens from the signer for a sale

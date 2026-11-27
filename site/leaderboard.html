@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proof of Reputation · Leaderboard</title>
+<meta name="description" content="Reputation leaderboard: score, fees and refundable deposit of real wallets loaded into the BSC testnet registry.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="terminal.css">
+<style>
+.pg{max-width:1280px;margin:0 auto;padding:18px 16px 40px}
+.pg h1{font:400 34px var(--serif);margin:6px 0 4px}
+.pg p.lead{color:var(--muted);margin:0 0 14px;max-width:80ch}
+.tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.tools input{background:#161615;border:1px solid var(--line2);color:var(--text);padding:8px 10px;font:400 12px var(--mono);border-radius:0;width:420px;max-width:90vw}
+.card{background:var(--bg);border:1px solid var(--line2);padding:16px;margin:12px 0}
+.bar{position:relative;height:22px;background:#161615;border:1px solid var(--line2);margin:10px 0 4px}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--grad)}
+.bar u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--lime);text-decoration:none}
+.axis{display:flex;justify-content:space-between;font:400 11px var(--mono);color:var(--muted)}
+.big{font:400 20px var(--serif)}
+.cmp{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.cmp div{border:1px solid var(--line);padding:8px;font:400 11px var(--mono);color:var(--muted)}
+.cmp b{display:block;color:var(--text);font:500 14px var(--mono)}
+.ex button{margin-right:8px}
+</style>
+</head>
+<body class="term">
+<header class="tbar">
+  <a class="brand" href="index.html"><span class="pxl" data-pxwallet="#141414"></span><span>Proof of Reputation</span></a>
+  <nav class="sets" aria-label="Pages"><a class="btn" href="terminal.html">Terminal</a> <a class="btn" href="leaderboard.html">Leaderboard</a> <a class="btn" href="profile.html">Profile</a></nav>
+  <a class="back" style="margin-left:auto" href="index.html">&larr; Back to overview</a>
+</header>
+<main class="pg">
+  <h1>Reputation leaderboard</h1>
+  <p class="lead">Real mainnet wallets preloaded into our BSC testnet registry for the simulation. Score is on the contract scale 0&ndash;1000 (0&ndash;1 shown too). Fees come from the <b>current contracts</b> formula; the dot marks rows re-read live from the testnet registry.</p>
+  <div class="tools"><input id="q" placeholder="search wallet 0x… (any of the 8000 wallets)" spellcheck="false" aria-label="Search wallet"><span class="mono" id="cnt"></span><span class="livestate" id="live"></span></div>
+  <div class="card" style="padding:0"><div class="tw"><table id="t"><thead><tr><th>#</th><th>Wallet</th><th class="r">Points</th><th>Score 0&ndash;1</th><th class="r">Buy bps</th><th class="r">Buy %</th><th class="r">Sell bps</th><th class="r">Sell %</th><th class="r">Deposit bps</th><th>Status</th><th class="r">Live registry buy / sell</th></tr></thead><tbody></tbody></table></div></div>
+  <p class="foot">Current contracts: regular fee 50 bps up to 400 points, then falling linearly to 0 at 1000; sells capped at 100 bps with no penalty; refundable buy deposit 640&middot;(400&minus;s)/400 below 400 points; penalty 640&middot;p/1000; total &le; 950. &ldquo;Live registry&rdquo; columns show what the deployed testnet registry quotes today (it predates this deposit formula). Click a wallet to open its <a href="profile.html" id="plink">profile</a>.</p>
+</main>
+<script src="vendor/ethers.umd.min.js"></script>
+<script>(function(){var MAP=["....########....","..##........##..",".#..###.####..#.",".#.#...#....#.#.","################","#..............#","#..............#","#..........###.#","#.........#...#.","#.........#.#.#.","#..........##.#.","#..............#","#..............#","################"];document.querySelectorAll("[data-pxwallet]").forEach(function(el){var r="";MAP.forEach(function(row,y){for(var x=0;x<row.length;x++)if(row[x]==="#")r+="<rect x=\""+x+"\" y=\""+y+"\" width=\"1\" height=\"1\"/>"});el.innerHTML="<svg viewBox=\"0 0 16 14\" shape-rendering=\"crispEdges\" fill=\"#141414\" aria-hidden=\"true\">"+r+"</svg>"})})();</script>
+<script src="por-common.js"></script><script src="leaderboard.js"></script></body></html>

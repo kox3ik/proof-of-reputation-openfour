@@ -1,0 +1,24 @@
+# Proof of Reputation
+
+> Proof of Reputation is an OpenFour (Four.meme) trade module for BNB Chain where the trading fee follows a wallet's on-chain reputation score (0..1000): trusted wallets pay less, low-score wallets pay a refundable deposit on buys, wallets with a rug history pay a penalty proportional to their rug component. Nobody is blocked and sells are never blocked. Honest wallets claim deposit + cashback + a bonus from a scam fund filled by flagged wallets. Hackathon prototype for BNB Bangkok 2026, BSC testnet only, not audited.
+
+## Docs
+- [README](README.md): overview, contracts, fee tables, live testnet run, risks and limitations
+- [llms-full.txt](llms-full.txt): self-contained description for LLMs (mechanism, formulas, contracts, addresses)
+- [OpenFour submission](docs/OPENFOUR_SUBMISSION.md): how the module plugs into OpenFour
+- [Cashback and scam fund](docs/cashback.md): deposit, cashback, bonus, forfeiture
+- [Transfers and migration pricing](docs/transfers.md): transfer fee, post-migration pricing, known gaps
+- [AI audit](docs/AI-AUDIT.md): findings of the AI reviewers
+
+## Contracts
+- [ReputationRegistry](src/ReputationRegistry.sol): scores, flags, fee quotes (`scoreOf`, `quoteDetailed`, `quoteFeeBps`, `isFlagged`)
+- [ReputationTradeModule](src/ReputationTradeModule.sol): OpenFour TradeModule, prices every trade by score
+- [ReputationLedger](src/ReputationLedger.sol): post-trade hook, tracks positions, funds the pool
+- [CashbackPool](src/CashbackPool.sol): holds deposits, cashback budget and scam fund; `claim`, `claimBonusPartial`
+- [ReputationLockedToken](src/ReputationLockedToken.sol): token implementation with transfer fee and migrated-pair pricing
+- [ReputationMath](src/ReputationMath.sol): fee, deposit and score formulas
+
+## Live
+- [Site](https://kox3ik.github.io/proof-of-reputation-openfour/): interactive demo and simulation on BSC testnet
+- [Repository](https://github.com/kox3ik/proof-of-reputation-openfour): source, tests, publisher service
+- [Testnet addresses](app/config.json): deployed contracts (BSC testnet, chain 97)

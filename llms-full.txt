@@ -1,0 +1,86 @@
+# Proof of Reputation (full description for LLMs)
+
+Repository: https://github.com/kox3ik/proof-of-reputation-openfour
+Site: https://kox3ik.github.io/proof-of-reputation-openfour/
+Status: hackathon prototype (BNB Bangkok 2026, Four.meme / OpenFour track). BSC testnet only, not audited by humans.
+
+## Problem
+On bonding-curve launchpads every wallet pays the same fee. Bundles that collect tokens and dump them in one trade (rugs) cost the same as honest traders. Blocking wallets is too blunt and breaks sells.
+
+## Idea
+The fee follows the wallet's on-chain reputation. Nobody is blocked: flagged wallets can buy and sell. Sells are never blocked. OpenFour's own protocol fee is untouched; our fee is on top.
+
+## Score
+A wallet has 5 components (volume, activity, holding, identity, penalty), stored as integers 0..1000. The registry combines them into a score s in 0..1000 (`ReputationRegistry.scoreOf(wallet)`). The identity component is max(stored, BABT identity if BABT held, Agent ID identity if Agent ID held); the checks are gas-capped staticcalls that never revert. The penalty component is the "rug component" (0 = clean, 1000 = full).
+
+## Pricing (current contracts, defaults)
+All values in basis points (bps), integer math, rounded down. N = neutralScore = 400.
+- Regular fee: 50 bps flat for s <= 400, then falls linearly to 0 at s = 1000.
+- Buy deposit (refundable): 640 * (400 - s) / 400 bps for s < 400, else 0. Sells have no deposit.
+- Penalty: 640 * rugComponent / 1000 bps, on buys and on sells (continuous, no cliff).
+- Total cap: regular + penalty + deposit <= 950 bps. If over, the deposit is cut first (the penalty only if it alone exceeds the room).
+- Sell cap: for wallets with no rug component the regular fee on sells is capped at 100 bps. It does not apply to wallets with a rug component.
+Examples (no penalty), buy fee at score 0 / 100 / 200 / 300 / 400 / 700: 690 / 530 / 370 / 210 / 50 / 25 bps. With rug component 1000: 950 / 950 / 950 / 850 / 690 / 665 bps. A flagged wallet: sell 690 bps, buy up to the 950 bps cap.
+
+## Fee split
+- Regular fee + penalty: split treasury / pool by `treasuryShareBps` (50 / 50 by default).
+- Deposit: 100 % to the pool (held, refundable).
+- A flagged wallet's pool share, and the deposit and cashback it forfeits on a rug sale, go to the scam fund.
+- Honest wallets claim: deposit + own cashback + bonus. The bonus is paid from the scam fund and never exceeds what the wallet paid.
+- Pool accounting (per quote asset): `depositPool` (deposits held), `budgetPool` (cashback budget), `fund` (scam fund), `bonusLiability`.
+
+## Lifecycle
+1. Token is created on the OpenFour curve with the preset "Reputation Bonding V1" (trade module + ledger hook + `ReputationLockedToken`).
+2. Every curve trade: `ReputationTradeModule.evaluate` prices it by the wallet's score. The ledger's post-trade hook records the position and funds `CashbackPool`.
+3. The publisher service watches trades; the reference rug rule flags a bundle that sells inside a 3-block window (publishes rug component 0 or 1000). Flagged wallets then pay the penalty on buys and sells.
+4. Migration to the DEX pair releases nothing.
+5. After migration the token prices trades against the registered migrated pair the same way (fee in tokens). Prototype, see limitations.
+6. A real sale (curve or into the pair) unlocks the deposit and cashback; honest wallets call `claim`.
+Wallet-to-wallet token transfers cost the sender's sell rate (in tokens, to the treasury); trade flows are free. See docs/transfers.md.
+
+## Contracts and key functions
+- `ReputationRegistry` (src/ReputationRegistry.sol): scores, flags, config (timelocked).
+  - `scoreOf(address wallet) view returns (uint256)`
+  - `quoteDetailed(address wallet, bool isBuy) view returns (FeeQuote)`: regularBps, depositBps, penaltyBps, treasuryBps, poolBps, treasury, pool
+  - `quoteFeeBps(address wallet, bool isBuy) view returns (uint256)`: regular + deposit + penalty
+  - `isFlagged(address wallet) view returns (bool)`; `isFresh(address)` (informational only)
+  - `componentsOf(address)`, `config()`, `effectiveIdentity(address)`
+  - Publisher-only: `setScores(epoch, wallets, comps)`, `finalizeEpoch(epoch, coveredUntil)`. Owner: `proposeConfig` / `activateConfig`, router allowlist, flag corrections (all behind a delay).
+- `ReputationTradeModule` (src/ReputationTradeModule.sol): OpenFour TradeModule; `evaluate(TradeContext)`, `quoteFeeBps(wallet, isBuy)`. Uses `tx.origin` when the trader is a contract.
+- `ReputationLedger` (src/ReputationLedger.sol): `afterHook(TradeHookContext)` (only Core), `onMigrate(MigrateHookContext)`, `onPoolSale(wallet, sold)`, `resolveWallet(trader)`.
+- `CashbackPool` (src/CashbackPool.sol):
+  - `claim(address asset, address token, address wallet) returns (depositOut, cashback)`
+  - `claimBonusPartial(address asset, address token)`: pro-rata bonus when the fund does not cover all bonus rights
+  - `forfeit(asset, token, wallet)`, `sweepSurplus(asset)` (only what exceeds all bonus rights goes to the treasury)
+  - Views: `depositPool(asset)`, `budgetPool(asset)`, `fund(asset)`, `bonusLiability(asset)`, `unlocked(asset, token, wallet)`, `ledgerOf(ledger)`
+- `ReputationLockedToken` (src/ReputationLockedToken.sol): token implementation with transfer fee; `setMigratedPool(s)`, `setPhase`, `transfersUnlocked`.
+- `CashbackDistributor` (src/CashbackDistributor.sol): Merkle distributor, kept in the repo, not deployed.
+
+## BSC testnet (chain 97) addresses
+Source: app/config.json and README.md. Explorer: https://testnet.bscscan.com
+- ReputationRegistry: 0x7231682cdfed6d9d401efb8a2002b026bcbbc105
+- ReputationTradeModule: 0xd67a6d6F12d79495f2f0D8EDd1AD67cf9B73AcF4
+- ReputationLedger: 0x15B9f0b6Fd56c3622ae7E65C5d28D04efe888a54
+- CashbackPool: 0x26c3fF93169be2049aaD92F732F013d015E70e75
+- ReputationLockedToken (impl): 0xbd5C281512b21927BbCAEcBfA34f63A8Ce4AB03D
+- OpenFour fork Registry: 0x74463FA010193012601912d961a445899164BeeF
+- OpenFour fork Core: 0x210edA86A5343b37a06573b6a4C9d49D0F86B2b3
+- Preset "Reputation Bonding V1": id 1795717041641
+BSC mainnet identity tokens (read-only checks): BABT 0x2B09d47D550061f995A3b5C6F0Fd58005215D7c8; SPACE ID Agent ID (ERC-721, not ERC-8004) 0x60b9262456de011f7d15a54cdd8c48baaa8b022f.
+
+## Publisher service (service/publisher)
+Python service. Reads trades, computes the 5 components and the rug rule, signs and sends `setScores` / `finalizeEpoch` with the publisher key (one trusted key). Start: `python3 service/publisher/run.py --rpc URL --registry 0x.. --core 0x.. --key-file PATH [--snapshot PATH]` (`--snapshot none` starts without a history snapshot). The key file is supplied by the operator and is never part of the repo.
+
+## Limitations
+- One publisher key writes scores and flags; a wrong publication can unfairly flag a wallet. Plan: multisig, later a ZK proof.
+- The payer is `tx.origin`; relayers and ERC-4337 bundlers become the payer.
+- Rug detector sees only sells within a 3-block window; sells in a token's first 60 s are ignored; the reference rule publishes 0 or 1000 only.
+- Post-migration pricing is a prototype in the token's transfer hook: a plain transfer to the pair, or adding liquidity, may be treated as a sale; removing liquidity is priced as a buy; only the registered pair is priced; a sale via a non-allowlisted contract pays the sell rate twice; the publisher does not read DEX swaps yet. Production path: a PancakeSwap Infinity hook.
+- Positions of tokens that never migrate stay locked.
+- `ReputationLockedToken` uses OpenZeppelin v5, OpenFour uses v4; needs OpenFour review.
+- Unit tests use a mock Core; demos run OpenFour's Core on a local fork. Nothing ran on an official audited Registry.
+
+## Run the tests
+- Contracts: `forge test` (solc 0.8.24, via-IR): 283 passed (27 Nov 2026).
+- Publisher: `cd service/publisher/tests && python3 -m unittest discover -p "test_*.py"`: 51 OK.
+- Local end-to-end demo: `scripts/demo-local.sh`; real testnet: `scripts/demo-testnet.md`.
