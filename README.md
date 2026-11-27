@@ -154,6 +154,20 @@ Full path create → buy → sell → migrate → claim with the current contrac
 | claim fresh | [0x50706e54…](https://testnet.bscscan.com/tx/0x50706e5471cebbbcaec7ceb15c5e960d60890dd1250753f379ee40e5c0d4970a) |
 | claim regular | [0xdb96f0de…](https://testnet.bscscan.com/tx/0xdb96f0de4e05f95021d9f08384891e02e704bb313263c3513e6d5d3408ab4c0c) |
 
+## Economics on the data
+
+![Scammers pay the protocol: 527 % of today's revenue (x5.3); 93 % of the added revenue comes from rug wallets, every month x3.6 to x6.2; OpenFour's 0.5 % is untouched.](site/media/charts/revenue.gif)
+
+*Scammers pay the protocol: 527 % of today's revenue (x5.3); 93 % of the added revenue comes from rug wallets, every month x3.6 to x6.2; OpenFour's 0.5 % is untouched.*
+
+![Honest traders get their fee back: 99.8 % returns, never more than you paid; every month 94 to 100 %.](site/media/charts/cashback.gif)
+
+*Honest traders get their fee back: 99.8 % returns, never more than you paid; every month 94 to 100 %.*
+
+![Pass the challenge, get your deposit back: 93.7 % returned, 6.3 % confiscated from rug wallets; it comes back when the wallet sells, even at a loss.](site/media/charts/deposits.gif)
+
+*Pass the challenge, get your deposit back: 93.7 % returned, 6.3 % confiscated from rug wallets; it comes back when the wallet sells, even at a loss.*
+
 ## Risks and limitations
 
 - **Trusted keys.** One publisher key writes scores, flags and `coveredUntil`; the registry owner changes config (behind a timelock) and corrects flags. A wrong or malicious publication can unfairly flag a wallet or delay claims. Plan: multisig for the owner and the publisher, later a ZK proof of the publication.
