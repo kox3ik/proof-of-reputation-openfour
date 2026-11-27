@@ -48,7 +48,7 @@ flowchart LR
 
 Status: hackathon submission, BSC testnet only (not audited by humans).
 
-**Explainer video (1:38):** https://kox3ik.github.io/proof-of-reputation-openfour/media/explainer.webm
+**Explainer video with voice-over (1:52):** https://kox3ik.github.io/proof-of-reputation-openfour/media/explainer-voice.webm · silent version: https://kox3ik.github.io/proof-of-reputation-openfour/media/explainer.webm
 
 ## Contracts
 
