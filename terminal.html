@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proof of Reputation · Terminal</title>
+<meta name="description" content="Trading terminal: token charts with the live rating and fee of every trader. Fees follow on-chain reputation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="terminal.css">
+</head>
+<body class="term">
+<header class="tbar">
+  <a class="brand" href="index.html"><span class="pxl" data-pxwallet="#141414"></span><span>Proof of Reputation</span></a>
+  <nav class="sets" id="sets" aria-label="Data sets"></nav>
+  <form class="yfee" id="yform" autocomplete="off">
+    <label for="yaddr" class="lbl">Your fee</label>
+    <input id="yaddr" placeholder="paste 0x wallet" spellcheck="false" aria-label="Wallet address">
+    <button class="btn fill" type="submit">Check</button>
+  </form>
+  <a class="back" href="index.html">&larr; Back to overview</a>
+</header>
+<div class="yout" id="yout" hidden></div>
+<div class="note" id="setnote"></div>
+<main class="grid" id="main">
+  <aside class="pane tokens" aria-label="Tokens">
+    <div class="ph"><span>Tokens</span><span id="tcount"></span></div>
+    <div id="tlist" class="tlist"></div>
+  </aside>
+  <section class="pane chart" aria-label="Price chart">
+    <div class="ph"><span id="ctitle">Chart</span><span class="legend" id="legend"></span></div>
+    <div class="cstats" id="cstats"></div>
+    <div class="cwrap" id="cwrap"><div id="lw" role="img" aria-label="Candlestick chart with trades"></div><div class="tip" id="tip" hidden></div></div>
+    <div class="ctoken mono" id="ctoken"></div>
+  </section>
+  <aside class="pane traders" aria-label="Traders rating and fees">
+    <div class="ph"><span>Traders on this token &mdash; rating &amp; fees</span><span id="livestate" class="livestate"></span></div>
+    <div class="tw"><table id="ttab"><thead><tr><th>Wallet</th><th>Score 0&ndash;1</th><th class="r">Buy</th><th class="r">Sell</th><th class="r">Dep.</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+    <p class="foot">Fees in bps (100 bps = 1 %). Deposit is refundable; penalty applies only to flagged wallets.</p>
+  </aside>
+  <section class="pane tape" aria-label="Trades">
+    <div class="ph"><span>Trades tape</span><span class="legend small">fee = regular + deposit + penalty (bps)</span></div>
+    <div class="tw"><table id="tape"><thead><tr><th>Time (UTC)</th><th>Side</th><th>Wallet</th><th class="r">BNB</th><th class="r">Fee bps</th><th>Split</th><th>Class</th><th>Tx</th></tr></thead><tbody></tbody></table></div>
+  </section>
+</main>
+<script src="vendor/ethers.umd.min.js"></script>
+<script src="vendor/lightweight-charts/lightweight-charts.standalone.production.js"></script>
+<script src="terminal.js"></script>
+</body>
+</html>

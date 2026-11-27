@@ -1,0 +1,4 @@
+lightweight-charts 4.2.3 (Apache-2.0), npm tarball lightweight-charts-4.2.3.tgz
+sha256 2713edf786c7b813408e75e7ca22e9f4aeb1d6722c9bd798118a877661f4c55e
+Source: https://www.npmjs.com/package/lightweight-charts - (c) TradingView, Inc. https://www.tradingview.com/
+The package ships no NOTICE file; the TradingView attribution logo on the chart is kept on, as the licence requires.
