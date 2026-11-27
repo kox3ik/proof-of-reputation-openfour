@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Proof of Reputation：你的信誉，你的价格</title>
+<meta name="description" content="OpenFour 交易模块。每个钱包根据链上历史获得 0 到 1 的信誉分，每笔交易的费用随分数浮动。跑路钱包付费，诚实钱包获得返现。">
+<meta name="theme-color" content="#1c1c1b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<style>:root{--serif:"Instrument Serif","Noto Serif SC","Songti SC","SimSun",Georgia,serif;--sans:"Inter",system-ui,-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;--mono:"JetBrains Mono",ui-monospace,"PingFang SC","Microsoft YaHei","Noto Sans SC",monospace}h1,h2{letter-spacing:0;line-height:1.2}</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="#top"><span data-pxwallet="#d7f25c" style="display:inline-block;width:22px;height:20px"></span>Proof of Reputation</a>
+  <ul>
+    <li><a href="#thesis">理念</a></li><li><a href="#how">运作方式</a></li><li><a href="#demo">演示</a></li>
+    <li><a href="#live">测试网实时查询</a></li><li><a href="#limits">局限</a></li>
+    <li><a href="../terminal.html">终端</a></li><li><a href="../leaderboard.html">排行榜</a></li><li><a href="../profile.html">钱包档案</a></li><li><a href="../claim.html">领取返现</a></li>
+    <li><a href="../index.html" hreflang="en" lang="en">English</a></li>
+  </ul>
+</div></header>
+
+<main id="main">
+<!-- 1 HERO -->
+<section class="hero" id="top"><div class="wrap">
+  <div class="label"><span><i></i>信誉 / 定价</span><span>01 / 信任的价值</span></div>
+  <div class="hero-grid">
+    <div>
+      <p><span class="tag">BNB Bangkok 2026</span><span class="tag">Four.meme / OpenFour</span></p>
+      <h1>你的信誉，<em>你的价格。</em></h1>
+      <p class="lead"><b>Proof of Reputation</b> 是一个 OpenFour 交易模块。每个钱包根据链上历史获得 0 到 1 的信誉分，每笔交易的费用随分数而定。跑路（Rug）钱包多付费，诚实钱包获得返现。</p>
+      <div class="cta"><a class="btn fill" href="../terminal.html">打开终端 &rarr;</a><a class="btn" href="#live">查询钱包</a><a class="btn" href="#demo">观看演示</a></div>
+    </div>
+    <div class="pxbox" aria-hidden="true"><span data-pxwallet="#141414"></span></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>75.5 %</b><span>的 Four.meme 跑路成交额来自此前已参与过跑路的钱包</span></div>
+    <div class="stat"><b>35.0 %</b><span>的联合曲线成交量来自跑路参与者，而他们仅占钱包总数的 6.5 %</span></div>
+    <div class="stat"><b>50 → 690</b><span>bps：同一个被标记的钱包、同一笔交易，标记前后的费率（测试网）</span></div>
+    <div class="stat"><b>8,000</b><span>个钱包已在 BSC 测试网上评分，其中 800 个因跑路历史被标记</span></div>
+  </div>
+</div></section>
+
+<!-- 2 THESIS -->
+<section class="thesis" id="thesis"><div class="wrap">
+  <div class="label"><span><i></i>我们的理念</span><span>02</span></div>
+  <h2>市场不需要<em>又一个发射台。</em></h2>
+  <div class="twocol">
+    <div>
+      <p class="lead">不是新的发射机制，也不是又一种费用、代币或分红的分配方式。</p>
+      <p class="lead">先把市场上的跑路和骗局清理掉，新的机制才能真正发挥作用。</p>
+    </div>
+    <div class="hist" id="hist" role="img" aria-label="装饰性像素直方图"></div>
+  </div>
+  <div class="problem">
+    <div><b>75.5 %</b><span>的 Four.meme 跑路成交额来自有过跑路前科的钱包，而发射台对它们收取的费用与诚实交易者相同。</span></div>
+    <div><b>35.0 %</b><span>的 Four.meme 联合曲线成交量来自跑路参与者，他们只占钱包总数的 6.5 %。共 5,358 个钱包、919 起协同跑路事件、844 个代币。</span></div>
+    <div><b>35.6M</b><span>今年分析了 147 万个代币上的 Four.meme 交易，另加 OpenFour 上线以来的 82 万笔交易。每次都是同一批人。</span></div>
+  </div>
+</div></section>
+
+<!-- 3 CARDS -->
+<section id="wallets"><div class="wrap">
+  <div class="label"><span><i></i>陌生钱包</span><span>03 / 直到现在</span></div>
+  <h2>陌生钱包，<em>直到现在。</em></h2>
+  <p class="lead">如今在发射台眼里，所有钱包都一模一样。有了这个模块，每个钱包都带有信誉分和对应费率。下面是真实钱包，分数读取自我们的测试网注册表。</p>
+  <div class="stage">
+    <div class="cardrow" aria-label="没有信誉的钱包">
+      <div class="wcard unk"><div class="ic"><span data-pxwallet></span></div><div class="nm">未知</div><div class="sc">?</div><div class="ad">0x896d…6c</div><span class="pill">所有人同一费率</span></div>
+      <div class="wcard unk"><div class="ic"><span data-pxwallet></span></div><div class="nm">未知</div><div class="sc">?</div><div class="ad">0xc366…7a</div><span class="pill">所有人同一费率</span></div>
+      <div class="wcard unk"><div class="ic"><span data-pxwallet></span></div><div class="nm">未知</div><div class="sc">?</div><div class="ad">0x6b04…b3</div><span class="pill">所有人同一费率</span></div>
+    </div>
+    <div class="arrow">信誉分 + 费率<svg width="64" height="16" viewBox="0 0 16 4" shape-rendering="crispEdges" fill="#d7f25c" aria-hidden="true"><rect x="0" y="1" width="13" height="2"/><rect x="12" y="0" width="1" height="4"/><rect x="13" y="1" width="2" height="2"/></svg></div>
+    <div class="cardrow" aria-label="带信誉分的同一批钱包">
+      <div class="wcard" data-live="0x896d37ee4a1022d722304d2fd2f9594b26d16c8c"><div class="ic"><span data-pxwallet></span></div><div class="nm">顶级交易者</div><div class="sc">0.799 <small>/ 1</small></div><div class="ad">0x896d…6c</div><span class="pill">分数来自运行日志</span></div>
+      <div class="wcard" data-live="0xc366f55d3ea6e6da886343b374582a35801dcb7a"><div class="ic"><span data-pxwallet></span></div><div class="nm">中位交易者</div><div class="sc">0.570 <small>/ 1</small></div><div class="ad">0xc366…7a</div><span class="pill">分数来自运行日志</span></div>
+      <div class="wcard bad" data-live="0x6b042bc47cb517315480e1d85834185d802224b3"><div class="ic"><span data-pxwallet></span></div><div class="nm">有跑路历史</div><div class="sc">0.000 <small>/ 1</small></div><div class="ad">0x6b04…b3</div><span class="pill">已标记</span></div>
+    </div>
+  </div>
+  <p class="small muted" style="margin-top:22px">真实的 BSC 主网钱包，其分数已载入测试网注册表。测试网 RPC 响应后，卡片会更新为注册表中的实时数值。</p>
+</div></section>
+
+<!-- 4 HOW -->
+<section id="how"><div class="wrap">
+  <div class="label"><span><i></i>运作方式</span><span>04</span></div>
+  <h2>一个信誉分，一条费率曲线，<em>适用每次发射。</em></h2>
+  <div class="steps">
+    <div><span class="n">01 / 信誉分</span><h3>历史变成分数</h3><p>交易量、活跃度、持仓时间、已验证身份以及过往的跑路参与情况，共同构成 0 到 1 的信誉分。权重由协议设定。</p></div>
+    <div><span class="n">02 / 费率</span><h3>分数决定费率</h3><p>OpenFour 读取签署交易的钱包并据此定价。受信任的钱包费率更低，新钱包和被标记的钱包费率更高。发送前无需额外调用，终端无需任何改动。</p></div>
+    <div><span class="n">03 / 押金</span><h3>低分钱包缴纳押金</h3><p>低分钱包在买入时需缴纳可退还的押金：分数为 0 时为 6.4 %，随分数上升平滑递减，到 0.4 时降为零。诚实交易后押金退还；若该钱包参与跑路，押金将被没收并转入骗子基金。</p></div>
+    <div><span class="n">04 / 罚金</span><h3>跑路钱包每笔交易都付罚金</h3><p>罚金随钱包的跑路分量增长，买入和卖出最高均为 6.4 %。它仍然可以买卖：卖出从不被禁止，只是被定价。</p></div>
+    <div><span class="n">05 / 返现</span><h3>骗子补偿诚实钱包</h3><p>罚金和被没收的押金汇入骗子基金。诚实钱包从中获得返现和奖励，但总额不会超过其已缴纳的费用。</p></div>
+    <div><span class="n">06 / 协议</span><h3>协议费用保持不变</h3><p>OpenFour 自身的费用完全不变。本模块在其之上叠加第二层基于信誉的费用。</p></div>
+  </div>
+  <div class="fees">
+    <div><span class="k">普通钱包</span><b>50 bps</b><span class="small muted">模块费用</span></div>
+    <div><span class="k">受信任钱包</span><b>低于 50</b><span class="small muted">费率曲线随分数下降</span></div>
+    <div><span class="k">新钱包，买入</span><b>690 bps</b><span class="small muted">分数为 0 时：50 + 640 可退还押金，分数 0.4 时降至 50</span></div>
+    <div><span class="k">被标记钱包</span><b>最高 950 bps</b><span class="small muted">罚金随跑路分量增长（最高 640）；完全被标记：卖出 690，买入 950（上限）</span></div>
+  </div>
+</div></section>
+
+<!-- 5 VIDEO -->
+<section id="demo"><div class="wrap">
+  <div class="label"><span><i></i>演示</span><span>05 / 1:56</span></div>
+  <h2>完整流程，<em>跑在测试网上。</em></h2>
+  <p class="lead">诚实钱包、捆绑钱包砸盘、标记、罚金、押金没收，以及诚实钱包领取返现。均为真实交易，录自我们的实际运行。</p>
+  <video class="video" controls preload="metadata" poster="../assets/poster.png"><source src="../media/demo.webm" type="video/webm">您的浏览器无法播放 WebM 视频，请直接打开<a href="../media/demo.webm">视频文件</a>。</video>
+</div></section>
+
+<!-- 6 LIVE -->
+<section id="live"><div class="wrap">
+  <div class="label"><span><i></i>BSC 测试网实时查询</span><span>06</span></div>
+  <h2>查询任意钱包，<em>实时。</em></h2>
+  <p class="lead">粘贴一个地址即可。页面直接在您的浏览器中调用我们部署在 BSC 测试网上的注册表，无需连接钱包，中间也没有我们的服务器。</p>
+  <div class="panel">
+    <form id="lkform" class="lk"><label for="addr" class="small muted" style="width:100%">钱包地址</label>
+      <input id="addr" autocomplete="off" spellcheck="false" placeholder="0x…" inputmode="text"><button class="btn fill" type="submit">查询</button></form>
+    <div class="chips" aria-label="快速选择">
+      <button class="chip" data-a="0x896d37ee4a1022d722304d2fd2f9594b26d16c8c">真实：顶级交易者</button>
+      <button class="chip" data-a="0x73f3a84a8b33a3d1ead7eab7e73684ad93492eed">真实：高分</button>
+      <button class="chip" data-a="0xc366f55d3ea6e6da886343b374582a35801dcb7a">真实：中位</button>
+      <button class="chip" data-a="0x1a6024151faf44ba7a51caa8792f97ac43e32b8b">真实：低分</button>
+      <button class="chip" data-a="0x6b042bc47cb517315480e1d85834185d802224b3">真实：有跑路历史</button>
+      <button class="chip" data-a="0xb016De44fcB18d88Fd9638dbFE3e1358b12CfCc7">模拟：诚实钱包</button>
+      <button class="chip" data-a="0x628303D7831E3f37bC8D166EFF5c950A6dD37C9B">模拟：捆绑钱包</button>
+    </div>
+    <div class="out" id="walletOut" aria-live="polite"><p class="muted">请选择钱包或粘贴地址。</p></div>
+    <p class="net">链 97 · 注册表 <code>0x7231682cdfed6d9d401efb8a2002b026bcbbc105</code> · RPC bsc-testnet-rpc.publicnode.com</p>
+  </div>
+
+  <h3 style="margin-top:64px;font:400 32px var(--serif)">交易凭证</h3>
+  <p class="muted">模拟中的关键交易。每个链接都会打开 testnet.bscscan.com。</p>
+  <div class="panel" style="padding:8px 18px 14px">
+    <table class="rc"><thead><tr><th>#</th><th>步骤</th><th>交易</th></tr></thead><tbody><tr><td>01</td><td><b>诚实钱包首次买入</b><br><span class="muted small">新钱包首次买入并缴纳可退还的押金。</span></td><td><a href="https://testnet.bscscan.com/tx/0x09d30f4214a7eab1439c514c3492efac5baa5297a75f0b5f4c8106e545807833" rel="noopener"><code>0x09d30f42…807833</code></a></td></tr><tr><td>02</td><td><b>捆绑钱包砸盘</b><br><span class="muted small">四个关联钱包一起买入同一个代币，然后在同一区块内卖出。</span></td><td>1&nbsp;<a href="https://testnet.bscscan.com/tx/0x5f2b384c74e585cd99165e57ec7b8c3fff3cdefe5b5b38b63b3ba50560ef42bb" rel="noopener"><code>0x5f2b384c…ef42bb</code></a> · 2&nbsp;<a href="https://testnet.bscscan.com/tx/0x43f5991da7b2052697af0b7f0e0425e30cb02e0688b5a235e13b108c7014a6e0" rel="noopener"><code>0x43f5991d…14a6e0</code></a> · 3&nbsp;<a href="https://testnet.bscscan.com/tx/0xa83d610dfcfd3f8481fd29b220ed0b765bea92b06ae306b57a5ee3fabcee2891" rel="noopener"><code>0xa83d610d…ee2891</code></a> · 4&nbsp;<a href="https://testnet.bscscan.com/tx/0xe2cf9600626172fb8641a9af4ddf1c7e1998d4d2f9f1567541d40ef8e60e592c" rel="noopener"><code>0xe2cf9600…0e592c</code></a></td></tr><tr><td>03</td><td><b>发布标记</b><br><span class="muted small">砸盘后，我们的发布器立即在链上标记该捆绑钱包组。</span></td><td><a href="https://testnet.bscscan.com/tx/0x2e3d4e83cc96d08290cf2a3c06560d5585ac46274d0f1597ffc2c588c8e3cd7d" rel="noopener"><code>0x2e3d4e83…e3cd7d</code></a></td></tr><tr><td>04</td><td><b>同一钱包，标记前后</b><br><span class="muted small">同一个捆绑钱包：标记前 50 bps，标记后 690 bps。它的卖出被允许，没有被禁止。</span></td><td>标记前买入 <a href="https://testnet.bscscan.com/tx/0xfe2e332947180251e7ac34313ed44d0b4ae139ee1fd3b8631e185c060c91ddfd" rel="noopener"><code>0xfe2e3329…91ddfd</code></a><br>标记后买入 <a href="https://testnet.bscscan.com/tx/0x5491c5747bc44b13d746992db7d81e4b0bb749f5a28d9c056489366cde637839" rel="noopener"><code>0x5491c574…637839</code></a><br>标记后卖出 <a href="https://testnet.bscscan.com/tx/0x96f17b72315a8074bff1dc048c8f8e497e6b1180002a398f351fb642cad4258f" rel="noopener"><code>0x96f17b72…d4258f</code></a></td></tr><tr><td>05</td><td><b>押金被没收</b><br><span class="muted small">被标记的钱包损失押金和返现权，全部进入骗子基金。</span></td><td>1&nbsp;<a href="https://testnet.bscscan.com/tx/0xe57bc3b5397390b8fe10bd0a8ca87b09f49bb471e4bfa2098dd9247a9978d771" rel="noopener"><code>0xe57bc3b5…78d771</code></a> · 2&nbsp;<a href="https://testnet.bscscan.com/tx/0xaba3fd8c3932c8cd42467e9d54d4008dbbdeece52c3a44a3266ab7f1eb54e996" rel="noopener"><code>0xaba3fd8c…54e996</code></a> · 3&nbsp;<a href="https://testnet.bscscan.com/tx/0xd7a7e35dafbee75add8017d7acf0e4c947b00db9a216a4a69f507c6964b05daa" rel="noopener"><code>0xd7a7e35d…b05daa</code></a> · 4&nbsp;<a href="https://testnet.bscscan.com/tx/0xaa2c1ce3e2cb401924788ae436e2b1812d383bcb61b3fd3277dc6f97bd9e45df" rel="noopener"><code>0xaa2c1ce3…9e45df</code></a></td></tr><tr><td>06</td><td><b>诚实钱包领取</b><br><span class="muted small">诚实钱包取回押金，并从基金中领取返现和奖励。</span></td><td>A&nbsp;<a href="https://testnet.bscscan.com/tx/0x9d8ab38f1d8461e432a8ebc6d09a2537354f304c6b7607ee9adbfb8f0034814c" rel="noopener"><code>0x9d8ab38f…34814c</code></a> · B&nbsp;<a href="https://testnet.bscscan.com/tx/0xa2d4bd080d82adf0e0bb9f09f2d04651b8aeb873c34f9a78520280f787a08d3e" rel="noopener"><code>0xa2d4bd08…a08d3e</code></a> · 新手&nbsp;<a href="https://testnet.bscscan.com/tx/0x18612b8749ab5c36883497f3888fcc7d059aaf7afbcffedb60488f643922bcec" rel="noopener"><code>0x18612b87…22bcec</code></a></td></tr></tbody></table>
+  </div>
+  <div class="checks">
+    <div><b>235</b><span>合约测试</span></div>
+    <div><b>51</b><span>发布器测试</span></div>
+    <div><b>AI</b><span>审计报告，由多个 AI 审查员完成：<a href="https://github.com/kox3ik/proof-of-reputation-openfour/blob/main/docs/AI-AUDIT.md">docs/AI-AUDIT.md</a>。并非人工审计。</span></div>
+  </div>
+</div></section>
+
+<!-- 7 PRICE NOT PERMISSION -->
+<section id="price"><div class="wrap">
+  <div class="label"><span><i></i>定价，而非许可</span><span>07</span></div>
+  <h2>我们不关门，<em>我们定价。</em></h2>
+  <div class="cmp">
+    <div><span class="tag">许可制发射</span>
+      <h3>文件、冻结、限额</h3>
+      <ul><li>交易前须提交 KYC 文件</li><li>限额和冻结由运营方决定</li><li>运营方可以冻结你的资金</li><li>诚实交易者流失，成交量下降</li></ul></div>
+    <div><span class="tag">Proof of Reputation</span>
+      <h3>每个交易者都留下</h3>
+      <ul><li>无需文件，只看链上历史</li><li>什么都不禁止，卖出永远不被禁止</li><li>没有冻结：标记只改变价格</li><li>骗子付费，诚实钱包获得返现</li></ul></div>
+  </div>
+</div></section>
+
+<!-- 8 LIMITS -->
+<section id="limits"><div class="wrap">
+  <div class="label"><span><i></i>坦诚说明局限</span><span>08</span></div>
+  <h2>目前还<em>做不到的事。</em></h2>
+  <div class="lim">
+    <div><h3>分数来自我们的服务</h3><p>分数由我们的服务发布并签名，规则公开，任何人都可以用公开数据重新计算。分数并非在链上计算，ZK 证明已列入路线图。</p></div>
+    <div><h3>仅限测试网</h3><p>这里的一切都运行在 BSC 测试网上，身份代币在测试网上是替代品。没有任何内容运行在官方的、经过审计的 OpenFour 注册表上。</p></div>
+    <div><h3>AI 审查，未经人工审计</h3><p>代码经过多个 AI 模型审查，每轮后均已修复。这不等同于人工审计。</p></div>
+    <div><h3>转账归集式跑路</h3><p>通过普通转账把代币归集到同一个钱包的跑路，目前尚无法检测。转账费会在迁移前后对其定价，但检测器不会标记它们。</p></div>
+  </div>
+  <p class="lead" style="margin-top:34px"><span class="mono small muted">下一步</span> &nbsp;为每个信誉分生成零知识证明；迁移后在 PancakeSwap Infinity hook 中沿用同一规则；成为所有 OpenFour 发射的默认交易规则；与身份和跑路标记的风险数据伙伴合作。</p>
+</div></section>
+</main>
+
+<footer><div class="wrap foot">
+  <div><div class="brand"><span data-pxwallet="#d7f25c" style="display:inline-block;width:22px;height:20px"></span>Proof of Reputation</div>
+    <p class="small muted">BNB Bangkok 2026 · Four.meme / OpenFour 赛道 · 仅限 BSC 测试网</p></div>
+  <ul>
+    <li><a href="https://github.com/kox3ik/proof-of-reputation-openfour">GitHub 仓库</a></li>
+    <li><a href="https://github.com/kox3ik/proof-of-reputation-openfour/blob/main/docs/OPENFOUR_SUBMISSION.md">OpenFour 提交材料</a></li>
+  </ul>
+</div></footer>
+
+<script src="../vendor/ethers.umd.min.js"></script>
+<script src="../app.js"></script>
+</body>
+</html>
