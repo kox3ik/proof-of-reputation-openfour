@@ -29,11 +29,11 @@
 </style>
 </head>
 <body class="term">
-<header class="tbar">
-  <a class="brand" href="index.html"><span class="pxl" data-pxwallet="#141414"></span><span>Proof of Reputation</span></a>
-  <nav class="sets" aria-label="Pages"><a class="btn" href="terminal.html">Terminal</a> <a class="btn" href="leaderboard.html">Leaderboard</a> <a class="btn" href="profile.html">Profile</a></nav>
-  <a class="back" style="margin-left:auto" href="index.html">&larr; Back to overview</a>
-</header>
+<header class="snav"><div class="snav-in">
+  <a class="brand" href="index.html" aria-label="Proof of Reputation"><svg viewBox="0 0 16 14" width="24" height="21" shape-rendering="crispEdges" fill="#d7f25c" aria-hidden="true"><path d="M4 0h8v1h-8zM2 1h2v1h-2zM12 1h2v1h-2zM1 2h1v1h-1zM4 2h3v1h-3zM8 2h4v1h-4zM14 2h1v1h-1zM1 3h1v1h-1zM3 3h1v1h-1zM7 3h1v1h-1zM12 3h1v1h-1zM14 3h1v1h-1zM0 4h16v1h-16zM0 5h1v1h-1zM15 5h1v1h-1zM0 6h1v1h-1zM15 6h1v1h-1zM0 7h1v1h-1zM11 7h3v1h-3zM15 7h1v1h-1zM0 8h1v1h-1zM10 8h1v1h-1zM14 8h1v1h-1zM0 9h1v1h-1zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM0 10h1v1h-1zM11 10h2v1h-2zM14 10h1v1h-1zM0 11h1v1h-1zM15 11h1v1h-1zM0 12h1v1h-1zM15 12h1v1h-1zM0 13h16v1h-16z"/></svg><span>Proof of Reputation</span></a>
+  <nav class="snav-links" aria-label="Pages"><a href="index.html">Overview</a><a href="leaderboard.html">Leaderboard</a><a href="profile.html" aria-current="page">Profile</a><a href="claim.html">Cashback</a></nav>
+  <div class="snav-r"><a class="snav-term" href="terminal.html">Terminal</a><a class="snav-lang" href="zh/index.html" hreflang="zh-CN" lang="zh-CN">中文</a></div>
+</div></header>
 <main class="pg">
   <h1>Wallet profile</h1>
   <p class="lead">New to the market? Paste a wallet to see its reputation score, its five components, and how many points separate it from the newcomer threshold (400 points = score 0.4), where the refundable buy deposit reaches zero.</p>
@@ -48,12 +48,12 @@
     <div class="card"><div class="ph" style="padding:0 0 10px;border:0"><span>Fees &mdash; current contracts</span></div><div class="cmp" id="fees"></div><p class="foot" id="livefees" style="padding:10px 0 0"></p></div>
   </div>
   <div class="card"><div class="ph" style="padding:0 0 10px;border:0"><span>What raises your score</span></div>
-    <table><thead><tr><th>Component</th><th class="r">Weight</th><th>How to raise it</th></tr></thead><tbody>
+    <div class="tw"><table><thead><tr><th>Component</th><th class="r">Weight</th><th>How to raise it</th></tr></thead><tbody>
     <tr><td>Volume</td><td class="r">30</td><td>Trade more BNB volume on Four.meme / OpenFour curves (percentile rank among all wallets).</td></tr>
     <tr><td>Activity</td><td class="r">25</td><td>Trade on many different days and across many tokens.</td></tr>
     <tr><td>Holding</td><td class="r">25</td><td>Hold positions instead of dumping right after buying.</td></tr>
     <tr><td>Identity</td><td class="r">20</td><td>Hold a BAB token or an Agent ID; the registry raises identity from on-chain checks.</td></tr>
-    <tr><td>Penalty</td><td class="r">&minus;</td><td>Subtracts from the score: joining rugs or coordinated dumps. Keep it at 0.</td></tr></tbody></table>
+    <tr><td>Penalty</td><td class="r">&minus;</td><td>Subtracts from the score: joining rugs or coordinated dumps. Keep it at 0.</td></tr></tbody></table></div>
     <p class="foot" style="padding:10px 0 0">Score = (30&middot;volume + 25&middot;activity + 25&middot;holding + 20&middot;identity) / 100 &minus; penalty. Buy deposit = 640&middot;(400 &minus; score)/400 bps below 400 points, refundable; 0 from 400.</p></div>
 </main>
 <script src="vendor/ethers.umd.min.js"></script>

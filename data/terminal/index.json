@@ -11,6 +11,15 @@
    ]
   },
   {
+   "id": "testnet-migrated",
+   "title": "Testnet \u00b7 full path with migration (27 Nov)",
+   "note": "BSC testnet, 27 Nov 2026: create \u2192 buys \u2192 sells \u2192 migration to PancakeSwap \u2192 claims, all real transactions. Fees come from each trade's own logs; ratings are the registry values at the time of the run, not re-read.",
+   "static": true,
+   "tokens": [
+    "testnet-mig92373.json"
+   ]
+  },
+  {
    "id": "mainnet",
    "title": "Mainnet replay",
    "note": "Real Four.meme trades; scores by our open rule from history before each token; fees = what the module would charge",
