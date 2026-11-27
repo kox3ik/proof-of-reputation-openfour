@@ -56,17 +56,27 @@ def fee_curve(s: int, cfg: dict = CFG) -> int:
     return cfg["neutralBps"] - (cfg["neutralBps"] - cfg["minBps"]) * (s - n) // (MAX_SCORE - n)
 
 
-def quote_detailed(c: tuple[int, int, int, int, int], is_buy: bool, cfg: dict = CFG) -> dict:
-    """ReputationRegistry.quoteDetailed for stored components c (no BAB / Agent ID held)."""
-    flagged = c[4] >= cfg["flagThreshold"]
-    regular = fee_curve(score_1000(c, cfg), cfg)
-    if not is_buy and not flagged and regular > cfg["sellCapBps"]:
+def deposit_bps(s: int, cfg: dict = CFG) -> int:
+    """ReputationMath.depositBps: refundable buy deposit falls linearly with the score, 0 from neutralScore up (floor)."""
+    n = cfg["neutralScore"]
+    return 0 if s >= n else cfg["freshDepositBps"] * (n - s) // n
+
+
+def quote_score(s: int, pen: int, is_buy: bool, cfg: dict = CFG) -> dict:
+    """ReputationRegistry.quoteDetailed (smooth pricing) for score s (0..1000) and penalty component pen (0..1000)."""
+    regular = fee_curve(s, cfg)
+    if not is_buy and pen == 0 and regular > cfg["sellCapBps"]:
         regular = cfg["sellCapBps"]
     regular = min(regular, MAX_TOTAL_BPS)
-    fresh = not any(c)
-    deposit = cfg["freshDepositBps"] if fresh and is_buy else 0
-    penalty = cfg["penaltyBps"] if flagged else 0
+    room = MAX_TOTAL_BPS - regular
+    penalty = min(cfg["penaltyBps"] * pen // MAX_SCORE, room)
+    deposit = min(deposit_bps(s, cfg) if is_buy else 0, room - penalty)
     return {"regular": regular, "deposit": deposit, "penalty": penalty, "total": regular + deposit + penalty}
+
+
+def quote_detailed(c: tuple[int, int, int, int, int], is_buy: bool, cfg: dict = CFG) -> dict:
+    """ReputationRegistry.quoteDetailed for stored components c (no BAB / Agent ID held)."""
+    return quote_score(score_1000(c, cfg), c[4], is_buy, cfg)
 
 
 def rank(sorted_ref: np.ndarray, x: float) -> int:

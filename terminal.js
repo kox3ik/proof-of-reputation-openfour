@@ -185,7 +185,7 @@
     rows.sort(function (a, b) { return b.score - a.score; });
     return rows;
   }
-  function status(w) { return w.flagged ? "flagged" : (w.fresh || w.depositBps > 0) ? "fresh" : w.buyBps < 50 ? "trusted" : "regular"; }
+  function status(w) { return w.flagged ? "flagged" : w.fresh ? "fresh" : w.buyBps < 50 ? "trusted" : "regular"; }
   function renderTraders() {
     var rows = traderRows(), t = S.tok, total = rows.length, CAP = 40;
     if (!S.showAll && total > CAP) {

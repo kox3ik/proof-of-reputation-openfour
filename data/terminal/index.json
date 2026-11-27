@@ -3,7 +3,7 @@
   {
    "id": "testnet",
    "title": "BSC testnet \u00b7 live",
-   "note": "BSC testnet: real transactions of our simulation; trader ratings and fees are re-read live from the registry.",
+   "note": "BSC testnet: real transactions of our simulation; ratings and fees are re-read live from the registry deployed before smooth pricing (deposit for fresh wallets, penalty for flagged ones). The contracts in the repo now price both smoothly.",
    "tokens": [
     "testnet-alpha5252.json",
     "testnet-beta7893.json",
@@ -13,7 +13,7 @@
   {
    "id": "mainnet",
    "title": "Mainnet replay",
-   "note": "Real Four.meme trades; scores by our open rule from history before each token; fees = what the module would charge",
+   "note": "Real Four.meme trades; scores by our open rule from history before each token; fees = what the current contracts charge: the buy deposit falls with the score, the penalty grows with the rug component, no cliffs",
    "tokens": [
     "mainnet-fm5eb6.json",
     "mainnet-fm26f7.json",
