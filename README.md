@@ -16,7 +16,7 @@ Status: hackathon submission, BSC testnet only (not audited by humans).
 | --- | --- |
 | `ReputationRegistry` | Per-wallet score from 5 components (shown as 0-1; on chain the integers 0..1000) (volume, activity, holding, identity, penalty). Protocol-only weights and a smooth fee curve; config changes go through a delay. |
 | `ReputationTradeModule` | OpenFour `TradeModule` (`evaluate(TradeContext)`): fee by score for every wallet (no buy ban; the flag penalty is part of the wallet's own rate; the sell cap does not apply to flagged wallets; sells are never blocked). Uses `tx.origin` when the trader is a contract. |
-| `ReputationLockedToken` | OpenFour token implementation with a pre-migration transfer fee: wallet-to-wallet moves cost the sender's sell rate (to the treasury); trade flows are free, and so are router hand-offs of tokens bought in the same tx (see `docs/transfers.md`). |
+| `ReputationLockedToken` | OpenFour token implementation with a transfer fee before and after migration: wallet-to-wallet moves cost the sender's sell rate (to the treasury); trade flows are free, and so are router hand-offs of tokens bought in the same tx (see `docs/transfers.md`). |
 
 ### On-chain identity (BABT and Agent ID)
 
@@ -34,11 +34,11 @@ AddressManager for the "Binance Agent ID Exclusive" preset 1778027615735).
 
 Deploy env vars: `BAB_TOKEN`, `AGENT_ID_TOKEN` (0 = check disabled), `BAB_IDENTITY` / `AGENT_IDENTITY` (default 700 / 500).
 
-### Transfer fee before migration
+### Transfer fee (before and after migration)
 
 A rug, as we define it, is "collect tokens by plain transfers onto one wallet, then sell in one trade". With
 `ReputationLockedToken` bound to the preset (Registry `upsertTokenImpl` + the preset's `tokenImplId`), moving tokens
-wallet-to-wallet before migration costs what selling from the sender would cost: `amount * quoteFeeBps(sender, false) / 10000`
+wallet-to-wallet, before or after migration, costs what selling from the sender would cost: `amount * quoteFeeBps(sender, false) / 10000`
 in tokens, paid to the registry treasury, so a clean or warmed wallet gets no discount. Buys and sells through Core are free. A router handing
 over tokens it bought in the same transaction is free, and a router pulling tokens from the signer for a sale is free only if it
 is on the registry router allowlist (owner proposes, activates after `configDelay`); after migration, trades against the DEX pair are priced like curve trades, fee in tokens. Details and the

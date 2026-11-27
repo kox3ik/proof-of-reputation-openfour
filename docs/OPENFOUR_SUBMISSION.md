@@ -17,7 +17,7 @@ Preset `Reputation Bonding V1`, id `1795717041641`, on our own OpenFour fork on 
 
 ## Gameplay
 
-A wallet's on-chain history gives it a score from 0 to 1. The trade fee of every buy and sell follows the score: trusted wallets pay less than the regular 50 bps extra, fresh one-time wallets pay a surcharge plus a refundable deposit (on buys only), and wallets flagged for a rug pay a 640 bps penalty in their own rate. Nobody is blocked; sells are never blocked. Deposits and cashback unlock on a curve sale or at migration. A flagged wallet's deposit and cashback go to a scam fund, which pays honest wallets a bonus. Measured on chain: the same bundle wallet paid 50 bps before the flag and 690 bps after, on buy and on sell.
+A wallet's on-chain history gives it a score from 0 to 1. The trade fee of every buy and sell follows the score: trusted wallets pay less than the regular 50 bps extra, below score 0.4 a refundable deposit on buys grows smoothly up to 640 bps at score 0, and rug history adds a penalty proportional to the rug component, up to 640 bps, in the wallet's own rate. No cliffs. Nobody is blocked; sells are never blocked. Deposits and cashback unlock only on a real sale, on the curve or into the migrated pair; migration itself releases nothing, and the same pricing applies against the pair. A flagged wallet's deposit and cashback go to a scam fund, which pays honest wallets a bonus. Measured on chain: the same bundle wallet paid 50 bps before the flag and 690 bps after, on buy and on sell (the testnet deployment predates smooth pricing and post-migration pricing; both are in the repository contracts and covered by tests).
 
 ## Composition
 

@@ -88,16 +88,16 @@
   <div class="steps">
     <div><span class="n">01 / SCORE</span><h3>History becomes a score</h3><p>Volume, activity, holding time, verified identity and past rug participation make a score from 0 to 1. The weights are set by the protocol.</p></div>
     <div><span class="n">02 / FEE</span><h3>The score sets the fee</h3><p>OpenFour reads the wallet that signs the trade and prices it. Trusted wallets pay less. Fresh and flagged wallets pay more. No call before sending, no change in terminals.</p></div>
-    <div><span class="n">03 / DEPOSIT</span><h3>New wallets post a deposit</h3><p>A new wallet leaves a refundable deposit on its first buys. It comes back after honest trading. If the wallet joins a rug, the deposit burns into the scam fund.</p></div>
-    <div><span class="n">04 / PENALTY</span><h3>Rug wallets pay on every trade</h3><p>A flagged wallet pays a penalty in its own rate. It can still buy and sell. Selling is never blocked, only priced.</p></div>
+    <div><span class="n">03 / DEPOSIT</span><h3>Low scores post a deposit</h3><p>A wallet with a low score leaves a refundable deposit on its buys: 6.4 % at score 0, shrinking smoothly to zero at score 0.4. It comes back after honest trading. If the wallet joins a rug, the deposit burns into the scam fund.</p></div>
+    <div><span class="n">04 / PENALTY</span><h3>Rug wallets pay on every trade</h3><p>The penalty grows with the wallet’s rug component, up to 6.4 % on buys and sells. It can still buy and sell. Selling is never blocked, only priced.</p></div>
     <div><span class="n">05 / CASHBACK</span><h3>Scammers pay honest wallets</h3><p>Penalties and forfeited deposits fill the scam fund. Honest wallets get a cashback and a bonus from it, never more than they paid in fees.</p></div>
     <div><span class="n">06 / PROTOCOL</span><h3>The protocol fee is untouched</h3><p>OpenFour’s own fee stays exactly as it is. The module adds a second, reputation-based layer on top of it.</p></div>
   </div>
   <div class="fees">
     <div><span class="k">Regular wallet</span><b>50 bps</b><span class="small muted">module fee</span></div>
     <div><span class="k">Trusted wallet</span><b>below 50</b><span class="small muted">the curve falls with the score</span></div>
-    <div><span class="k">New wallet, buy</span><b>690 bps</b><span class="small muted">50 + 640 refundable deposit</span></div>
-    <div><span class="k">Flagged wallet</span><b>690 bps</b><span class="small muted">50 + 640 penalty, buys and sells</span></div>
+    <div><span class="k">New wallet, buy</span><b>690 bps</b><span class="small muted">at score 0: 50 + 640 refundable deposit, falling to 50 at score 0.4</span></div>
+    <div><span class="k">Flagged wallet</span><b>690–950 bps</b><span class="small muted">sell 50 + 640 penalty; buy adds the deposit, total capped at 950</span></div>
   </div>
 </div></section>
 
@@ -164,7 +164,7 @@
     <div><h3>Scores come from our service</h3><p>Scores are published by our service, signed, with an open rule. Anyone can recompute them from public data. They are not computed on chain, and ZK proofs are on the roadmap.</p></div>
     <div><h3>Testnet only</h3><p>Everything here runs on BSC testnet. Identity tokens are stand-ins there. Nothing was run on an official, audited OpenFour registry.</p></div>
     <div><h3>AI-reviewed, not audited</h3><p>The code was reviewed by several AI models and fixed after each round. That is not a human audit.</p></div>
-    <div><h3>Transfer-collection rugs</h3><p>Rugs that collect tokens by plain transfers into one wallet are not detected yet. A pre-migration transfer fee prices them, but the detector does not flag them.</p></div>
+    <div><h3>Transfer-collection rugs</h3><p>Rugs that collect tokens by plain transfers into one wallet are not detected yet. A transfer fee prices them before and after migration, but the detector does not flag them.</p></div>
   </div>
   <p class="lead" style="margin-top:34px"><span class="mono small muted">NEXT</span> &nbsp;Zero-knowledge proofs of every score. The same rule after migration in a PancakeSwap Infinity hook. A default trade rule for all OpenFour launches. Risk-data partners for identity and rug flags.</p>
 </div></section>
