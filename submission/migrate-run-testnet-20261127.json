@@ -1,0 +1,157 @@
+{
+  "generatedAt": "2026-11-27T01:36:01.887Z",
+  "chainId": 97,
+  "presetId": "1795743117646",
+  "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69",
+  "raiseBNB": "0.02",
+  "steps": [
+    {
+      "step": "publish scores",
+      "tx": "0x5a6c946a7f5a853809904edbe74c8611fd2f52f706b47085f9efc2c022c70828",
+      "epoch": "4"
+    },
+    {
+      "step": "create",
+      "tx": "0x28e1cf6139f5f37f9f1e1104af1065d9b93bb3ee95974db184a80199e4a38ac0",
+      "block": 145084306,
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69",
+      "raiseBNB": "0.02",
+      "tokenRecord": {
+        "tokenAddress": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69",
+        "name": "MIG92373",
+        "symbol": "MIG92373",
+        "presetId": "1795743117646",
+        "presetName": "Reputation Bonding V1",
+        "creator": "0xf2121A546e3f8b43E5Eb88c0eF8E79B29b3C2B78",
+        "txHash": "0x28e1cf6139f5f37f9f1e1104af1065d9b93bb3ee95974db184a80199e4a38ac0",
+        "chainId": 97,
+        "quoteAsset": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+        "createdAt": "2026-11-27T01:34:53.000Z",
+        "digest": "0x8869801a5db0fcd406f89f2c05dc11f1118d6a230af7842486049081884248fe"
+      }
+    },
+    {
+      "step": "buy fresh",
+      "tx": "0xaa79ae9dad23e2a6b2376afd99905fedd7710d32dfd8c59c4ebd8986711bfba0",
+      "block": 145084316,
+      "role": "fresh",
+      "wallet": "0xCf75edac67eafEE9f334BdcfA70a1f6FdF11aB33",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69"
+    },
+    {
+      "step": "buy regular",
+      "tx": "0xff12e1b2e31025d482f2fec9f8e617b10295a23989fcf2a8d4ed518ac8d71682",
+      "block": 145084326,
+      "role": "regular",
+      "wallet": "0x09CdF0a7c8d9d545dCF1a28d3F756079Ae1A96e0",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69"
+    },
+    {
+      "step": "buy trusted",
+      "tx": "0xf6b87b85393316972bf7b3219b5f048337fdfa265011de266b563bd42382d40b",
+      "block": 145084335,
+      "role": "trusted",
+      "wallet": "0x4da2504e450adB1EE5674155793a35CCcB2D7Ce5",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69"
+    },
+    {
+      "step": "sell 50% fresh",
+      "tx": "0x154cf179cc51adebf2ddbbb3b4213dd2ebb5f3344407999471bddeadfde3e945",
+      "block": 145084355,
+      "role": "fresh",
+      "wallet": "0xCf75edac67eafEE9f334BdcfA70a1f6FdF11aB33",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69"
+    },
+    {
+      "step": "sell 100% regular",
+      "tx": "0xd9bf8385bb19bf639da1d0d66816db15a3c4bc3f541c21d72e37948282f46220",
+      "block": 145084374,
+      "role": "regular",
+      "wallet": "0x09CdF0a7c8d9d545dCF1a28d3F756079Ae1A96e0",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69"
+    },
+    {
+      "step": "buy trusted #1 (towards the raise target)",
+      "tx": "0x884433a25d69883aa1ecd14fe7482b2618e71097dfaf79466b85b47f3e7f635f",
+      "block": 145084383,
+      "role": "trusted",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69"
+    },
+    {
+      "step": "buy trusted #2 (towards the raise target)",
+      "tx": "0x65c36d027a180cd108493e1429cee989d50bf0d91ecd839f58aa6e4f0ccaacd9",
+      "block": 145084393,
+      "role": "trusted",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69"
+    },
+    {
+      "step": "buy trusted #3 (towards the raise target)",
+      "tx": "0xa7810639fd495261c403a5ed24495e644dd0dfc76ac61bce3b4a0169c04bd08b",
+      "block": 145084403,
+      "role": "trusted",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69"
+    },
+    {
+      "step": "migrate",
+      "tx": "0xa7810639fd495261c403a5ed24495e644dd0dfc76ac61bce3b4a0169c04bd08b",
+      "block": 145084403,
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69",
+      "totalRaised": "19999999999999998",
+      "remainingForSale": "0",
+      "migrateModule": "0xfb5238488609AfC47908E0c20D594B51bc8e75E7",
+      "note": "executed by Core inside the buy that reached the raise target; Core then called ReputationLedger.onMigrate"
+    },
+    {
+      "step": "ledger migratedAt",
+      "migratedAt": 1795743337
+    },
+    {
+      "step": "finalizeEpoch (coveredUntil passes the migration)",
+      "tx": "0x05e9bccd81ecf79b6e64b4bdc8253a68ad48a9043b9da98eb371dbc4b29c7652",
+      "block": 145084431,
+      "coveredUntil": 1795743346
+    },
+    {
+      "step": "claim fresh",
+      "tx": "0x50706e5471cebbbcaec7ceb15c5e960d60890dd1250753f379ee40e5c0d4970a",
+      "block": 145084441,
+      "role": "fresh",
+      "wallet": "0xCf75edac67eafEE9f334BdcfA70a1f6FdF11aB33",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69",
+      "unlocked": {
+        "deposit": "119180603033067",
+        "fee": "12117038566185",
+        "bonus": "12117038566185"
+      },
+      "paid": {
+        "deposit": "119180603033067",
+        "cashback": "12117038566185",
+        "bonus": "0",
+        "total": "131297641599252"
+      }
+    },
+    {
+      "step": "claim regular",
+      "tx": "0xdb96f0de4e05f95021d9f08384891e02e704bb313263c3513e6d5d3408ab4c0c",
+      "block": 145084451,
+      "role": "regular",
+      "wallet": "0x09CdF0a7c8d9d545dCF1a28d3F756079Ae1A96e0",
+      "token": "0x3122dA3f46E2941fA098Add55caF5345d5d83F69",
+      "unlocked": {
+        "deposit": "0",
+        "fee": "17559254781701",
+        "bonus": "17559254781701"
+      },
+      "paid": {
+        "deposit": "0",
+        "cashback": "17559254781701",
+        "bonus": "0",
+        "total": "17559254781701"
+      }
+    },
+    {
+      "step": "claim trusted",
+      "note": "nothing unlocked"
+    }
+  ]
+}

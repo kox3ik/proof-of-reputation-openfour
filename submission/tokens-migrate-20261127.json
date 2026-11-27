@@ -1,0 +1,30 @@
+{
+  "tokens": [
+    {
+      "tokenAddress": "0x17202e3959Fa426fBe0D7798D4358aDc6423679E",
+      "name": "MIG13168",
+      "symbol": "MIG13168",
+      "presetId": "1795742305003",
+      "presetName": "Reputation Bonding V1",
+      "creator": "0xf2121A546e3f8b43E5Eb88c0eF8E79B29b3C2B78",
+      "txHash": "0x760fafaba8095cbe3102a35f745c804081cbd58f3589788c609a70fea6d9bb4f",
+      "chainId": 97,
+      "quoteAsset": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+      "createdAt": "2026-11-27T01:18:33.000Z",
+      "digest": "0xbe9dc1efa55d77db7f50fea585d3be99ca08e4a70c95fcaf7147e292d5ac3858"
+    },
+    {
+      "tokenAddress": "0x7a23073F5e097e421ECA33cCC7464BfcdBaeef59",
+      "name": "POR05137",
+      "symbol": "POR05137",
+      "presetId": "1795742305003",
+      "presetName": "Reputation Bonding V1",
+      "creator": "0xf2121A546e3f8b43E5Eb88c0eF8E79B29b3C2B78",
+      "txHash": "0x6fe52fbc61787d4425ef925fc2f4c3eba093a5e650cb88845d153c8c82f3f66a",
+      "chainId": 97,
+      "quoteAsset": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
+      "createdAt": "2026-11-27T01:18:26.000Z",
+      "digest": "0xf2999d73f244ddfbdcc70b46960e802bf307e4e0021a0c14c54e58d514d95a0d"
+    }
+  ]
+}

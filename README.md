@@ -131,7 +131,28 @@ Key transactions:
 
 Fees measured on chain (on top of OpenFour's 50 bps protocol fee, which is untouched): a wallet with a record pays 50 bps; a fresh wallet pays 690 bps on its first buy (50 regular + 640 refundable deposit); a flagged wallet pays 690 bps on buys and sells (50 + 640 penalty); the same bundle wallet went 50 -> 690 bps on buy and on sell once flagged. The complete log, with every hash: the run log referenced in `site/SOURCES.md` (`keyTxs`).
 
-Not part of this final run: a migrate step (none was recorded). The migrate path was shown earlier on a local fork (`scripts/demo-local.sh`, `scripts/demo/migrate_flow.js`).
+The migrate step is recorded on BSC testnet in a separate run of the current contracts (section "Migration on BSC testnet" below).
+
+### Migration on BSC testnet (27 Nov 2026, current contracts)
+
+Full path create → buy → sell → migrate → claim with the current contracts (smooth pricing, post-migration pricing, reviewer fixes). Token [`0x3122dA3f46E2941fA098Add55caF5345d5d83F69`](https://testnet.bscscan.com/token/0x3122dA3f46E2941fA098Add55caF5345d5d83F69); development Registry `0xc8c6C582438c7b2044b27a0921d7184901260343`. The third buy towards the raise target triggers the migration. Records: `submission/migrate-run-testnet-20261127.json`, `submission/tokens-migrate-20261127.json`.
+
+| Step | Transaction |
+|---|---|
+| publish scores | [0x5a6c946a…](https://testnet.bscscan.com/tx/0x5a6c946a7f5a853809904edbe74c8611fd2f52f706b47085f9efc2c022c70828) |
+| create | [0x28e1cf61…](https://testnet.bscscan.com/tx/0x28e1cf6139f5f37f9f1e1104af1065d9b93bb3ee95974db184a80199e4a38ac0) |
+| buy fresh | [0xaa79ae9d…](https://testnet.bscscan.com/tx/0xaa79ae9dad23e2a6b2376afd99905fedd7710d32dfd8c59c4ebd8986711bfba0) |
+| buy regular | [0xff12e1b2…](https://testnet.bscscan.com/tx/0xff12e1b2e31025d482f2fec9f8e617b10295a23989fcf2a8d4ed518ac8d71682) |
+| buy trusted | [0xf6b87b85…](https://testnet.bscscan.com/tx/0xf6b87b85393316972bf7b3219b5f048337fdfa265011de266b563bd42382d40b) |
+| sell 50% fresh | [0x154cf179…](https://testnet.bscscan.com/tx/0x154cf179cc51adebf2ddbbb3b4213dd2ebb5f3344407999471bddeadfde3e945) |
+| sell 100% regular | [0xd9bf8385…](https://testnet.bscscan.com/tx/0xd9bf8385bb19bf639da1d0d66816db15a3c4bc3f541c21d72e37948282f46220) |
+| buy trusted #1 (towards the raise target) | [0x884433a2…](https://testnet.bscscan.com/tx/0x884433a25d69883aa1ecd14fe7482b2618e71097dfaf79466b85b47f3e7f635f) |
+| buy trusted #2 (towards the raise target) | [0x65c36d02…](https://testnet.bscscan.com/tx/0x65c36d027a180cd108493e1429cee989d50bf0d91ecd839f58aa6e4f0ccaacd9) |
+| buy trusted #3 (towards the raise target) | [0xa7810639…](https://testnet.bscscan.com/tx/0xa7810639fd495261c403a5ed24495e644dd0dfc76ac61bce3b4a0169c04bd08b) |
+| migrate | [0xa7810639…](https://testnet.bscscan.com/tx/0xa7810639fd495261c403a5ed24495e644dd0dfc76ac61bce3b4a0169c04bd08b) |
+| finalizeEpoch (coveredUntil passes the migration) | [0x05e9bccd…](https://testnet.bscscan.com/tx/0x05e9bccd81ecf79b6e64b4bdc8253a68ad48a9043b9da98eb371dbc4b29c7652) |
+| claim fresh | [0x50706e54…](https://testnet.bscscan.com/tx/0x50706e5471cebbbcaec7ceb15c5e960d60890dd1250753f379ee40e5c0d4970a) |
+| claim regular | [0xdb96f0de…](https://testnet.bscscan.com/tx/0xdb96f0de4e05f95021d9f08384891e02e704bb313263c3513e6d5d3408ab4c0c) |
 
 ## Risks and limitations
 
