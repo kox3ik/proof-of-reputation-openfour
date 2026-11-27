@@ -35,7 +35,7 @@ contract FeeExtrasTest is Base {
     }
 
     function test_walletWithHistoryIsNotFresh() public {
-        _publish(alice, 100, 0);
+        _publish(alice, 400, 0); // score at the knee: no deposit
         assertFalse(registry.isFresh(alice));
         assertEq(registry.quoteDetailed(alice, true).depositBps, 0);
     }
@@ -44,11 +44,11 @@ contract FeeExtrasTest is Base {
         _publish(alice, 0, 900);
         FeeQuote memory b = registry.quoteDetailed(alice, true);
         FeeQuote memory s = registry.quoteDetailed(alice, false);
-        assertEq(b.penaltyBps, 500);
-        assertEq(b.depositBps, 0);
+        assertEq(b.penaltyBps, 450); // 500 * 900 / 1000: continuous in the penalty component
         assertEq(s.regularBps, b.regularBps); // sell uncapped
-        assertEq(s.treasuryBps, (b.regularBps + 500) * 5000 / 10_000); // penalty splits like the regular fee
-        assertEq(s.poolBps, b.regularBps + 500 - s.treasuryBps);
+        assertEq(s.treasuryBps, (b.regularBps + 450) * 5000 / 10_000); // penalty splits like the regular fee
+        assertEq(s.poolBps, b.regularBps + 450 - s.treasuryBps);
+        assertEq(s.depositBps, 0); // no deposit on sells
     }
 
     function test_configRejectsFeePlusExtraAboveCap() public {
@@ -100,5 +100,35 @@ contract FeeExtrasTest is Base {
         assertEq(s.depositBps, 0);
         assertEq(registry.quoteFeeBps(alice, false), s.regularBps);
         assertEq(s.treasuryBps + s.poolBps, s.regularBps);
+    }
+
+    /// @dev Smooth pricing: deposit falls monotonically with the score, zero at the knee and above; the total buy fee
+    ///      (regular + deposit) has no jump between neighbouring scores.
+    function test_depositFallsMonotonicallyAndBuyFeeIsContinuous() public view {
+        Config memory c = registry.config();
+        uint256 prevDeposit = type(uint256).max;
+        uint256 prevTotal = ReputationMath.feeBps(0, c) + ReputationMath.depositBps(0, c);
+        assertEq(ReputationMath.depositBps(0, c), c.freshDepositBps);
+        for (uint256 s; s <= 1000; ++s) {
+            uint256 d = ReputationMath.depositBps(s, c);
+            assertLe(d, prevDeposit);
+            prevDeposit = d;
+            if (s >= c.neutralScore) assertEq(d, 0);
+            uint256 total = ReputationMath.feeBps(s, c) + d;
+            uint256 diff = total > prevTotal ? total - prevTotal : prevTotal - total;
+            assertLe(diff, 2);
+            prevTotal = total;
+        }
+        assertEq(ReputationMath.depositBps(200, c), 75); // half way to the knee: half the deposit
+    }
+
+    function test_penaltyIsProportionalToTheComponent() public {
+        uint256[4] memory comps = [uint256(0), 100, 450, 1000];
+        for (uint256 i; i < 4; ++i) {
+            address w = makeAddr(string(abi.encodePacked("pen", i)));
+            _publish(w, 0, uint16(comps[i]));
+            assertEq(registry.quoteDetailed(w, true).penaltyBps, 500 * comps[i] / 1000);
+            assertEq(registry.quoteDetailed(w, false).penaltyBps, 500 * comps[i] / 1000);
+        }
     }
 }

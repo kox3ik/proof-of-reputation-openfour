@@ -1,0 +1,372 @@
+{
+ "id": "testnet-t1",
+ "name": "ALPHA5252",
+ "symbol": "ALPHA",
+ "network": "bsc-testnet",
+ "address": "0xbda42CeC66986F8FD47Fa2f28a9f23e6CDc79518",
+ "note": "BSC testnet: real transactions of our simulation run (token on the OpenFour curve). Time per trade is derived from its block.",
+ "trades": [
+  {
+   "t": 1795720857,
+   "block": 145034546,
+   "side": "buy",
+   "wallet": "0xa8d8ca5d1c52fde169f57815823a47db5d3649c7",
+   "bnb": 0.003724391417167103,
+   "tokens": 553867416.0720593,
+   "price": 6.724337466139283e-12,
+   "tx": "0x51e7fd7aa81320c07c404187ac1761f795f1409ae5b1bcba7dcc2919250bfe63",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 640,
+    "penalty": 0,
+    "total": 690
+   },
+   "role": "new",
+   "label": "newbie1 first buy T1 (fresh: deposit applies)"
+  },
+  {
+   "t": 1795720859,
+   "block": 145034550,
+   "side": "buy",
+   "wallet": "0xe480d013af9cb66ae2a5cfd50f9a644a73e42d51",
+   "bnb": 0.003724390719460999,
+   "tokens": 499541108.2161918,
+   "price": 7.45562408819647e-12,
+   "tx": "0xb799fe0e0b080e1a81dd14a57e5ef4129dcb73cc6605800b52bc24c8e89481a5",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 640,
+    "penalty": 0,
+    "total": 690
+   },
+   "role": "new",
+   "label": "newbie2 first buy T1 (fresh: deposit applies)"
+  },
+  {
+   "t": 1795720861,
+   "block": 145034555,
+   "side": "buy",
+   "wallet": "0xb016de44fcb18d88fd9638dbfe3e1358b12cfcc7",
+   "bnb": 0.005586589395713807,
+   "tokens": 663736777.9361128,
+   "price": 8.4168748537414e-12,
+   "tx": "0x09d30f4214a7eab1439c514c3492efac5baa5297a75f0b5f4c8106e545807833",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 640,
+    "penalty": 0,
+    "total": 690
+   },
+   "role": "honest",
+   "label": "honestA first buy T1 (fresh: deposit applies)"
+  },
+  {
+   "t": 1795721049,
+   "block": 145034977,
+   "side": "buy",
+   "wallet": "0x628303d7831e3f37bc8d166eff5c950a6dd37c9b",
+   "bnb": 0.009310978378021879,
+   "tokens": 924807528.6137443,
+   "price": 1.006801749546603e-11,
+   "tx": "0x6527951a95be402f9ee49aec3c191ac64a3a9a52a8b92c684d845f8ef999c8c5",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 640,
+    "penalty": 0,
+    "total": 690
+   },
+   "role": "bundle",
+   "label": "bundle1 buys T1 together with the bundle (fee BEFORE any flag)"
+  },
+  {
+   "t": 1795721051,
+   "block": 145034981,
+   "side": "buy",
+   "wallet": "0xe38f0f5953ea34b21807d01b6cfb013727d915f7",
+   "bnb": 0.009310980439351852,
+   "tokens": 752849183.1146165,
+   "price": 1.2367656959965531e-11,
+   "tx": "0x941b71f6ddd4f3025a8d55e060759960d879aa058219f3214adcd8e66a040626",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 640,
+    "penalty": 0,
+    "total": 690
+   },
+   "role": "bundle",
+   "label": "bundle2 buys T1 together with the bundle (fee BEFORE any flag)"
+  },
+  {
+   "t": 1795721053,
+   "block": 145034985,
+   "side": "buy",
+   "wallet": "0x0c9684442a624c6ea9b97582bbdd123bc97016d8",
+   "bnb": 0.009310976422569728,
+   "tokens": 624771640.204754,
+   "price": 1.490300747248751e-11,
+   "tx": "0x82f2d37379a0237ad32d399950e3426cb799e993e253df03f95acc53d5e5e4a3",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 640,
+    "penalty": 0,
+    "total": 690
+   },
+   "role": "bundle",
+   "label": "bundle3 buys T1 together with the bundle (fee BEFORE any flag)"
+  },
+  {
+   "t": 1795721055,
+   "block": 145034990,
+   "side": "buy",
+   "wallet": "0xb43e5354b4cec79169a120622d18cee2aac256ab",
+   "bnb": 0.009310978980679027,
+   "tokens": 526815811.5701643,
+   "price": 1.7674068955766218e-11,
+   "tx": "0xf53f0afbf3a5d696ffe95c35524a742f9cfd13841683ca9ead548931b47da59a",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 640,
+    "penalty": 0,
+    "total": 690
+   },
+   "role": "bundle",
+   "label": "bundle4 buys T1 together with the bundle (fee BEFORE any flag)"
+  },
+  {
+   "t": 1795721135,
+   "block": 145035168,
+   "side": "sell",
+   "wallet": "0x628303d7831e3f37bc8d166eff5c950a6dd37c9b",
+   "bnb": 0.012442732647645081,
+   "tokens": 924807528.6137443,
+   "price": 1.3454402416356108e-11,
+   "tx": "0x5f2b384c74e585cd99165e57ec7b8c3fff3cdefe5b5b38b63b3ba50560ef42bb",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "bundle",
+   "label": "bundle1 dumps T1 (with the bundle, fee before flag)"
+  },
+  {
+   "t": 1795721135,
+   "block": 145035168,
+   "side": "sell",
+   "wallet": "0xe38f0f5953ea34b21807d01b6cfb013727d915f7",
+   "bnb": 0.012872925521167469,
+   "tokens": 752849183.1146165,
+   "price": 1.7098943334056388e-11,
+   "tx": "0x43f5991da7b2052697af0b7f0e0425e30cb02e0688b5a235e13b108c7014a6e0",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "bundle",
+   "label": "bundle2 dumps T1 (with the bundle, fee before flag)"
+  },
+  {
+   "t": 1795721135,
+   "block": 145035168,
+   "side": "sell",
+   "wallet": "0x0c9684442a624c6ea9b97582bbdd123bc97016d8",
+   "bnb": 0.006065475891840767,
+   "tokens": 624771640.204754,
+   "price": 9.708308606730215e-12,
+   "tx": "0xa83d610dfcfd3f8481fd29b220ed0b765bea92b06ae306b57a5ee3fabcee2891",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "bundle",
+   "label": "bundle3 dumps T1 (with the bundle, fee before flag)"
+  },
+  {
+   "t": 1795721135,
+   "block": 145035168,
+   "side": "sell",
+   "wallet": "0xb43e5354b4cec79169a120622d18cee2aac256ab",
+   "bnb": 0.005862780159969166,
+   "tokens": 526815811.5701643,
+   "price": 1.1128709562636823e-11,
+   "tx": "0xe2cf9600626172fb8641a9af4ddf1c7e1998d4d2f9f1567541d40ef8e60e592c",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "bundle",
+   "label": "bundle4 dumps T1 (with the bundle, fee before flag)"
+  },
+  {
+   "t": 1795721362,
+   "block": 145035678,
+   "side": "sell",
+   "wallet": "0xb016de44fcb18d88fd9638dbfe3e1358b12cfcc7",
+   "bnb": 0.005586589395713807,
+   "tokens": 663736777.9361128,
+   "price": 8.4168748537414e-12,
+   "tx": "0xa292cbc2c34ee95fa3c726c7ad5dc0a4998b53f1c4a08dc699b52e0f760b51af",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "honest",
+   "label": "honestA sells T1 (closes its position)"
+  },
+  {
+   "t": 1795721364,
+   "block": 145035683,
+   "side": "sell",
+   "wallet": "0xa8d8ca5d1c52fde169f57815823a47db5d3649c7",
+   "bnb": 0.004107519779707153,
+   "tokens": 553867416.0720593,
+   "price": 7.416070453894974e-12,
+   "tx": "0x9a4c6efa5994fd4ed0559d1fb428021f6f3cadeafe5d236313de2bcfc265c79f",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "new",
+   "label": "newbie1 sells T1 (closes its position)"
+  }
+ ],
+ "wallets": {
+  "0xa8d8ca5d1c52fde169f57815823a47db5d3649c7": {
+   "score": 0.184,
+   "flagged": false,
+   "fresh": false,
+   "buyBps": 50,
+   "sellBps": 50,
+   "depositBps": 0,
+   "label": "newbie1",
+   "live": false
+  },
+  "0xe480d013af9cb66ae2a5cfd50f9a644a73e42d51": {
+   "score": 0.141,
+   "flagged": false,
+   "fresh": false,
+   "buyBps": 50,
+   "sellBps": 50,
+   "depositBps": 0,
+   "label": "newbie2",
+   "live": false
+  },
+  "0xb016de44fcb18d88fd9638dbfe3e1358b12cfcc7": {
+   "score": 0.291,
+   "flagged": false,
+   "fresh": false,
+   "buyBps": 50,
+   "sellBps": 50,
+   "depositBps": 0,
+   "label": "honestA",
+   "live": false
+  },
+  "0x628303d7831e3f37bc8d166eff5c950a6dd37c9b": {
+   "score": 0,
+   "flagged": true,
+   "fresh": false,
+   "buyBps": 690,
+   "sellBps": 690,
+   "depositBps": 0,
+   "label": "bundle1",
+   "live": false
+  },
+  "0xe38f0f5953ea34b21807d01b6cfb013727d915f7": {
+   "score": 0,
+   "flagged": true,
+   "fresh": false,
+   "buyBps": 690,
+   "sellBps": 690,
+   "depositBps": 0,
+   "label": "bundle2",
+   "live": false
+  },
+  "0x0c9684442a624c6ea9b97582bbdd123bc97016d8": {
+   "score": 0,
+   "flagged": true,
+   "fresh": false,
+   "buyBps": 690,
+   "sellBps": 690,
+   "depositBps": 0,
+   "label": "bundle3",
+   "live": false
+  },
+  "0xb43e5354b4cec79169a120622d18cee2aac256ab": {
+   "score": 0,
+   "flagged": true,
+   "fresh": false,
+   "buyBps": 690,
+   "sellBps": 690,
+   "depositBps": 0,
+   "label": "bundle4",
+   "live": false
+  }
+ },
+ "events": [
+  {
+   "t": 1795721135,
+   "kind": "dump",
+   "text": "Bundle dumps together (4 wallets, one block)",
+   "tx": "0x5f2b384c74e585cd99165e57ec7b8c3fff3cdefe5b5b38b63b3ba50560ef42bb"
+  },
+  {
+   "t": 1795721139,
+   "kind": "flag",
+   "text": "Bundle flagged by the rule, 10 blocks (4 s) after the dump",
+   "tx": ""
+  },
+  {
+   "t": 1795721306,
+   "kind": "claim",
+   "text": "Deposit forfeited by flagged wallet (bundle1)",
+   "tx": "0xe57bc3b5397390b8fe10bd0a8ca87b09f49bb471e4bfa2098dd9247a9978d771"
+  },
+  {
+   "t": 1795721309,
+   "kind": "claim",
+   "text": "Deposit forfeited by flagged wallet (bundle2)",
+   "tx": "0xaba3fd8c3932c8cd42467e9d54d4008dbbdeece52c3a44a3266ab7f1eb54e996"
+  },
+  {
+   "t": 1795721311,
+   "kind": "claim",
+   "text": "Deposit forfeited by flagged wallet (bundle3)",
+   "tx": "0xd7a7e35dafbee75add8017d7acf0e4c947b00db9a216a4a69f507c6964b05daa"
+  },
+  {
+   "t": 1795721314,
+   "kind": "claim",
+   "text": "Deposit forfeited by flagged wallet (bundle4)",
+   "tx": "0xaa2c1ce3e2cb401924788ae436e2b1812d383bcb61b3fd3277dc6f97bd9e45df"
+  },
+  {
+   "t": 1795721316,
+   "kind": "claim",
+   "text": "Deposit forfeited by flagged wallet (bundle1)",
+   "tx": "0xf9098150fc6bc63e8cbd451e22a857d98e79a0d419ea7f797d68d0f92bf7ea64"
+  },
+  {
+   "t": 1795721373,
+   "kind": "claim",
+   "text": "Cashback and deposit claimed (honestA)",
+   "tx": "0x9d8ab38f1d8461e432a8ebc6d09a2537354f304c6b7607ee9adbfb8f0034814c"
+  },
+  {
+   "t": 1795721379,
+   "kind": "claim",
+   "text": "Cashback and deposit claimed (newbie1)",
+   "tx": "0x18612b8749ab5c36883497f3888fcc7d059aaf7afbcffedb60488f643922bcec"
+  }
+ ]
+}

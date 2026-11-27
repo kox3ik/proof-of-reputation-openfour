@@ -173,21 +173,21 @@ contract LockedTokenCustodyTest is LockedFixture {
         assertGt(_feeInPhase(OpenFourTypes.Phase.Terminal), 0);
     }
 
-    function test_noFeeInMigratePendingAndMigrated() public {
-        assertEq(_feeInPhase(OpenFourTypes.Phase.MigratePending), 0);
-        assertEq(_feeInPhase(OpenFourTypes.Phase.Migrated), 0);
+    function test_feeContinuesInMigratePendingAndMigrated() public {
+        assertGt(_feeInPhase(OpenFourTypes.Phase.MigratePending), 0);
+        assertGt(_feeInPhase(OpenFourTypes.Phase.Migrated), 0);
         assertTrue(token.transfersUnlocked());
     }
 
-    function test_postMigrationPoolPullHasNoFee() public {
+    function test_postMigrationUnlistedContractPullPaysFee() public {
         vault.setPhase(OpenFourTypes.Phase.Migrated);
         MockRouter pool = new MockRouter(token);
         vm.prank(alice);
         token.approve(address(pool), 100e18);
         vm.prank(address(pool), alice);
         pool.pullFrom(alice, 100e18);
-        assertEq(token.balanceOf(address(pool)), 100e18);
-        assertEq(token.balanceOf(treasury), 0);
+        assertLt(token.balanceOf(address(pool)), 100e18); // unlisted contract: the sender's sell rate, like before migration
+        assertGt(token.balanceOf(treasury), 0);
     }
 
     // ── edges ──

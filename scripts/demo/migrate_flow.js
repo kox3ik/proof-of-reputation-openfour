@@ -54,11 +54,7 @@ async function run(env) {
   steps.push({ step: "ledger migratedAt", migratedAt: Number(at) });
   if (at === 0n) throw new Error("ReputationLedger.onMigrate was not called");
 
-  // after migration open positions release lazily: anyone calls settle(wallet)
-  for (const role of ["fresh", "trusted"]) {
-    const before = await ledger.positions(W[role].address);
-    await rec(`settle ${role}`, await new ethers.Contract(rt.customData, LEDGER_ABI, c.deployer).settle(W[role].address, c.gas), { role, wallet: W[role].address, token: tokenAddr, openBefore: { pos: before.pos.toString(), deposit: before.depositOpen.toString(), fee: before.feeOpen.toString(), bonus: before.bonusOpen.toString() } });
-  }
+  // migration releases nothing any more: positions unlock only on a real sale (curve, or into the DEX pair)
   // a complete publication covering the migration time opens the claims
   epoch = await nextEpoch();
   await pub(epoch, [[W.regular.address, [400, 400, 400, 400, 0]]]);

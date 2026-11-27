@@ -19,6 +19,12 @@ contract Deploy is Script {
         return block.chainid == 31337 || block.chainid == 97 || block.chainid == 5611;
     }
 
+    /// @dev Uint env option where an unset OR empty variable means "use the default" (a test or shell cannot truly unset).
+    function _envUint(string memory name, uint256 dflt) internal view returns (uint256) {
+        string memory v = vm.envOr(name, string(""));
+        return bytes(v).length == 0 ? dflt : vm.parseUint(v);
+    }
+
     function run() external {
         uint256 pk = vm.envUint("DEPLOYER_PRIVATE_KEY");
         address deployer = vm.addr(pk);
@@ -38,20 +44,20 @@ contract Deploy is Script {
             penaltyWeight: 1000,
             flagThreshold: 700,
             neutralScore: 400,
-            zeroBps: uint16(vm.envOr("ZERO_BPS", uint256(50))),
+            zeroBps: uint16(_envUint("ZERO_BPS", uint256(50))),
             neutralBps: 50,
             minBps: 0,
             sellCapBps: 100,
             treasuryShareBps: 5000,
             treasury: vm.envOr("TREASURY", deployer),
             rewardsPool: poolAddr,
-            configDelay: uint32(vm.envOr("CONFIG_DELAY", _isTestChain() ? uint256(0) : uint256(86400))),
+            configDelay: uint32(_envUint("CONFIG_DELAY", _isTestChain() ? uint256(0) : uint256(86400))),
             babToken: vm.envOr("BAB_TOKEN", address(0)),
             agentIdToken: vm.envOr("AGENT_ID_TOKEN", address(0)),
             babIdentity: uint16(vm.envOr("BAB_IDENTITY", uint256(700))),
             agentIdentity: uint16(vm.envOr("AGENT_IDENTITY", uint256(500))),
-            freshDepositBps: uint16(vm.envOr("FRESH_DEPOSIT_BPS", uint256(640))),
-            penaltyBps: uint16(vm.envOr("PENALTY_BPS", uint256(640)))
+            freshDepositBps: uint16(_envUint("FRESH_DEPOSIT_BPS", uint256(640))),
+            penaltyBps: uint16(_envUint("PENALTY_BPS", uint256(640)))
         });
 
         vm.startBroadcast(pk);

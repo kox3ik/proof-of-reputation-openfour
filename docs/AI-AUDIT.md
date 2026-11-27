@@ -58,8 +58,10 @@ documented design choice), **known limitation** (open by design, listed for judg
 | 31 | A claim triggered by a third party while the fund was short wrote off the wallet's unpaid bonus (Gemini) | Medium | **fixed** `8b4e666`, reworked in the next commit: with a short fund `claim` pays no bonus and leaves the right whole (no write-off, no drain by repeated claims); only the wallet itself may take a pro rata share via `claimBonusPartial` | `CashbackPool.sol` |
 | 32 | One bucket per wallet and asset: a late rug sale on token B stripped the refund of an honest closed position on token A; sales glued into one bucket (Codex, Gemini) | High | **fixed** `255512d`: buckets keyed per (asset, token, wallet); `claim` / `forfeit` / `unlocked` take the token. Sales of the same token still share one bucket stamped with the latest sale | `CashbackPool.sol` |
 | 33 | Fresh-wallet deposit was also charged on sells; the economics model charges it on buys only (Codex, Gemini) | Medium | **fixed** `cabbb0f`: `quoteDetailed` charges the deposit on buys only; sells and sell-priced transfers pay the regular fee | `ReputationRegistry.sol`, `ReputationLedger.sol` |
+| 34 | Deposit refunded at migration, then dump into the PancakeSwap pool unpriced; holding instead of selling farmed rating (found by the team) | High | **fixed**: positions unlock only on a real sale; after migration trades against the migrated pair are priced like the curve (fee, deposit, penalty in tokens), `onPoolSale` unlocks the curve position | `ReputationLockedToken.sol`, `ReputationLedger.sol`, `CashbackPool.sol` |
+| 35 | Pricing cliff: regular fee 50 bps at score 0-0.4 but fresh / flagged wallets paid +640 bps, so improving reputation gave no gradual benefit (found by the team) | Medium | **fixed**: smooth deposit (`freshDepositBps * (N - s) / N` on buys) and penalty (`penaltyBps * component / 1000`), total capped at 950 bps; flag history `flaggedFrom` unchanged | `ReputationRegistry.sol`, `ReputationMath.sol`, `ReputationSplit.sol` |
 
-Totals: 33 items. Fixed 19 (rows 4-7, 11-21, 23, 31-33), mitigated 4 (1, 8, 10, 29), known limitation 8 (2, 3, 24-28, 30),
+Totals: 35 items. Fixed 21 (rows 4-7, 11-21, 23, 31-35), mitigated 4 (1, 8, 10, 29), known limitation 8 (2, 3, 24-28, 30),
 false positives 2 (9 and 22; row 9 additionally hardened).
 
 ## What was verified independently

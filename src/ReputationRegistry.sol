@@ -271,13 +271,15 @@ contract ReputationRegistry is Ownable2Step {
         return _withIdentity(wallet, _config).identity;
     }
 
-    /// @notice True if the wallet's penalty component reached `flagThreshold`. A flagged wallet pays `penaltyBps` extra,
-    ///         has no sell cap (sells are priced, never blocked), and forfeits its refundable deposit and cashback.
+    /// @notice True if the wallet's penalty component reached `flagThreshold`. A flagged wallet has no sell cap
+    ///         (sells are priced, never blocked) and forfeits its refundable deposit and cashback on a rug sale; the penalty
+    ///         itself is continuous in the penalty component (`quoteDetailed`).
     function isFlagged(address wallet) public view returns (bool) {
         return _components[wallet].penalty >= _config.flagThreshold;
     }
 
-    /// @notice Fresh wallet: every stored component is zero and no BAB (non-transferable SBT) is held. The Agent ID
+    /// @notice Informational (UI): fresh wallet. NOT used for pricing any more: the deposit falls smoothly with the score
+    ///         (`quoteDetailed`). Every stored component is zero and no BAB (non-transferable SBT) is held. The Agent ID
     ///         is soulbound but minted by any wallet for ~gas with a SPACE ID server signature, so it never ends
     ///         freshness (a ring of cheap wallets would waive every deposit); newness is decided by our stored
     ///         components + BAB only. Agent ID only raises the identity component of the regular fee.
@@ -301,32 +303,41 @@ contract ReputationRegistry is Ownable2Step {
         return (q.treasuryBps + q.poolBps, q.treasuryBps, q.poolBps, q.treasury, q.pool);
     }
 
-    /// @notice Full breakdown for the trade module and the cashback ledger.
-    /// @dev Flagged wallets: no sell cap (sells are priced, never blocked) and `penaltyBps` extra; fresh (unflagged)
-    ///      wallets pay `freshDepositBps` extra on BUYS only (never on sells or sell-priced transfers). Regular fee and penalty split treasury / pool by `treasuryShareBps`; the
-    ///      deposit goes 100% to the pool.
+    /// @notice Full breakdown for the trade module and the cashback ledger. Smooth in the wallet's reputation (no cliffs).
+    /// @dev With `s` = score (0..1000, as in the fee curve) and `N` = `neutralScore` (the knee where the regular fee starts
+    ///      to fall):
+    ///        regular fee      = `feeBps(s)` (sell cap applies to wallets without any penalty component),
+    ///        deposit (BUYS)   = `freshDepositBps * (N - s) / N` for s < N, else 0 (refundable, 100% pool),
+    ///        penalty          = `penaltyBps * penaltyComponent / 1000` (continuous in the publisher's component, buys and
+    ///                           sells; a wallet with a penalty component has no sell cap).
+    ///      Integer math, rounded down. If regular + penalty + deposit would exceed `MAX_TOTAL_BPS`, the penalty is cut
+    ///      first, then the deposit. Regular fee and penalty split treasury / pool by `treasuryShareBps`.
     function quoteDetailed(address wallet, bool isBuy) public view returns (FeeQuote memory q) {
         Config memory c = _config;
         Components memory comp = _withIdentity(wallet, c);
-        bool flagged = _components[wallet].penalty >= c.flagThreshold;
-        uint256 regular = ReputationMath.feeBps(ReputationMath.score(comp, c), c);
-        if (!isBuy && !flagged && regular > c.sellCapBps) regular = c.sellCapBps;
+        uint256 s = ReputationMath.score(comp, c);
+        uint256 regular = ReputationMath.feeBps(s, c);
+        if (!isBuy && comp.penalty == 0 && regular > c.sellCapBps) regular = c.sellCapBps;
         if (regular > ReputationMath.MAX_TOTAL_BPS) regular = ReputationMath.MAX_TOTAL_BPS;
-        bool fresh = _isFresh(wallet, c);
+        uint256 room = ReputationMath.MAX_TOTAL_BPS - regular;
+        uint256 penalty = uint256(c.penaltyBps) * comp.penalty / ReputationMath.MAX_SCORE;
+        if (penalty > room) penalty = room;
+        uint256 deposit = isBuy ? ReputationMath.depositBps(s, c) : 0;
+        if (deposit > room - penalty) deposit = room - penalty;
         q.regularBps = regular;
-        q.depositBps = fresh && isBuy ? c.freshDepositBps : 0; // refundable deposit on buys only; a sell (and a transfer, priced as a sell) pays the regular fee
-        q.penaltyBps = flagged ? c.penaltyBps : 0;
+        q.depositBps = deposit;
+        q.penaltyBps = penalty;
         // the penalty is split like any other fee: treasury / pool by `treasuryShareBps`; only the deposit is all pool
-        uint256 base = regular + q.penaltyBps;
+        uint256 base = regular + penalty;
         q.treasuryBps = base * c.treasuryShareBps / ReputationMath.BPS;
-        q.poolBps = base - q.treasuryBps + q.depositBps;
+        q.poolBps = base - q.treasuryBps + deposit;
         q.treasury = c.treasury;
         q.pool = c.rewardsPool;
     }
 
     // ───────────────────────── internal ─────────────────────────
 
-    /// @dev Single definition of "fresh" for `isFresh` and `quoteDetailed`: all stored components zero and no BAB held.
+    /// @dev Definition of "fresh" for `isFresh`: all stored components zero and no BAB held.
     function _isFresh(address wallet, Config memory c) private view returns (bool) {
         Components memory s = _components[wallet];
         if (s.volume != 0 || s.activity != 0 || s.holding != 0 || s.identity != 0 || s.penalty != 0) return false;

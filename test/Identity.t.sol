@@ -218,38 +218,28 @@ contract IdentityTest is Base {
         _deploy(c);
     }
 
-    function test_agentIdWithZeroComponentsStillPaysFreshDeposit() public {
+    /// @dev The deposit falls smoothly with the score: identity (Agent ID 500, BAB 700, weight 20 %) lowers it gradually.
+    function test_agentIdLowersDepositSmoothlyButDoesNotWaiveIt() public {
         _freshDepositConfig();
+        uint256 none = registry.quoteDetailed(bob, true).depositBps;
+        assertEq(none, 150); // score 0: full deposit
         agent.mint(bob);
-        assertEq(registry.effectiveIdentity(bob), 500); // identity bonus on the regular fee stays
-        assertTrue(registry.isFresh(bob));
-        assertEq(registry.quoteDetailed(bob, true).depositBps, 150);
+        assertEq(registry.effectiveIdentity(bob), 500);
+        assertEq(registry.quoteDetailed(bob, true).depositBps, 112); // score 100: 150 * 300 / 400
     }
 
-    function test_agentIdOnManyCheapWalletsNeverEndsFreshness() public {
+    function test_agentIdOnManyCheapWalletsPaysTheSameSmoothDeposit() public {
         _freshDepositConfig();
         for (uint256 i; i < 5; ++i) {
             address w = address(uint160(0xA000 + i));
             agent.mint(w);
-            assertTrue(registry.isFresh(w));
-            assertEq(registry.quoteDetailed(w, true).depositBps, 150);
+            assertEq(registry.quoteDetailed(w, true).depositBps, 112);
         }
     }
 
-    function test_babHolderIsNotFreshAndPaysNoDeposit() public {
+    function test_babHolderPaysASmallerDeposit() public {
         _freshDepositConfig();
         bab.mint(bob);
-        assertFalse(registry.isFresh(bob));
-        assertEq(registry.quoteDetailed(bob, true).depositBps, 0);
-    }
-
-    function test_isFreshAgreesWithQuoteDetailed() public {
-        _freshDepositConfig();
-        address[3] memory ws = [bob, makeAddr("c1"), makeAddr("c2")];
-        agent.mint(ws[1]);
-        bab.mint(ws[2]);
-        for (uint256 i; i < 3; ++i) {
-            assertEq(registry.isFresh(ws[i]), registry.quoteDetailed(ws[i], true).depositBps != 0);
-        }
+        assertEq(registry.quoteDetailed(bob, true).depositBps, 97); // score 140: 150 * 260 / 400
     }
 }

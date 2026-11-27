@@ -17,15 +17,18 @@ contract DeployScriptTest is Test {
         return ReputationRegistry(vm.parseJsonAddress(vm.readFile(out), ".registry"));
     }
 
-    function test_configDelayDefaultsByChain() public {
+    /// @dev ONE test on purpose: `vm.setEnv` is process-wide and forge runs tests in parallel threads, so every test that
+    ///      touches the environment must run sequentially in a single function to be independent of scheduling.
+    function test_deployDefaultsAndEnvOptions() public {
+        // CONFIG_DELAY defaults by chain
         assertEq(_run(97, "deployments/test-97.json").config().configDelay, 0);
         assertEq(_run(56, "deployments/test-56.json").config().configDelay, 86400);
         vm.setEnv("CONFIG_DELAY", "3600");
         assertEq(_run(56, "deployments/test-56b.json").config().configDelay, 3600);
         vm.setEnv("CONFIG_DELAY", "");
-    }
+        assertEq(_run(56, "deployments/test-56.json").config().configDelay, 86400); // empty = unset
 
-    function test_rateDefaultsAndOwnerOptions() public {
+        // rates: defaults, then the owner options
         ReputationRegistry r = _run(97, "deployments/test-97.json");
         assertEq(r.config().zeroBps, 50);
         assertEq(r.config().freshDepositBps, 640);

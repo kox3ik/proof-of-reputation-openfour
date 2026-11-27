@@ -9,12 +9,13 @@ import {OpenFourTypes, ParamDescriptor, ModuleEncodeSchema} from "./vendor/openf
 import {ReputationRegistry} from "./ReputationRegistry.sol";
 import {FeeQuote} from "./ReputationTypes.sol";
 import {CashbackPool} from "./CashbackPool.sol";
+import {ReputationSplit} from "./ReputationSplit.sol";
 
 /// @title ReputationLedger
 /// @notice OpenFour customData module (one BeaconProxy per token). Core calls `afterHook` after every buy/sell; the
 ///         ledger recomputes what the trade module charged this wallet, reports the amounts paid to the pool and tracks
 ///         the wallet's curve position. A sale unlocks the sold fraction of the deposit and fees paid while the position
-///         was open; `onMigrate` unlocks everything still open. Transfers are invisible here and unlock nothing.
+///         was open; a sale into the migrated DEX pool unlocks the same way (`onPoolSale`); migration itself unlocks nothing. Plain transfers are invisible here and unlock nothing.
 /// @dev Registry and pool are `immutable`s of the implementation (carried over to every proxy). The fee amounts mirror
 ///      Core's tier arithmetic: amount = curveQuote * bps / 10_000, rounded down per tier. The payer is resolved exactly
 ///      as in `ReputationTradeModule.resolveWallet`. `tx.origin` is used only for accounting, never for authorization.
@@ -38,8 +39,6 @@ contract ReputationLedger is Initializable, IOpenFourCustomDataModule, IOpenFour
     uint64 public migratedAt;
     string private _moduleVersion;
     mapping(address => Position) public positions;
-
-    event Settled(address indexed wallet, uint256 deposit, uint256 fee, uint64 at);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor(ReputationRegistry registry_, CashbackPool pool_) {
@@ -124,35 +123,32 @@ contract ReputationLedger is Initializable, IOpenFourCustomDataModule, IOpenFour
         returns (uint256 poolAmt, uint256 deposit, uint256 fee, uint256 fundIn, uint256 bonus)
     {
         if (q.pool != address(POOL)) return (0, 0, 0, 0, 0);
-        bool collapsed = q.treasury == q.pool;
-        poolAmt = collapsed ? cq * (q.treasuryBps + q.poolBps) / BPS : cq * q.poolBps / BPS;
-        if (REGISTRY.isFlagged(wallet)) return (poolAmt, 0, 0, poolAmt, 0);
-        // honest: no penalty; the pool tier before the deposit is the only cashback basis
-        uint256 poolTier = cq * q.poolBps / BPS; // the treasury part of a collapsed tier is never cashback basis
-        deposit = cq * q.depositBps / BPS;
-        if (deposit > poolAmt) deposit = poolAmt;
-        fee = poolTier > deposit ? poolTier - deposit : 0;
-        if (collapsed) fundIn = poolAmt - poolTier; // the treasury part of the one tier: ownerless otherwise, so it joins the fund
-        else bonus = cq * q.treasuryBps / BPS;
+        return ReputationSplit.amounts(REGISTRY.isFlagged(wallet), q, cq, REGISTRY.config().treasuryShareBps);
     }
 
-    /// @dev Remembers the migration time; open positions are released lazily through `settle`.
+    /// @dev Remembers the migration time only. Open positions are NOT released at migration: a position unlocks on a real
+    ///      sale, on the curve (`afterHook`) or into the DEX pool after migration (`onPoolSale`, called by the token).
     function onMigrate(OpenFourTypes.MigrateHookContext calldata ctx) external override onlyCore {
         require(ctx.token == token, "Ledger: wrong token");
         if (migratedAt == 0) migratedAt = uint64(block.timestamp);
     }
 
-    /// @notice After migration, release a wallet's still-open deposit and fees (timestamp = migration time). Anyone may call.
-    function settle(address wallet) external {
-        uint64 at = migratedAt;
-        require(at != 0, "Ledger: not migrated");
-        Position memory ps = positions[wallet];
-        if (ps.depositOpen == 0 && ps.feeOpen == 0 && ps.bonusOpen == 0 && ps.pos == 0) return;
-        delete positions[wallet];
-        emit Settled(wallet, ps.depositOpen, ps.feeOpen, at);
-        if (ps.depositOpen != 0 || ps.feeOpen != 0 || ps.bonusOpen != 0) {
-            POOL.report(token, wallet, 0, 0, 0, 0, ps.depositOpen, ps.feeOpen, ps.bonusOpen, at);
-        }
+    /// @notice The token reports a wallet's sale into the migrated DEX pool: the sold fraction of the curve position's
+    ///         open deposit and fees unlocks, exactly like a curve sale. Only the token itself may call.
+    function onPoolSale(address wallet, uint256 sold_) external {
+        require(msg.sender == token, "Ledger: only token");
+        Position storage ps = positions[wallet];
+        uint256 p = ps.pos;
+        if (p == 0 || sold_ == 0) return;
+        uint256 sold = sold_ < p ? sold_ : p;
+        uint256 ud = Math.mulDiv(ps.depositOpen, sold, p);
+        uint256 uf = Math.mulDiv(ps.feeOpen, sold, p);
+        uint256 ub = Math.mulDiv(ps.bonusOpen, sold, p);
+        ps.pos = p - sold;
+        ps.depositOpen -= ud;
+        ps.feeOpen -= uf;
+        ps.bonusOpen -= ub;
+        if (ud != 0 || uf != 0 || ub != 0) POOL.report(token, wallet, 0, 0, 0, 0, ud, uf, ub, uint64(block.timestamp));
     }
 
     function moduleEncodeSchema() external pure override returns (ModuleEncodeSchema memory) {

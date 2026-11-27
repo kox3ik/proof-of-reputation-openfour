@@ -5,10 +5,10 @@
 
 ## Flow
 1. The trade module returns two tiers: treasury and the pool. The pool tier is `CashbackPool`, the registry's
-   `rewardsPool`. It carries the pool part of the regular fee, the **fresh deposit** (`freshDepositBps`, default 150:
+   `rewardsPool`. It carries the pool part of the regular fee, the **fresh deposit** (`freshDepositBps`, default 150, scaled by the score: `freshDepositBps * (N - s) / N` for score `s` below the knee `N` = `neutralScore`, zero at or above it; buys only:
    wallets with no history and no BAB pay it on top of the regular rate, on **buys only** (a sell, and a transfer priced as a sell, pays the regular fee without a deposit); the soulbound Agent ID is minted for ~gas with a
-   SPACE ID server signature, so it does not end newness) and the **flag penalty** (`penaltyBps`, default 500, only for
-   rug-flagged wallets; flagged wallets also lose the 1 % sell cap, sells are priced, never blocked). The penalty is split
+   SPACE ID server signature, so it does not end newness) and the **flag penalty** (`penaltyBps`, default 500, scaled by the
+   publisher's penalty component: `penaltyBps * component / 1000`, no cliff at `flagThreshold`; flagged wallets also lose the 1 % sell cap, sells are priced, never blocked). The penalty is split
    like any other fee (treasury / pool by `treasuryShareBps`); only the deposit is 100 % pool.
 2. After every successful buy or sell OpenFour Core calls `afterHook` on the token's `ReputationLedger` (an OpenFour
    *customData* module, one BeaconProxy per token, enabled by the preset's `customDataId`). The ledger resolves the payer
@@ -20,8 +20,7 @@
 4. A **sell of x** with position p releases fraction `min(x, p) / p` of the deposit and of the module fees paid while the
    position was open (the sale's own deposit and fee are added to the open amounts first, so a full sale releases
    everything; a sell with no tracked position releases only what that sale paid). No fixed shares: the fraction is
-   whatever was sold. On **migration** (`onMigrate`) open positions are released with the migration time; anyone calls
-   `ledger.settle(wallet)`.
+   whatever was sold. **Migration releases nothing**: a position unlocks only on a real sale, on the curve or, after migration, into the DEX pair (same pricing there, fee and deposit in tokens, bucket under asset = token; the curve position unlocks through `ledger.onPoolSale`). See `docs/transfers.md`.
 5. Released amounts wait in a per-(asset, token, wallet) bucket (one per position) stamped with the latest sale time of that token. A sale of another token never touches it, so a closed honest position keeps its refund even if the wallet later rugs on a different token; `claim` / `forfeit` / `unlocked` take the token address.
 
 ## Claim (`CashbackPool.claim(asset, token, wallet)`: anyone may trigger it, the caller pays the gas, funds go only to `wallet`)
@@ -65,12 +64,12 @@ preset is rejected.
 
 ## For judges
 Prototype on OpenFour's official hooks. Cashback depends on the budget and on flags by a trusted publisher. The deposit
-unlocks on a curve sale or at migration. 150 / 500 bps are deployment defaults (950 bps is the module cap). The official
+unlocks on a real sale (curve or DEX pair). 150 / 500 bps are deployment defaults (950 bps is the module cap). The official
 preset needs OpenFour approval.
 
 ## Known limitations
 - Relayers and ERC-4337: the payer is `tx.origin`, which for a relayer or bundler is not the user; positions of different
   users then mix and the payout goes to the relayer. Such routes need a payer identity confirmed by Core.
-- A position that is never sold on the curve and never migrates has no unlock time.
+- A position that is never sold has no unlock time.
 - The updater can delay publication (and so claims) or change flags; this is the single trusted input.
 - `executedAmount` / `curveQuote` semantics and gas of full trades through Core were not measured against a real Core.

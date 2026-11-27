@@ -8,9 +8,15 @@ import {OpenFourTypes} from "./vendor/openfour/OpenFourTypes.sol";
 import {IOpenFourToken} from "./vendor/openfour/IOpenFourToken.sol";
 import {ReputationRegistry} from "./ReputationRegistry.sol";
 import {FeeQuote} from "./ReputationTypes.sol";
+import {ReputationSplit} from "./ReputationSplit.sol";
+import {CashbackPool} from "./CashbackPool.sol";
 
 interface IVaultCore {
     function fourCore() external view returns (address);
+}
+
+interface ILedgerPoolSale {
+    function onPoolSale(address wallet, uint256 sold) external;
 }
 
 /// @title ReputationLockedToken
@@ -18,7 +24,7 @@ interface IVaultCore {
 ///         OpenFour's `OpenFourToken` (so Core / Vault / Migrate modules treat it identically), plus a transfer fee
 ///         before migration: a wallet-to-wallet transfer costs the SENDER's sell rate from the registry
 ///         (`quoteFeeBps(sender, false)`, penalty included if flagged), paid in tokens to the registry's treasury (no
-///         burn); the receiver gets the rest. After migration the token is a normal token without any fee.
+///         burn); the receiver gets the rest. After migration, trades against the migrated DEX pair are priced like curve trades (see `_market`), fee in tokens.
 /// @dev Fee applies in every phase where no DEX pool is tradeable: Created, Trading, SoldOut, Terminal (OpenFour
 ///      integration guide section 4: SoldOut = "internal buy/sell unavailable ... not an external DEX state";
 ///      Terminal = reserved / trade-terminated token, never a DEX token). From MigratePending on the token is a normal
@@ -82,6 +88,17 @@ contract ReputationLockedToken is Initializable, ERC20, IOpenFourToken {
     /// @dev Cached OpenFour Core (read lazily from the vault: the vault may learn its Core after this token is set up).
     ///      Appended AFTER every field of OpenFour's `OpenFourToken` so the layout stays a superset of it.
     address private _core;
+
+    /// @dev Open position of a wallet in the migrated DEX pool, fees paid in THIS token (mirror of the ledger's curve
+    ///      position, which stays in the ledger and is unlocked by `onPoolSale`).
+    struct Open {
+        uint256 pos;
+        uint256 depositOpen;
+        uint256 feeOpen;
+        uint256 bonusOpen;
+    }
+
+    mapping(address => Open) public marketPositions;
 
     event MigratedPoolUpdated(address indexed pool, bool enabled);
     event MigratedPoolsUpdated(address[] pools, bool enabled);
@@ -176,13 +193,19 @@ contract ReputationLockedToken is Initializable, ERC20, IOpenFourToken {
     function _update(address from, address to, uint256 amount) internal override {
         uint256 fee;
         FeeQuote memory q;
-        if (from != address(0) && to != address(0) && !transfersUnlocked()) {
+        if (from != address(0) && to != address(0) && transfersUnlocked() && _market(from, to, amount)) return;
+        bool post = transfersUnlocked();
+        if (from != address(0) && to != address(0) && post && _market(from, to, amount)) return;
+        // After migration a plain wallet-to-wallet transfer costs the sender's sell rate exactly as before (so a flagged
+        // wallet cannot hand tokens to a clean one for free); pair moves (liquidity, exempt protocol sides) stay free.
+        if (from != address(0) && to != address(0) && !(post && _freePostMigration(from, to))) {
             uint256 bal = balanceOf(from);
             if (bal < amount) revert ERC20InsufficientBalance(from, bal, amount); // before splitting off a fee
             (bool free, address payer) = _isFree(from, to, amount);
             if (!free) {
                 q = REGISTRY.quoteDetailed(payer, false);
                 if (q.treasury == address(0)) revert ZeroFeeRecipient();
+                if (post && (from == q.pool || to == q.pool || from == q.treasury || to == q.treasury)) q = FeeQuote(0, 0, 0, 0, 0, q.treasury, q.pool);
                 fee = Math.mulDiv(amount, q.regularBps + q.depositBps + q.penaltyBps, 10_000);
             }
         }
@@ -194,6 +217,87 @@ contract ReputationLockedToken is Initializable, ERC20, IOpenFourToken {
         super._update(from, to, amount - fee);
         // Same as OpenFour's own token: one event per transfer, also for zero amounts and mint / burn.
         emit TokenTransferred(from, to, requestId, amount - fee);
+    }
+
+    /// @dev After migration, trades against a migrated pool pair are priced like curve trades: a transfer FROM the pair is
+    ///      a buy of the receiver (`quoteDetailed(wallet, true)`), a transfer TO the pair a sale of the sender
+    ///      (`quoteDetailed(wallet, false)`); a contract on the trader side is priced at `tx.origin`. The fee is taken in
+    ///      tokens (on a buy from the receiver after the pair has paid out, so the pair's own accounting is untouched) and
+    ///      paid to the treasury and the cashback pool, which records it under asset = this token. Protocol moves
+    ///      (vault, Core, migrate module, ledger, treasury, pool: liquidity at migration, claims, sweeps) are free.
+    ///      Returns false when the transfer is not a priced pair trade (then it stays free, as for any normal token).
+    function _market(address from, address to, uint256 amount) private returns (bool) {
+        bool isBuy = migratedPools[from];
+        if (isBuy == migratedPools[to]) return false;
+        address other = isBuy ? to : from;
+        if (other == vault || other == migrateModule || other == customData || other == _coreOf()) return false;
+        address wallet = other.code.length > 0 ? tx.origin : other;
+        FeeQuote memory q = REGISTRY.quoteDetailed(wallet, isBuy);
+        if (other == q.pool || other == q.treasury) return false;
+        if (q.treasury == address(0)) revert ZeroFeeRecipient();
+        bool collapsed = q.treasury == q.pool;
+        uint256 toTreasury = collapsed ? 0 : amount * q.treasuryBps / 10_000;
+        uint256 toPool = collapsed ? amount * (q.treasuryBps + q.poolBps) / 10_000 : amount * q.poolBps / 10_000;
+        uint256 fee = toTreasury + toPool;
+        address payer = isBuy ? to : from; // who gives up the fee tokens
+        if (isBuy) super._update(from, to, amount);
+        if (toTreasury != 0) super._update(payer, q.treasury, toTreasury);
+        if (toPool != 0) super._update(payer, q.pool, toPool);
+        if (!isBuy) super._update(from, to, amount - fee);
+        emit TokenTransferred(from, to, requestId, amount - fee);
+        if (fee != 0) emit TransferFee(payer, q.treasury, fee);
+        _recordMarket(wallet, isBuy, amount - fee, amount, q);
+        return true;
+    }
+
+    function _recordMarket(address wallet, bool isBuy, uint256 net, uint256 gross, FeeQuote memory q) private {
+        (uint256 poolAmt, uint256 deposit, uint256 fee, uint256 fundIn, uint256 bonus) =
+            ReputationSplit.amounts(REGISTRY.isFlagged(wallet), q, gross, REGISTRY.config().treasuryShareBps);
+        uint256 ud;
+        uint256 uf;
+        uint256 ub;
+        Open storage o = marketPositions[wallet];
+        o.depositOpen += deposit;
+        o.feeOpen += fee;
+        o.bonusOpen += bonus;
+        if (isBuy) {
+            o.pos += net;
+        } else {
+            uint256 p = o.pos;
+            if (p == 0) {
+                (ud, uf, ub) = (o.depositOpen, o.feeOpen, o.bonusOpen);
+            } else {
+                uint256 sold = gross < p ? gross : p;
+                ud = Math.mulDiv(o.depositOpen, sold, p);
+                uf = Math.mulDiv(o.feeOpen, sold, p);
+                ub = Math.mulDiv(o.bonusOpen, sold, p);
+                o.pos = p - sold;
+            }
+            o.depositOpen -= ud;
+            o.feeOpen -= uf;
+            o.bonusOpen -= ub;
+        }
+        if (q.pool.code.length != 0 && (poolAmt != 0 || bonus != 0 || ud != 0 || uf != 0 || ub != 0)) {
+            CashbackPool(q.pool).report(
+                address(this), wallet, poolAmt - deposit - fundIn, deposit, fundIn, bonus, ud, uf, ub, uint64(block.timestamp)
+            );
+        }
+        if (!isBuy && customData.code.length != 0) ILedgerPoolSale(customData).onPoolSale(wallet, gross);
+    }
+
+    /// @dev After migration: moves touching a migrated pair (priced in `_market` or exempt protocol liquidity) and moves
+    ///      of the migrate module / ledger are not wallet-to-wallet transfers.
+    function _freePostMigration(address from, address to) private view returns (bool) {
+        return migratedPools[from] || migratedPools[to] || from == migrateModule || to == migrateModule
+            || (customData != address(0) && (from == customData || to == customData));
+    }
+
+    function _coreOf() private returns (address core) {
+        core = _core;
+        if (core == address(0)) {
+            core = IVaultCore(vault).fourCore();
+            if (core != address(0)) _core = core;
+        }
     }
 
     /// @dev Pre-migration transfer exemptions (see contract notes). Returns whether the transfer is free and whose sell

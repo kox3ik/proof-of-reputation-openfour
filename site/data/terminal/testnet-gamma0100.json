@@ -1,0 +1,134 @@
+{
+ "id": "testnet-t3",
+ "name": "GAMMA0100",
+ "symbol": "GAMMA",
+ "network": "bsc-testnet",
+ "address": "0xB9F2fF25C51f2f88789ACD78C08AEc3ca8E4C1d6",
+ "note": "BSC testnet: real transactions of our simulation run (token on the OpenFour curve). Time per trade is derived from its block.",
+ "trades": [
+  {
+   "t": 1795720949,
+   "block": 145034753,
+   "side": "buy",
+   "wallet": "0xb016de44fcb18d88fd9638dbfe3e1358b12cfcc7",
+   "bnb": 0.005940593703405622,
+   "tokens": 857142809.8766235,
+   "price": 6.930693036158941e-12,
+   "tx": "0x9f375885f3eee0acfa94cd4504ce70752bb70800bc1a5d8251ef1aafa23f394c",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "honest",
+   "label": "honestA buys T3"
+  },
+  {
+   "t": 1795720952,
+   "block": 145034758,
+   "side": "buy",
+   "wallet": "0xefe1b1b6d6c6b07251229b4cf2ba1306c59bbb87",
+   "bnb": 0.003724392810993032,
+   "tokens": 470925014.4422543,
+   "price": 7.908674835215668e-12,
+   "tx": "0x58f2255b9c1afb92040788ed452a73f94f08a3d7b0d97e40c6266597fafdb3e8",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 640,
+    "penalty": 0,
+    "total": 690
+   },
+   "role": "new",
+   "label": "newbie4 first buy T3 (fresh)"
+  },
+  {
+   "t": 1795721066,
+   "block": 145035014,
+   "side": "buy",
+   "wallet": "0x94d0de9b5507b7df50c23cec686c1eb3479f3fdb",
+   "bnb": 0.005940593757823344,
+   "tokens": 664823800.973402,
+   "price": 8.935591278659732e-12,
+   "tx": "0xe9c716efdc594223b4fed22da9be49c702139c2e36f446f9ca0e089e13ddf63a",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "honest",
+   "label": "honestB buys T3"
+  },
+  {
+   "t": 1795721462,
+   "block": 145035902,
+   "side": "buy",
+   "wallet": "0xb016de44fcb18d88fd9638dbfe3e1358b12cfcc7",
+   "bnb": 0.005940593785477858,
+   "tokens": 577096621.2849258,
+   "price": 1.029393270792492e-11,
+   "tx": "0x214616067fa36d8f9e053c39d6cc8a87eabfe33ceb30f0cbf502912f35baf536",
+   "feeBps": {
+    "regular": 50,
+    "deposit": 0,
+    "penalty": 0,
+    "total": 50
+   },
+   "role": "honest",
+   "label": "honestA buys T3 again"
+  }
+ ],
+ "wallets": {
+  "0xb016de44fcb18d88fd9638dbfe3e1358b12cfcc7": {
+   "score": 0.291,
+   "flagged": false,
+   "fresh": false,
+   "buyBps": 50,
+   "sellBps": 50,
+   "depositBps": 0,
+   "label": "honestA",
+   "live": false
+  },
+  "0xefe1b1b6d6c6b07251229b4cf2ba1306c59bbb87": {
+   "score": 0.141,
+   "flagged": false,
+   "fresh": false,
+   "buyBps": 50,
+   "sellBps": 50,
+   "depositBps": 0,
+   "label": "newbie4",
+   "live": false
+  },
+  "0x94d0de9b5507b7df50c23cec686c1eb3479f3fdb": {
+   "score": 0.253,
+   "flagged": false,
+   "fresh": false,
+   "buyBps": 50,
+   "sellBps": 50,
+   "depositBps": 0,
+   "label": "honestB",
+   "live": false
+  }
+ },
+ "events": [
+  {
+   "t": 1795721139,
+   "kind": "flag",
+   "text": "Bundle flagged by the rule, 10 blocks (4 s) after the dump",
+   "tx": ""
+  },
+  {
+   "t": 1795721373,
+   "kind": "claim",
+   "text": "Cashback and deposit claimed (honestA)",
+   "tx": "0x9d8ab38f1d8461e432a8ebc6d09a2537354f304c6b7607ee9adbfb8f0034814c"
+  },
+  {
+   "t": 1795721376,
+   "kind": "claim",
+   "text": "Cashback and deposit claimed (honestB)",
+   "tx": "0xa2d4bd080d82adf0e0bb9f09f2d04651b8aeb873c34f9a78520280f787a08d3e"
+  }
+ ]
+}

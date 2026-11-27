@@ -232,15 +232,15 @@ contract LockedTokenTest is LockedFixture {
 
     // ── migration ──
 
-    function test_noFeeAfterMigration() public {
+    function test_transferFeeContinuesAfterMigration() public {
         vault.setPhase(OpenFourTypes.Phase.MigratePending);
         vm.prank(alice);
         token.transfer(bob, 100e18);
         vault.setPhase(OpenFourTypes.Phase.Migrated);
         vm.prank(flaggedW);
         token.transfer(bob, 100e18);
-        assertEq(token.balanceOf(bob), 200e18);
-        assertEq(token.balanceOf(treasury), 0);
+        assertLt(token.balanceOf(bob), 200e18); // both senders pay their sell rate, also after migration
+        assertGt(token.balanceOf(treasury), 0);
     }
 
     function test_onlyVaultSetsPhase() public {

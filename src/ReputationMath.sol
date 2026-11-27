@@ -40,6 +40,14 @@ library ReputationMath {
         return uint256(cfg.neutralBps) - (uint256(cfg.neutralBps) - cfg.minBps) * (s - n) / (MAX_SCORE - n);
     }
 
+    /// @notice Refundable deposit on a buy (bps), falling linearly with the score: full `freshDepositBps` at score 0, zero at
+    ///         `neutralScore` and above. Rounded down.
+    function depositBps(uint256 s, Config memory cfg) internal pure returns (uint256) {
+        uint256 n = cfg.neutralScore;
+        if (s >= n) return 0;
+        return uint256(cfg.freshDepositBps) * (n - s) / n;
+    }
+
     /// @notice Reverts with InvalidConfig if the config breaks any protocol invariant.
     function validate(Config memory c) internal pure {
         if (uint256(c.wVolume) + c.wActivity + c.wHolding + c.wIdentity == 0) revert InvalidConfig("weights sum zero");

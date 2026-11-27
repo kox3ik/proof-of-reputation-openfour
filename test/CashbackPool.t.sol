@@ -126,7 +126,7 @@ contract CashbackPoolTest is Base {
     ReputationLedger internal ledger;
     Terminal internal router = new Terminal();
 
-    function setUp() public {
+    function setUp() public virtual {
         vm.warp(100 days);
         core = new MockCore();
         wbnb = new QuoteToken();
@@ -273,28 +273,16 @@ contract CashbackPoolTest is Base {
         assertEq(bf, FEE_SELL);
     }
 
-    function test_migrationUnlocksOpenPositions() public {
+    function test_migrationUnlocksNothing() public {
         _buy(alice, CQ, AMT);
-        vm.expectRevert("Ledger: not migrated");
-        ledger.settle(alice);
         vm.warp(vm.getBlockTimestamp() + 3 days);
         core.migrate(token);
-        uint64 at = uint64(vm.getBlockTimestamp());
-        vm.warp(vm.getBlockTimestamp() + 1 days);
-        vm.prank(carol); // anyone can settle
-        ledger.settle(alice);
-        (uint256 ud, uint256 uf, uint64 ts) = _unlocked(alice);
-        assertEq(ud, DEP);
-        assertEq(uf, FEE_BUY);
-        assertEq(ts, at);
-        (uint256 p,,,) = ledger.positions(alice);
-        assertEq(p, 0);
-        ledger.settle(alice); // idempotent
-        (ud,,) = _unlocked(alice);
-        assertEq(ud, DEP);
-        _publishLater();
-        _claim(alice);
-        assertGe(wbnb.balanceOf(alice), DEP);
+        assertGt(ledger.migratedAt(), 0);
+        (uint256 ud, uint256 uf,) = _unlocked(alice);
+        assertEq(ud + uf, 0); // holding through migration releases no deposit
+        (uint256 p, uint256 d,,) = ledger.positions(alice);
+        assertEq(p, AMT);
+        assertEq(d, DEP);
     }
 
     // ── claim ──
@@ -818,7 +806,7 @@ contract CashbackPoolTest is Base {
     // ── cashback cap basis: only the POOL PART of the wallet's regular module fee (never the treasury part) ──
 
     function _regularRoundTrip(address w) internal returns (uint256 recorded, uint256 regularPool) {
-        _publish(w, 300, 0); // known wallet: regular fee, no fresh deposit, not flagged
+        _publish(w, 400, 0); // known wallet at the knee: regular fee, no deposit, not flagged
         uint256 bps = registry.quoteDetailed(w, true).poolBps;
         assertGt(bps, 0);
         _buy(w, CQ, AMT);

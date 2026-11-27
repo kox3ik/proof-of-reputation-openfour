@@ -187,6 +187,14 @@ contract CashbackPool is Ownable2Step, ReentrancyGuard {
     function _verify(address ledger, address token) private returns (Ledger memory l) {
         if (!presetBound) revert PresetNotBound();
         (,, uint256 pid,,,,,,, address quote,,,,,, address cd,, bool exists,,) = CORE.tokens(token);
+        if (ledger == token) {
+            // the token itself reports post-migration trades; its fees are paid in the token, which is then the asset
+            if (!exists || pid != presetId) revert NotOurLedger();
+            l = Ledger(token, token);
+            ledgerOf[ledger] = l;
+            emit LedgerVerified(ledger, token, token);
+            return l;
+        }
         if (!exists || pid != presetId || cd != ledger || !allowedAsset[quote]) revert NotOurLedger();
         l = Ledger(token, quote);
         ledgerOf[ledger] = l;
