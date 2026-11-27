@@ -13,11 +13,24 @@
   {
    "id": "mainnet",
    "title": "Mainnet replay",
-   "note": "Real Four.meme trades; scores by our open rule from history before each token; fees = what the current contracts charge: the buy deposit falls with the score, the penalty grows with the rug component, no cliffs",
+   "note": "Real Four.meme trades; scores by our open rule from history before each token; fees = what the module would charge",
    "tokens": [
     "mainnet-fm5eb6.json",
     "mainnet-fm26f7.json",
-    "mainnet-fm4efc.json"
+    "mainnet-fm4efc.json",
+    "mainnet-fme9c8.json",
+    "mainnet-fm8d73.json",
+    "mainnet-fm228b.json",
+    "mainnet-fm520a.json",
+    "mainnet-fmf5bd.json",
+    "mainnet-fm1539.json",
+    "mainnet-fmd43d.json",
+    "mainnet-fm4e6b.json",
+    "mainnet-fm36d5.json",
+    "mainnet-fm87f9.json",
+    "mainnet-fm1485.json",
+    "mainnet-fm7fb6.json",
+    "mainnet-fmba6b.json"
    ]
   }
  ]
