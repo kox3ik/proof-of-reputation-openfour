@@ -196,7 +196,7 @@
     }
     var roleOf = {}; t.trades.forEach(function (x) { roleOf[x.wallet.toLowerCase()] = x.role; });
     document.querySelector("#ttab tbody").innerHTML = rows.map(function (w) {
-      var st = status(w), exp = (t.network === "bsc-testnet" ? CFG.explorer : "https://bscscan.com") + "/address/" + w.addr;
+      var st = status(w), exp = t.network === "bsc-testnet" ? "profile.html?w=" + w.addr : "https://bscscan.com/address/" + w.addr;
       return '<tr><td><span class="dot" style="background:' + COL[cls(roleOf[w.addr.toLowerCase()])] + '"></span><a href="' + esc(exp) + '" target="_blank" rel="noopener" title="' + esc(w.addr) + '">' + short(w.addr) + "</a>" + (w.label ? ' <span class="muted">' + esc(w.label) + "</span>" : "") + "</td>" +
         '<td><span class="sbar' + (w.flagged ? " bad" : "") + '"><i style="width:' + Math.round(w.score * 100) + '%"></i></span>' + Number(w.score).toFixed(3) + "</td>" +
         '<td class="r">' + w.buyBps + '</td><td class="r">' + w.sellBps + '</td><td class="r">' + w.depositBps + '</td><td><span class="chip ' + st + '">' + st + "</span>" + (w.live ? ' <span class="up" title="read live from the registry">&#9679;</span>' : "") + "</td></tr>";
